@@ -3,6 +3,7 @@ from scipy.spatial import distance
 import numpy as np
 import re
 from pyswarms.discrete.binary import BinaryPSO as binaryPSO 
+from pyswarms.single import GlobalBestPSO as GBPSO
 from collections import deque, defaultdict
 from ast2json import ast2json
 import sys
@@ -294,9 +295,9 @@ class Fitness:
                         print(statement)
                         [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
                         exec(statement)
-            normalized_bd = 1 - pow(1.001, -sum_bd)
+            normalized_bd = 1 + (-1.001 ** -abs(sum_bd))
             print(normalized_bd)
-            particles_fitness.append(normalized_bd+sum_al)
+            particles_fitness.append(float(normalized_bd+sum_al))
         return tuple(particles_fitness)
             
     def resolve_if(self, node, particle, sum_al, sum_bd, multiplier_if=1, multiplier_elif=1):
@@ -444,6 +445,7 @@ class Fitness:
         """
         Obtains the approach level of the branch to the ideal path
         """
+        print(f"EVAL {eval(pred)} ")
         if eval(pred):
             return 0
         return 1
@@ -462,10 +464,11 @@ if __name__ == '__main__':
     print(visitor.nodes)
     
     # print(visitor.function_names)
-    options = {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 3, 'p': 2}
-    bpso = binaryPSO(20, 2, options=options)
+    options = {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+    # bpso = binaryPSO(20, 2, options=options)
+    gbpso = GBPSO(20,2,options=options)
     fitness = Fitness()
     #fitness.calc_expression(deque('( (  ( 1 == 3 ) and  ( 101 > 100 ) ) or  ( 100 + 3 ) )'.split()))
-    cost, pos = bpso.optimize(fitness.fitness_function, iters=100)
+    cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
     print(f"Best cost is {cost} and best position of particle is {pos}")
     
