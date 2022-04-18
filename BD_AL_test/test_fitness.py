@@ -125,6 +125,10 @@ class TreeVisitor(ast.NodeVisitor):
                 node = Node()
                 node.statements.append(self._parse_if_test(statement))
                 self.nodes['body'].append(node)
+            elif statement['_type'] == 'For':
+                pass
+            elif statement['_type'] == 'While':
+                pass
 
 
     def _parse_if(self, statement, is_else=False, if_body="", else_if = ''):
@@ -198,7 +202,8 @@ class TreeVisitor(ast.NodeVisitor):
             print(statement['_type'])
             if statement['_type'] == 'If':
                 if_body += 'if-'
-                self._parse_if(statement, if_body)
+                print("NESTED IF")
+                self._parse_if(statement, if_body=if_body)
             elif statement['_type'] == 'Expr':
                 pass
             elif statement['_type'] == 'Assign':
