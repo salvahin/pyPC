@@ -6,9 +6,9 @@ def excecute(x: int, y, a=2, *defaultlistx, **args) -> int:
         test = y
     test = x
     if y > 100:
-        print("error")
+        test = 1
         if x > 2 and y < 200:
-            print("success")
+            test = 0
     else:
         print("success")
         print("s")
