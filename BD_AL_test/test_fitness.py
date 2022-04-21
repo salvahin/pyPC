@@ -117,17 +117,14 @@ class TreeVisitor(ast.NodeVisitor):
                 statements = []
                 for target in statement['targets']:
                     statements.append(f"{self._get_value_from_ast(target)} = {value}") 
-                print(statements)
                 node = Node()
                 node.statements.extend(statements)
                 self.nodes['body'].append(node)
             elif statement['_type'] == 'AugAssign':
                 value = self._parse_if_test(statement['value'])
-                print(statement['op'])
                 op = self.operators[statement['op']['_type']]
                 statements = []
                 statements.append(f"{self._get_value_from_ast(statement['target'])} {op}= {value}") 
-                print(statements)
                 node.statements.extend(statements)
             elif statement['_type'] == 'BinOp':
                 node = Node()
@@ -153,7 +150,6 @@ class TreeVisitor(ast.NodeVisitor):
         # parse If test
         result = self._parse_if_test(statement['test']).strip()
 
-        print(result)
         node.statements.append(result)
         if is_else:
             self.if_nodes[f'{if_body}if-{else_if}test'] = node
@@ -212,7 +208,6 @@ class TreeVisitor(ast.NodeVisitor):
         """
         node = Node()
         for statement in body:
-            print(statement['_type'])
             if statement['_type'] == 'If':
                 if_body += 'if-'
                 print("NESTED IF")
@@ -224,15 +219,12 @@ class TreeVisitor(ast.NodeVisitor):
                 statements = []
                 for target in statement['targets']:
                     statements.append(f"{self._get_value_from_ast(target)} = {value}") 
-                print(statements)
                 node.statements.extend(statements)
             elif statement['_type'] == 'AugAssign':
                 value = self._parse_if_test(statement['value'])
-                print(statement['op'])
                 op = self.operators[statement['op']['_type']]
                 statements = []
                 statements.append(f"{self._get_value_from_ast(statement['target'])} {op}= {value}") 
-                print(statements)
                 node.statements.extend(statements)
             elif statement['_type'] == 'BinOp':
                 node.statements.append(self._parse_if_test(statement))
@@ -333,7 +325,7 @@ class Fitness:
             sum_bd = 0
             for node in visitor.nodes['body']:
                 if isinstance(node, dict):
-                    sum_al, sum_bd = self.resolve_if2(node, particle, sum_al, sum_bd)
+                    sum_al, sum_bd = self.resolve_if(node, particle, sum_al, sum_bd)
                         # ap = approach_level(p,p)
                     #if key == ''
                 else:
@@ -346,10 +338,9 @@ class Fitness:
             particles_fitness.append(float(normalized_bd+sum_al))
         return tuple(particles_fitness)
 
-    def resolve_if2(self, node, particle, sum_al, sum_bd, al=1):
+    def resolve_if(self, node, particle, sum_al, sum_bd, al=1):
         enters_if = False
         for key, _ in node.items():
-            print(key)
             if 'body' in key:
                 continue
             if not enters_if and 'elif' in key:
@@ -397,91 +388,6 @@ class Fitness:
                         except NameError as e:
                             name = str(e).split()[1].replace("'", "")
                             exec(statement.replace(name, f'self.{name}'))
-        return sum_al, sum_bd
-
-
-    def resolve_if(self, node, particle, sum_al, sum_bd, multiplier_if=1, multiplier_elif=1):
-        enters_if = False
-        enters_elif = False
-        for key, _ in node.items():
-            if 'body' in key:
-                continue
-            if_nested = "if-" * multiplier_if
-            elif_nested = "elif-" * multiplier_elif
-            test = f'{if_nested}{elif_nested}test'
-            print(f"Resolving if with key {key} and comparing with {test} multipliers are {multiplier_elif} and {multiplier_if}")
-            al = 1
-            if key == f'{if_nested}test':
-                print(f"Enters IF {key}")
-                statement = node[f'{if_nested}test'].statements[0]
-                [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                tokens = deque(statement.split())
-                sum_bd += self.calc_expression(tokens)
-                al = self.approach_level(statement)
-                sum_al += al
-                if not al:
-                    print(f"Enters IF body {key}")
-                    enters_if = True
-                    statements = node[f'{if_nested}body'].statements
-                    for statement in statements:
-                        print(statements)
-                        if isinstance(statement, dict):
-                            multiplier_if += 1
-                            sum_al, sum_bd = self.resolve_if(statement, particle, sum_al, sum_bd, multiplier_if, multiplier_elif)
-                        else:
-                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                            exec(statement)
-            elif key == f'{if_nested}{elif_nested}test' and not enters_if:
-                print(f"Enters ELIF {key}")
-                statement = node[f'{if_nested}{elif_nested}test'].statements[0]
-                [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                tokens = deque(statement.split())
-                sum_bd += self.calc_expression(tokens)
-                al = self.approach_level(statement)
-                sum_al += al
-                if not al:
-                    print(f"Enters ELIF body {key}")
-                    enters_elif = True
-                    statements = node[f'{if_nested}{elif_nested}body'].statements
-                    for statement in statements:
-                        if isinstance(statement, dict):
-                            multiplier_if += 1
-                            sum_al, sum_bd = self.resolve_if(statement, particle, sum_al, sum_bd, multiplier_if, multiplier_elif)
-                        else:
-                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                            exec(statement)
-            elif key == f'{if_nested}{elif_nested}else' and not enters_if and not enters_elif:
-                print(f"Enters ELSE body {key}")
-                statements = node[f'{if_nested}{elif_nested}else'].statements
-                for statement in statements:
-                    if isinstance(statement, dict):
-                        multiplier_if += 1
-                        sum_al, sum_bd = self.resolve_if(statement, particle, sum_al, sum_bd, multiplier_if, multiplier_elif)
-                    else:
-                        [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                        exec(statement)
-            elif key == f'{if_nested}else' and not enters_if and not enters_elif:
-                print(f"Enters ELSE body {key}")
-                statements = node[f'{if_nested}else'].statements
-                for statement in statements:
-                    if isinstance(statement, dict):
-                        multiplier_if += 1
-                        sum_al, sum_bd = self.resolve_if(statement, particle, sum_al, sum_bd, multiplier_if, multiplier_elif)
-                    else:
-                        [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                        exec(statement)
-            elif key == f'if-else' and not enters_if and not enters_elif:
-                print(f"Enters ELSE body {key}")
-                statements = node[f'if-else'].statements
-                for statement in statements:
-                    if isinstance(statement, dict):
-                        multiplier_if += 1
-                        sum_al, sum_bd = self.resolve_if(statement, particle, sum_al, sum_bd, multiplier_if, multiplier_elif)
-                    else:
-                        [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                        exec(statement)
-            else:
-                multiplier_elif += 1
         return sum_al, sum_bd
     
     
@@ -572,11 +478,11 @@ if __name__ == '__main__':
     #shape (n_particles, n_dimensions)
     # a.shape[1] = number of values
     #with open("test.py", 'r+') as filename:
-    #    lines = filename.readlines()
-    #    tree = ast.parse(''.join(lines))
+    #   lines = filename.readlines()
+    #   tree = ast.parse(''.join(lines))
     with open("trig_area.py", 'r+') as filename:
-        lines = filename.readlines()
-        tree = ast.parse(''.join(lines))
+       lines = filename.readlines()
+       tree = ast.parse(''.join(lines))
     print(ast.dump(tree))
     tree = ast.parse(tree)
     visitor = TreeVisitor()
