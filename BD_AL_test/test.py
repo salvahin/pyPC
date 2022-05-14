@@ -1,9 +1,22 @@
 def excecute(x: int, y, a=2, *defaultlistx, **args) -> int:
     #function execute
+    for i in range(10):
+        for asd in range(10,20):
+            print(i)
+    for ar in range(2):
+        for are in range(2):
+            if x:
+                print(3)
     if x == 3 and y > 100:
         x = x ** 2
+        for i in range(30):
+            for df in range(15):
+                if i == 0:
+                    print(i)
     elif x == 2:
         test = y
+    elif y == 3:
+        test = 0
     test = x
     if y > 100:
         test = 1
