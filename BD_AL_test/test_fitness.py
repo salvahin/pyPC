@@ -492,15 +492,23 @@ class Fitness:
                             name = str(e).split()[1].replace("'", "")
                             exec(statement.replace(name, f'self.{name}'))
             if 'for' in key and not 'else' in key and not 'elif' in key and not 'if' in key:
-                r = re.compile(f"{key.replace('-test', '')}[-for-]*")
+                r = re.compile(f"{key.replace('-test', '-body')}(-for-)*")
                 #if_body_list = filter(lambda x: True if f'{key.replace("-test", "-body")}' in x else False, node.keys())
                 #for_list = list(filter(lambda x: True if 'for' in x else False, if_body_list))
                 for_list = list(filter(r.match, node.keys()))
                 print(f"FOR LIST {for_list}")
-                r = re.compile(r".*[for-]+body[-if-]+")
+                r = re.compile(r".*[for-]+body(-if-)+")
                 if_for = list(filter(r.match, for_list))
                 print(f"IF inside FOR {if_for}")
-                new_if_node = {name: node[name] for name in if_for}
+                [for_list.pop(for_list.index(x)) for x in if_for]
+                print(f"Stripping out the ifs in the for_list {for_list}")
+                if_for_nodes = []
+                for for_node in for_list:
+                    for if_node in if_for:
+                        if for_node in if_node:
+                            if_for_nodes.append(if_node[len(for_node)+1:])
+                print(f"New nodes for IF's inside For's {if_for_nodes}")
+                new_if_node = {if_for_nodes[x]: node[name] for x, name in enumerate(if_for)}
                 # if_for = list(filter(lambda x: True if 'body-if' in x else False, for_list))
                 for for_node in for_list:
                     if 'body' in for_node:
@@ -519,7 +527,8 @@ class Fitness:
                                 iters[:0] = test.split('in')[0][4:].strip().split(',')
                                 product_iterators.insert(0, test.split('in')[1].strip())
                             iterators = [eval(x) for x in product_iterators]
-
+                            sum_aplevel = sum_brd = 0
+                            module_cost = len([x for x in reduce(product, iterators)])
                             for x in reduce(product, iterators):
                                 if len(iters) == 1:
                                     exec(f'{iters[0]} = x')
@@ -534,14 +543,21 @@ class Fitness:
                                         exec(statement)
                                     except NameError as e:
                                         name = str(e).split()[1].replace("'", "")
-                                if if_for:
-                                    sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
+                                    sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                          particle, 
-                                                         sum_al, 
-                                                         sum_bd, 
+                                                         0, 
+                                                         0, 
                                                          al)
+                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            sum_al += sum_aplevel
+                            sum_bd += sum_brd
+                            print(f"Moduled cost for for is {sum_aplevel}")
+                                    
                         else:
                             print("Enters single for")
+                            sum_aplevel = sum_brd = 0
+                            module_cost = len([x for x in product(eval(test.split('in')[1]))])
                             for x in product(eval(test.split('in')[1])):
                                 if len(iters) == 1:
                                     exec(f'{iters[0]} = x')
@@ -555,12 +571,16 @@ class Fitness:
                                     except NameError as e:
                                         name = str(e).split()[1].replace("'", "")
                                         exec(statement.replace(name, f'self.{name}'))
-                                if if_for:
-                                    sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
+                                    sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                          particle, 
-                                                         sum_al, 
-                                                         sum_bd, 
+                                                         0, 
+                                                         0, 
                                                          al)
+                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            sum_al += sum_aplevel
+                            sum_bd += sum_brd
+                            print(f"Moduled cost for for is {sum_aplevel}")
                 break
             if not enters_if and 'elif' in key:
                 statement = node[key].statements[0]
@@ -579,15 +599,23 @@ class Fitness:
                         except NameError as e:
                             name = str(e).split()[1].replace("'", "")
                             exec(statement.replace(name, f'self.{name}'))
-                    r = re.compile(f"{key.replace('-test', '-body')}[-for-]")
+                    r = re.compile(f"{key.replace('-test', '-body')}(-for-)+")
                     #if_body_list = filter(lambda x: True if f'{key.replace("-test", "-body")}' in x else False, node.keys())
                     #for_list = list(filter(lambda x: True if 'for' in x else False, if_body_list))
                     for_list = list(filter(r.match, node.keys()))
                     print(f"FOR LIST {for_list}")
-                    r = re.compile(r".*[for-]+body[-if-]+")
+                    r = re.compile(r".*[for-]+body(-if-)+")
                     if_for = list(filter(r.match, for_list))
                     print(f"IF inside FOR {if_for}")
-                    new_if_node = {name: node[name] for name in if_for}
+                    [for_list.pop(for_list.index(x)) for x in if_for]
+                    print(f"Stripping out the ifs in the for_list {for_list}")
+                    if_for_nodes = []
+                    for for_node in for_list:
+                        for if_node in if_for:
+                            if for_node in if_node:
+                                if_for_nodes.append(if_node[len(for_node)+1:])
+                    print(f"New nodes for IF's inside For's {if_for_nodes}")
+                    new_if_node = {if_for_nodes[x]: node[name] for x, name in enumerate(if_for)}
                     # if_for = list(filter(lambda x: True if 'body-if' in x else False, for_list))
                     for for_node in for_list:
                         if 'body' in for_node:
@@ -606,6 +634,8 @@ class Fitness:
                                     iters[:0] = test.split('in')[0][4:].strip().split(',')
                                     product_iterators.insert(0, test.split('in')[1])
                                 iterators = [eval(x) for x in product_iterators]
+                                sum_aplevel = sum_brd = 0
+                                module_cost = len([x for x in reduce(product, iterators)])
                                 for x in reduce(product, iterators):
                                     if len(iters) == 1:
                                         exec(f'{iters[0]} = x')
@@ -620,13 +650,19 @@ class Fitness:
                                             exec(statement)
                                         except NameError as e:
                                             name = str(e).split()[1].replace("'", "")
-                                    if if_for:
-                                        sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                    if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
+                                        sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             sum_al, 
-                                                             sum_bd, 
+                                                             0, 
+                                                             0, 
                                                              al)
+                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                sum_al += sum_aplevel
+                                sum_bd += sum_brd
+                                print(f"Moduled cost for for is {sum_aplevel}")
                             else:
+                                sum_aplevel = sum_brd = 0
+                                module_cost = len([x for x in product(eval(test.split('in')[1]))])
                                 for x in product(eval(test.split('in')[1])):
                                     if len(iters) == 1:
                                         exec(f'{iters[0]} = x')
@@ -640,12 +676,16 @@ class Fitness:
                                         except NameError as e:
                                             name = str(e).split()[1].replace("'", "")
                                             exec(statement.replace(name, f'self.{name}'))
-                                    if if_for:
-                                        sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                    if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
+                                        sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             sum_al, 
-                                                             sum_bd, 
+                                                             0, 
+                                                             0, 
                                                              al)
+                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                sum_al += sum_aplevel
+                                sum_bd += sum_brd
+                                print(f"Moduled cost for for is {sum_aplevel}")
                     break
             elif not enters_if and 'else' in key:
                 print(f"Enters ELSE body {key}")
@@ -657,15 +697,23 @@ class Fitness:
                     except NameError as e:
                             name = str(e).split()[1].replace("'", "")
                             exec(statement.replace(name, f'self.{name}'))
-                r = re.compile(f"{key.replace('-test', '-body')}[-for-]")
+                r = re.compile(f"{key.replace('-test', '-body')}(-for-)+")
                 #if_body_list = filter(lambda x: True if f'{key.replace("-test", "-body")}' in x else False, node.keys())
                 #for_list = list(filter(lambda x: True if 'for' in x else False, if_body_list))
                 for_list = list(filter(r.match, node.keys()))
                 print(f"FOR LIST {for_list}")
-                r = re.compile(r".*[for-]+body[-if-]+")
+                r = re.compile(r".*[for-]+body(-if-)+")
                 if_for = list(filter(r.match, for_list))
                 print(f"IF inside FOR {if_for}")
-                new_if_node = {name: node[name] for name in if_for}
+                [for_list.pop(for_list.index(x)) for x in if_for]
+                print(f"Stripping out the ifs in the for_list {for_list}")
+                if_for_nodes = []
+                for for_node in for_list:
+                    for if_node in if_for:
+                        if for_node in if_node:
+                            if_for_nodes.append(if_node[len(for_node)+1:])
+                print(f"New nodes for IF's inside For's {if_for_nodes}")
+                new_if_node = {if_for_nodes[x]: node[name] for x, name in enumerate(if_for)}
                 # if_for = list(filter(lambda x: True if 'body-if' in x else False, for_list))
                 for for_node in for_list:
                     if 'body' in for_node:
@@ -684,6 +732,8 @@ class Fitness:
                                 iters[:0] = test.split('in')[0][4:].strip().split(',')
                                 product_iterators.insert(0, test.split('in')[1])
                             iterators = [eval(x) for x in product_iterators]
+                            sum_aplevel = sum_brd = 0
+                            module_cost = len([x for x in reduce(product, iterators)])
                             for x in reduce(product, iterators):
                                 if len(iters) == 1:
                                     exec(f'{iters[0]} = x')
@@ -698,13 +748,19 @@ class Fitness:
                                         exec(statement)
                                     except NameError as e:
                                         name = str(e).split()[1].replace("'", "")
-                                if if_for:
-                                    sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
+                                    sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                          particle, 
-                                                         sum_al, 
-                                                         sum_bd, 
+                                                         0, 
+                                                         0, 
                                                          al)
+                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            sum_al += sum_aplevel
+                            sum_bd += sum_brd
+                            print(f"Moduled cost for for is {sum_aplevel}")
                         else:
+                            sum_aplevel = sum_brd = 0
+                            module_cost = len([x for x in product(eval(test.split('in')[1]))])
                             for x in product(eval(test.split('in')[1])):
                                 if len(iters) == 1:
                                     exec(f'{iters[0]} = x')
@@ -718,12 +774,16 @@ class Fitness:
                                     except NameError as e:
                                         name = str(e).split()[1].replace("'", "")
                                         exec(statement.replace(name, f'self.{name}'))
-                                if if_for:
+                                if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
                                     sum_al, sum_bd = self.resolve_if(new_if_node, 
                                                          particle, 
                                                          sum_al, 
                                                          sum_bd, 
                                                          al)
+                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            sum_al += sum_aplevel
+                            sum_bd += sum_brd
+                            print(f"Moduled cost for for is {sum_aplevel}")
                 break
             elif 'else' not in key and 'elif' not in key:
                 statement = node[key].statements[0]
@@ -743,20 +803,28 @@ class Fitness:
                         except NameError as e:
                             name = str(e).split()[1].replace("'", "")
                             exec(statement.replace(name, f'self.{name}'))
-                    r = re.compile(f"{key.replace('-test', '-body')}[-for-]")
+                    r = re.compile(f"{key.replace('-test', '-body')}(-for-)+")
                     #if_body_list = filter(lambda x: True if f'{key.replace("-test", "-body")}' in x else False, node.keys())
                     #for_list = list(filter(lambda x: True if 'for' in x else False, if_body_list))
                     for_list = list(filter(r.match, node.keys()))
                     print(f"FOR LIST {for_list}")
-                    r = re.compile(r".*[for-]+body[-if-]+")
+                    r = re.compile(r".*[for-]+body(-if-)+")
                     if_for = list(filter(r.match, for_list))
                     print(f"IF inside FOR {if_for}")
-                    new_if_node = {name: node[name] for name in if_for}
+                    [for_list.pop(for_list.index(x)) for x in if_for]
+                    print(f"Stripping out the ifs in the for_list {for_list}")
+                    if_for_nodes = []
+                    for for_node in for_list:
+                        for if_node in if_for:
+                            if for_node in if_node:
+                                if_for_nodes.append(if_node[len(for_node)+1:])
+                    print(f"New nodes for IF's inside For's {if_for_nodes}")
+                    new_if_node = {if_for_nodes[x]: node[name] for x, name in enumerate(if_for)}
                     # if_for = list(filter(lambda x: True if 'body-if' in x else False, for_list))
                     for for_node in for_list:
-                        if 'body' in for_node:
-                            continue
+                        print(f"For node is {for_node}")
                         if 'test' in for_node:
+                            print(f"Enters for test {for_node}")
                             test = node[for_node].statements[0]
                             iters = test.split('in')[0][4:].strip().split(',')
                             if for_node.count("for-") > 1:
@@ -770,6 +838,8 @@ class Fitness:
                                     iters[:0] = test.split('in')[0][4:].strip().split(',')
                                     product_iterators.insert(0, test.split('in')[1])
                                 iterators = [eval(x) for x in product_iterators]
+                                module_cost = len([x for x in reduce(product, iterators)])
+                                sum_aplevel = sum_brd = 0
                                 for x in reduce(product, iterators):
                                     if len(iters) == 1:
                                         exec(f'{iters[0]} = x')
@@ -784,13 +854,20 @@ class Fitness:
                                             exec(statement)
                                         except NameError as e:
                                             name = str(e).split()[1].replace("'", "")
-                                    if if_for:
-                                        sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                    if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
+                                        print(f"passing new if nodes to resolve {new_if_node}")
+                                        sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             sum_al, 
-                                                             sum_bd, 
+                                                             0, 
+                                                             0, 
                                                              al)
+                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                sum_al += sum_aplevel
+                                sum_bd += sum_brd
+                                print(f"Moduled cost for for is {sum_aplevel}")
                             else:
+                                module_cost = len([x for x in product(eval(test.split('in')[1]))])
+                                sum_aplevel = sum_brd = 0
                                 for x in product(eval(test.split('in')[1])):
                                     if len(iters) == 1:
                                         exec(f'{iters[0]} = x')
@@ -804,12 +881,17 @@ class Fitness:
                                         except NameError as e:
                                             name = str(e).split()[1].replace("'", "")
                                             exec(statement.replace(name, f'self.{name}'))
-                                    if if_for:
-                                        sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                    if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
+                                        print(f"passing new if nodes to resolve {new_if_node}")
+                                        sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             sum_al, 
-                                                             sum_bd, 
-                                                             al)
+                                                             0, 
+                                                             0, 
+                                                             al)    
+                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                sum_al += sum_aplevel
+                                sum_bd += sum_brd
+                                print(f"Moduled cost for for is {sum_aplevel}")                            
                     break
                         
         return sum_al, sum_bd
@@ -917,7 +999,7 @@ if __name__ == '__main__':
     # print(visitor.function_names)
     options = {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
     # bpso = binaryPSO(20, 2, options=options)
-    gbpso = GBPSO(20,3,options=options)
+    gbpso = GBPSO(20,2,options=options)
     fitness = Fitness()
     #fitness.calc_expression(deque('( (  ( 1 == 3 ) and  ( 101 > 100 ) ) or  ( 100 + 3 ) )'.split()))
     cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)

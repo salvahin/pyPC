@@ -7,10 +7,10 @@ def excecute(x: int, y, a=2, *defaultlistx, **args) -> int:
         for are in range(2):
             if x:
                 print(3)
-    if x == 3 and y > 100:
+    if x > 2 and y > 100:
         x = x ** 2
-        for i in range(30):
-            for df in range(15):
+        for i in range(5):
+            for df in range(5):
                 if i == 0:
                     print(i)
     elif x == 2:
