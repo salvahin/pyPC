@@ -303,3 +303,28 @@
 2022-05-17 17:30:59,857 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.0, best pos: [  4.08060932 111.99163105 -12.0442633 ]
 2022-05-17 17:33:17,610 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
 2022-05-17 17:33:36,085 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.0, best pos: [  3.04246332 107.83198837]
+2022-05-17 22:29:41,965 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-17 22:30:25,554 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.0, best pos: [  3.69687024 103.5435977 ]
+2022-05-17 22:40:23,293 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-17 22:40:51,406 - pyswarms.single.global_best - INFO - Optimization finished | best cost: -46.99591043377917, best pos: [  8.48985276 106.34024287]
+2022-05-17 22:42:40,452 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-17 22:42:59,986 - pyswarms.single.global_best - INFO - Optimization finished | best cost: -46.99591043377917, best pos: [  3.6785269  104.84516052]
+2022-05-17 22:48:10,506 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-17 22:48:28,252 - pyswarms.single.global_best - INFO - Optimization finished | best cost: -22.995910433779173, best pos: [  2.751095   100.33334952]
+2022-05-17 22:52:44,663 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-17 22:52:59,802 - pyswarms.single.global_best - INFO - Optimization finished | best cost: -3.949353533271179, best pos: [  2.01218888 106.97864891]
+2022-05-17 22:56:58,272 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-17 22:57:16,639 - pyswarms.single.global_best - INFO - Optimization finished | best cost: -3.949353533271179, best pos: [  2.79662721 101.284944  ]
+2022-05-18 08:07:54,437 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-18 08:08:14,273 - pyswarms.single.global_best - INFO - Optimization finished | best cost: -22.995910433779173, best pos: [  5.03303195 109.75893899]
+2022-05-18 08:10:06,369 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-18 08:10:24,190 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 1.0040895662208267, best pos: [  4.26021758 103.46183034]
+2022-05-18 08:17:09,834 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-18 08:17:27,438 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-18 08:17:45,660 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.05064646672882078, best pos: [  2.19917424 101.94280794]
+2022-05-18 08:29:22,669 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-18 08:29:38,738 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.05064646672882078, best pos: [  2.13074958 104.94577887]
+2022-05-18 08:32:10,608 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-18 08:32:29,666 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.05064646672882078, best pos: [  6.72986915 103.20415513]
+2022-05-18 08:35:28,947 - pyswarms.single.global_best - INFO - Optimize for 100 iters with {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+2022-05-18 08:35:48,315 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.0, best pos: [  3.19344297 101.92486042]

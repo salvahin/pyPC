@@ -546,10 +546,14 @@ class Fitness:
                                 if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
                                     sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                          particle, 
-                                                         0, 
-                                                         0, 
+                                                         sum_aplevel, 
+                                                         sum_brd, 
                                                          al)
-                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                            correct_als = num_ifs*module_cost - sum_aplevel
+                            correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                            print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel}")
+                            sum_aplevel, sum_brd = (correct_als, 0) if correct_als < 1 else (correct_als, sum_brd)
                             sum_al += sum_aplevel
                             sum_bd += sum_brd
                             print(f"Moduled cost for for is {sum_aplevel}")
@@ -574,10 +578,14 @@ class Fitness:
                                 if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
                                     sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                          particle, 
-                                                         0, 
-                                                         0, 
+                                                         sum_aplevel, 
+                                                         sum_brd, 
                                                          al)
-                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                            correct_als = num_ifs*module_cost - sum_aplevel
+                            correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                            print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel}")
+                            sum_aplevel, sum_brd = (correct_als, 0) if correct_als < 1 else (correct_als, sum_brd)
                             sum_al += sum_aplevel
                             sum_bd += sum_brd
                             print(f"Moduled cost for for is {sum_aplevel}")
@@ -653,10 +661,14 @@ class Fitness:
                                     if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
                                         sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             0, 
-                                                             0, 
+                                                             sum_aplevel, 
+                                                             sum_brd, 
                                                              al)
-                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                                correct_als = num_ifs*module_cost - sum_aplevel
+                                correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                                print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel}")
+                                sum_aplevel, sum_brd = (correct_als, 0) if correct_als < 1 else (correct_als, sum_brd)
                                 sum_al += sum_aplevel
                                 sum_bd += sum_brd
                                 print(f"Moduled cost for for is {sum_aplevel}")
@@ -679,10 +691,14 @@ class Fitness:
                                     if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
                                         sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             0, 
-                                                             0, 
+                                                             sum_aplevel, 
+                                                             sum_brd, 
                                                              al)
-                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                                correct_als = num_ifs*module_cost - sum_aplevel
+                                correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                                print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel}")
+                                sum_aplevel, sum_brd = (correct_als, 0) if correct_als < 1 else (correct_als, sum_brd)
                                 sum_al += sum_aplevel
                                 sum_bd += sum_brd
                                 print(f"Moduled cost for for is {sum_aplevel}")
@@ -751,10 +767,14 @@ class Fitness:
                                 if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
                                     sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                          particle, 
-                                                         0, 
-                                                         0, 
+                                                         sum_aplevel, 
+                                                         sum_brd, 
                                                          al)
-                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                            correct_als = num_ifs*module_cost - sum_aplevel
+                            correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                            print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel}")
+                            sum_aplevel, sum_brd = (correct_als, 0) if correct_als > 0 else (correct_als, sum_brd)
                             sum_al += sum_aplevel
                             sum_bd += sum_brd
                             print(f"Moduled cost for for is {sum_aplevel}")
@@ -775,12 +795,16 @@ class Fitness:
                                         name = str(e).split()[1].replace("'", "")
                                         exec(statement.replace(name, f'self.{name}'))
                                 if if_for and list(filter(lambda x: True if for_node.replace('-test', '-body') in x else False, if_for)):
-                                    sum_al, sum_bd = self.resolve_if(new_if_node, 
+                                    sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                          particle, 
-                                                         sum_al, 
-                                                         sum_bd, 
+                                                         sum_aplevel, 
+                                                         sum_brd, 
                                                          al)
-                            sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                            num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                            correct_als = num_ifs*module_cost - sum_aplevel
+                            correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                            print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel}")
+                            sum_aplevel, sum_brd = (correct_als, 0) if correct_als < 1 else (correct_als, sum_brd)
                             sum_al += sum_aplevel
                             sum_bd += sum_brd
                             print(f"Moduled cost for for is {sum_aplevel}")
@@ -858,10 +882,14 @@ class Fitness:
                                         print(f"passing new if nodes to resolve {new_if_node}")
                                         sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             0, 
-                                                             0, 
+                                                             sum_aplevel, 
+                                                             sum_brd, 
                                                              al)
-                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                                correct_als = num_ifs*module_cost - sum_aplevel
+                                correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                                print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel} {sum_brd}")
+                                sum_aplevel, sum_brd = (correct_als, 0) if correct_als < 1 else (correct_als, sum_brd)
                                 sum_al += sum_aplevel
                                 sum_bd += sum_brd
                                 print(f"Moduled cost for for is {sum_aplevel}")
@@ -885,10 +913,14 @@ class Fitness:
                                         print(f"passing new if nodes to resolve {new_if_node}")
                                         sum_aplevel, sum_brd = self.resolve_if(new_if_node, 
                                                              particle, 
-                                                             0, 
-                                                             0, 
+                                                             sum_aplevel, 
+                                                             sum_brd, 
                                                              al)    
-                                sum_aplevel, sum_brd = (0, 0) if module_cost - sum_aplevel > 0 else (1, sum_brd)
+                                num_ifs = len(list(filter(lambda x: True if for_node.replace('-test', '-body') in x and 'test' not in x else False, if_for)))
+                                correct_als = num_ifs*module_cost - sum_aplevel
+                                correct_als = 0 if num_ifs < correct_als  else num_ifs - correct_als
+                                print(f"Correct Ifs is {correct_als} and number of ifs is {num_ifs} {sum_aplevel}")
+                                sum_aplevel, sum_brd = (correct_als, 0) if correct_als < 1 else (correct_als, sum_brd)
                                 sum_al += sum_aplevel
                                 sum_bd += sum_brd
                                 print(f"Moduled cost for for is {sum_aplevel}")                            
