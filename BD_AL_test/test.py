@@ -13,6 +13,8 @@ def excecute(x: int, y, a=2, *defaultlistx, **args) -> int:
             for df in range(5):
                 if i == 0:
                     print(i)
+                if df == 4:
+                    break
     elif x == 2:
         test = y
     elif y == 3:
