@@ -381,19 +381,9 @@ class TreeVisitor(ast.NodeVisitor):
     #     print('Node type: Pass\nFields:', node._fields)
     #     ast.NodeVisitor.generic_visit(self, node)
 class Fitness:
-        
-    def _unpack(self, x, unpacked_values=[]):
-        """
-        Unpacks the values returned by the reduce operation ((),)
-        returns a list of unpacked values
-        """
-        unpacked_values.insert(0, x[1])
-        if isinstance(x[0], (int, np.double, float, np.float128, np.int64, Double, str, list)):
-            unpacked_values.insert(0, x[0])
-            return unpacked_values
-        elif len(x[0]) > 1:
-            unpacked_values[:0] = (self._unpack(x[0]))
-        return unpacked_values
+
+    def measure_coverage(self):
+        nodes = visitor.nodes['body']
 
     def fitness_function(self, param):
         """
@@ -641,11 +631,11 @@ if __name__ == '__main__':
     print(visitor.nodes)
     
     # print(visitor.function_names)
-    options = {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+    #options = {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
     # bpso = binaryPSO(20, 2, options=options)
-    gbpso = GBPSO(20,2,options=options)
-    fitness = Fitness()
+    #gbpso = GBPSO(20,2,options=options)
+    #fitness = Fitness()
     #fitness.calc_expression(deque('( (  ( 1 == 3 ) and  ( 101 > 100 ) ) or  ( 100 + 3 ) )'.split()))
-    cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
-    print(f"Best cost is {cost} and best position of particle is {pos}")
+    #cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
+    #print(f"Best cost is {cost} and best position of particle is {pos}")
     
