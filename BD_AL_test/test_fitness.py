@@ -382,8 +382,10 @@ class TreeVisitor(ast.NodeVisitor):
     #     ast.NodeVisitor.generic_visit(self, node)
 class Fitness:
 
-    def measure_coverage(self):
-        nodes = visitor.nodes['body']
+    def __init__(self) -> None:
+        self.complete_coverage = []
+        self.coverage = 0
+
 
     def fitness_function(self, param):
         """
@@ -395,9 +397,12 @@ class Fitness:
         for particle in param:
             sum_al = 0
             sum_bd = 0
+            self.coverage = 0
             for node in visitor.nodes['body']:
                 if isinstance(node, dict):
-                    sum_al, sum_bd = self.resolve_if(node, particle, sum_al, sum_bd)
+                    sum_al, sum_bd, coverage = self.resolve_if(node, particle, sum_al, sum_bd)
+                    print(f"COVERAGE and values are {coverage} {sum_al} {sum_bd}")
+                    self.coverage += coverage
                         # ap = approach_level(p,p)
                     #if key == ''
                 else:
@@ -405,27 +410,36 @@ class Fitness:
                         print(statement)
                         [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
                         exec(statement)
+                        self.coverage += 1
+
             normalized_bd = 1 + (-1.001 ** -abs(sum_bd))
             print(normalized_bd)
+            self.complete_coverage = (self.coverage/len(visitor.nodes['body'])) * 100
             particles_fitness.append(float(normalized_bd+sum_al))
         return tuple(particles_fitness)
 
     def resolve_if(self, node, particle, sum_al, sum_bd, al=1):
         enters_if = False
+        coverage = 0
+        len_statements2 = len(list(filter(lambda x: True if 'test' in x[0] else False, node.items())))
         for key, _ in node.items():
             if 'body' in key:
                 continue
             if 'while' in key:
                 statement = node[key].statements[0]
+                len_statements = 0
                 while exec(statement):
+
                     statements = node[f'{key.replace("-test", "-body")}'].statements
+                    len_statements = len(statements)
                     sum_aplevel = sum_brd = 0
                     for statement in statements:
                         if isinstance(statement, dict):
-                            sum_aplevel, sum_brd = self.resolve_if(statement, particle, sum_al, sum_bd)
+                            sum_aplevel, sum_brd_temp, coverage2 = self.resolve_if(statement, particle, sum_al, sum_bd)
                             print(f"returning cost value inside for {sum_aplevel_temp}")
                             sum_aplevel += sum_aplevel_temp
                             sum_brd += sum_brd_temp
+                            coverage += coverage2
                         else:
                             [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
                             try:
@@ -433,13 +447,17 @@ class Fitness:
                             except NameError as e:
                                 name = str(e).split()[1].replace("'", "")
                                 exec(statement.replace(name, f'self.{name}'))
+                            else:
+                                coverage += 1
                 print(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
                 sum_al += sum_aplevel/module_cost
                 sum_bd += sum_brd/module_cost
+                coverage = coverage/len_statements
                 break
             if 'for' in key and not 'else' in key and not 'elif' in key and not 'if' in key:
                 print(f"Enters {key}")
                 test = node[key].statements[0]
+                len_statements = 0
                 iters = test.split('in')[0][4:].strip().split(',')
                 sum_aplevel = sum_brd = 0
                 module_cost = len([x for x in product(eval(test.split('in')[1]))])
@@ -451,12 +469,14 @@ class Fitness:
                         for num, iter in enumerate(iters):
                             exec(f'{iter} = x[{num}]')
                     statements = node[f"{key.replace('-test', '-body')}"].statements
+                    len_statements = len(statements)
                     for statement in statements:
                         if isinstance(statement, dict):
                             print(f"evaluating statement inside {key}  {statement}")
-                            sum_aplevel_temp, sum_brd_temp = self.resolve_if(statement, particle, sum_al, sum_bd)
+                            sum_aplevel_temp, sum_brd_temp, coverage2 = self.resolve_if(statement, particle, sum_al, sum_bd)
                             print(f"returning cost value inside for {sum_aplevel_temp}")
                             sum_aplevel += sum_aplevel_temp
+                            coverage += coverage2
                             sum_brd += sum_brd_temp
 
                         else:
@@ -466,9 +486,14 @@ class Fitness:
                             except NameError as e:
                                 name = str(e).split()[1].replace("'", "")
                                 exec(statement.replace(name, f'self.{name}'))
+                            else:
+                                coverage += 1
                 print(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
                 sum_al += sum_aplevel/module_cost
                 sum_bd += sum_brd/module_cost
+                print(f"Coverage cost is {coverage}")
+                coverage = (coverage/(len_statements*module_cost)) if len_statements > 0 else (coverage/module_cost)
+                print(f"Coverage cost is {coverage}")
                 break
             if not enters_if and 'elif' in key:
                 statement = node[key].statements[0]
@@ -480,24 +505,35 @@ class Fitness:
                     print(f"Enters ElIF body {key}")
                     enters_if = True
                     statements = node[f'{key}-body'].statements
+                    len_statements = len(statements)
                     sum_aplevel = sum_brd = 0
                     for statement in statements:
                         if isinstance(statement, dict):
-                            sum_aplevel, sum_brd = self.resolve_if(statement, particle, sum_al, sum_bd)
+                            sum_aplevel, sum_brd, coverage2 = self.resolve_if(statement, particle, sum_al, sum_bd)
+                            coverage += coverage2
+                            sum_bd += sum_brd
+                            sum_al += sum_aplevel
                         else:
                             [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
                             try:
                                 exec(statement)
                             except NameError as e:
                                 name = str(e).split()[1].replace("'", "")
-                                exec(statement.replace(name, f'self.{name}'))   
+                                exec(statement.replace(name, f'self.{name}'))  
+                            else:
+                                coverage += 1 
+                    coverage = (coverage/len_statements) if len_statements > 0 else coverage
             elif not enters_if and 'else' in key:
                 print(f"Enters ELSE body {key}")
                 statements = node[key].statements
+                len_statements = len(statements)
                 sum_aplevel = sum_brd = 0
                 for statement in statements:
                     if isinstance(statement, dict):
-                        sum_aplevel, sum_brd = self.resolve_if(statement, particle, sum_al, sum_bd)
+                        sum_aplevel, sum_brd, coverage2 = self.resolve_if(statement, particle, sum_al, sum_bd)
+                        coverage += coverage2
+                        sum_bd += sum_brd
+                        sum_al += sum_aplevel
                     else:
                         [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
                         try:
@@ -505,6 +541,9 @@ class Fitness:
                         except NameError as e:
                             name = str(e).split()[1].replace("'", "")
                             exec(statement.replace(name, f'self.{name}'))
+                        else:
+                            coverage += 1
+                coverage = (coverage/len_statements) if len_statements > 0 else coverage
             elif 'else' not in key and 'elif' not in key:
                 statement = node[key].statements[0]
                 tokens = deque(statement.split())
@@ -516,10 +555,14 @@ class Fitness:
                     print(f"Enters IF body {key}")
                     enters_if = True
                     statements = node[f'{key.replace("-test", "-body")}'].statements
+                    len_statements = len(statements)
                     sum_aplevel = sum_brd = 0
                     for statement in statements:
                         if isinstance(statement, dict):
-                            sum_aplevel, sum_brd = self.resolve_if(statement, particle, sum_al, sum_bd)
+                            sum_aplevel, sum_brd, coverage2 = self.resolve_if(statement, particle, sum_al, sum_bd)
+                            coverage += coverage2
+                            sum_bd += sum_brd
+                            sum_al += sum_aplevel
                         else:
                             [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
                             try:
@@ -527,8 +570,11 @@ class Fitness:
                             except NameError as e:
                                 name = str(e).split()[1].replace("'", "")
                                 exec(statement.replace(name, f'self.{name}'))
-                        
-        return sum_al, sum_bd
+                            else:
+                                coverage += 1
+                    coverage = (coverage/len_statements) if len_statements > 0 else coverage
+        coverage = (coverage/len_statements2) if len_statements2 > 0 else coverage                
+        return sum_al, sum_bd, coverage
     
     
     def calc_expression(self, tokens):
@@ -631,11 +677,10 @@ if __name__ == '__main__':
     print(visitor.nodes)
     
     # print(visitor.function_names)
-    #options = {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
-    # bpso = binaryPSO(20, 2, options=options)
-    #gbpso = GBPSO(20,2,options=options)
-    #fitness = Fitness()
-    #fitness.calc_expression(deque('( (  ( 1 == 3 ) and  ( 101 > 100 ) ) or  ( 100 + 3 ) )'.split()))
-    #cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
-    #print(f"Best cost is {cost} and best position of particle is {pos}")
+    options = {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
+    gbpso = GBPSO(20,2,options=options)
+    fitness = Fitness()
+    cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
+    print(f"Best cost is {cost} and best position of particle is {pos}")
+    print(f"Coverage is {fitness.complete_coverage}")
     
