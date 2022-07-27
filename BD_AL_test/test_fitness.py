@@ -95,6 +95,8 @@ class TreeVisitor(ast.NodeVisitor):
             return "pass"
         elif obj['_type'] == 'Continue':
             return "pass"
+        elif obj['_type'] == 'Tuple':
+            return ','.join([self._get_value_from_ast(element) for element in obj['elts']])
         elif isinstance(obj, ast.List):
             return [self._get_value_from_ast(e) for e in obj.elts]
         elif isinstance(obj, ast.Tuple):
@@ -844,7 +846,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("trig_area.py", 'r+') as filename:
+    with open("three_number_sort.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
