@@ -3,7 +3,7 @@ from cmath import sqrt
 
 def trig_area(a, b, c):
     match = p = s = h = 0
-    if a+b>=c and b+c >= a and a+c >= b and a > 0 and b > 0 and c >0:
+    if ((a+b)>=c and b+c >= a) and ((a+c >= b and a > 0) and (b > 0 and c >0)):
         if a == b:
             match += 1
         if a == c:
