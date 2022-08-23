@@ -1,4 +1,7 @@
 from multiprocessing.sharedctypes import Value
+import matplotlib.pyplot as plt
+from IPython.display import Image
+from pyswarms.utils.plotters import (plot_cost_history, plot_contour, plot_surface)
 from tokenize import Double
 import numpy as np
 from itertools import product
@@ -596,6 +599,8 @@ class Fitness:
                 sum_al += al
                 if not al:
                     print(f"Enters IF body {key}")
+                    if count != '2-0.0-0.0-0.0':
+                        print("hello")
                     if count in self.custom_weights.keys():
                         sum_bd += self.custom_weights[count]
                         sum_al += self.custom_weights[count]
@@ -705,7 +710,7 @@ class Fitness:
             return 0
         return 1
     
-    def resolve_path(self, param, costs=[100]):
+    def resolve_path(self, param, costs=[1048576]):
         """
         Fitness function combining both branch distance and approach level
         Must accept a (numpy.ndarray) with shape (n_particles, dimensions)
@@ -726,7 +731,8 @@ class Fitness:
                 if not any(map(has_element(x), prefix_path)):
                     prefix_path.append(x)
             for x in prefix_path:
-                self.custom_weights.update({f"{x}": max(costs)})
+                divide_ = x.count('-')
+                self.custom_weights.update({f"{x}": max(costs)/2**divide_})
             self.current_walked_tree = prefix_path
 
     def resolve_dict_path(self, node, particle, pos, al=1, nested=0, count=''):
@@ -846,7 +852,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("three_number_sort.py", 'r+') as filename:
+    with open("test.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
@@ -863,10 +869,10 @@ if __name__ == '__main__':
     past_walking = []
     while more_paths:
         options = {'c1': 2, 'c2': 2, 'w': 0.7}
-        gbpso = GBPSO(100,3,options=options)
+        gbpso = GBPSO(100,2,options=options)
         cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
         #lbpso = LBPSO(40,3,options=options)
-        #cost, pos = lbpso.optimize(fitness.fitness_function, iters=100)
+        #cost, pos = lbpso.optimize(fitness.fitn1ess_function, iters=100)
         particle_pos = np.array([pos],np.float32)
         fitness.resolve_path(particle_pos)
         has_path = lambda x: lambda y: y in x
@@ -876,6 +882,9 @@ if __name__ == '__main__':
         best_positions.update({f"{pos}": f"Cost is {cost} and coverage is {coverage}"})
         print(f"Real coverage is {coverage}")
         past_walking.extend(fitness.current_walked_tree)
+        # plot_cost_history(cost_history=gbpso.cost_history)
+        # plt.show()
+    print(fitness.custom_weights)
     print(f"Positions and coverage are {best_positions}")
     print(f"The coverage of the matrix is {coverage}")
     print(f"whole tree is {list(set(fitness.whole_tree))} .  {list(set(fitness.walked_tree))}")
