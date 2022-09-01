@@ -1,9 +1,16 @@
 from multiprocessing.sharedctypes import Value
-from scipy.spatial import distance
+import matplotlib.pyplot as plt
+from IPython.display import Image
+from pyswarms.utils.plotters import (plot_cost_history, plot_contour, plot_surface)
+from tokenize import Double
 import numpy as np
+from itertools import product
 import re
-from pyswarms.discrete.binary import BinaryPSO as binaryPSO 
+import math
+from functools import reduce
+from pyparsing import nested_expr
 from pyswarms.single import GlobalBestPSO as GBPSO
+from pyswarms.single import LocalBestPSO as LBPSO
 from collections import deque, defaultdict
 from ast2json import ast2json
 import sys
@@ -23,7 +30,9 @@ class TreeVisitor(ast.NodeVisitor):
         self.curr_func_json = None
         self.nodes = {}
         self.nodes['body'] = []
+        self.if_nested_nodes = []
         self.if_nodes = {}
+        self.while_nodes = {}
         self.curr_node = ''
         self._args = []
         self._vars_values = {}
@@ -49,6 +58,22 @@ class TreeVisitor(ast.NodeVisitor):
             "Invert": "~"
         }
         super().__init__()
+    
+    def _rename_while_keys(self, if_body="", else_if="", is_while=False, while_body="", if_parent=False):
+        """
+        Method to rename the while_node keys if is inside the if clause.
+        Example: If x:
+                    for y in range(1):
+                         print(x)
+        first it is going to parse the If then the for but the for keys parsed won't 
+        have the If as a parent key so this will change for-test and for-body keys to 
+        {if_body}-for-test and {if_body}-for-body keys
+        """
+        temp_dict = {}
+        for key, value in self.while_nodes.items():
+                temp_dict[f'{"if-"*if_body}{else_if}body-{key}'] = value
+        # self.while_nodes = {}
+        return temp_dict
 
     def _get_value_from_ast(self, obj):
         """
@@ -69,6 +94,12 @@ class TreeVisitor(ast.NodeVisitor):
             arguments = ','.join([self._parse_if_test(arg) for arg in obj['args']])
             print(f"{obj['func']['id']}({arguments})")
             return f"{obj['func']['id']}({arguments})"
+        elif obj['_type'] == 'Break':
+            return "pass"
+        elif obj['_type'] == 'Continue':
+            return "pass"
+        elif obj['_type'] == 'Tuple':
+            return ','.join([self._get_value_from_ast(element) for element in obj['elts']])
         elif isinstance(obj, ast.List):
             return [self._get_value_from_ast(e) for e in obj.elts]
         elif isinstance(obj, ast.Tuple):
@@ -107,9 +138,7 @@ class TreeVisitor(ast.NodeVisitor):
         for statement in body:
             # print(statement.keys())
             if statement['_type'] == 'If':
-                self._parse_if(statement)
-                self.nodes['body'].append(self.if_nodes)
-                self.if_nodes = {}
+                self.nodes['body'].append(self._parse_if(statement))
             elif statement['_type'] == 'Expr':
                 pass
             elif statement['_type'] == 'Assign':
@@ -136,51 +165,99 @@ class TreeVisitor(ast.NodeVisitor):
                 node.statements.append(self._parse_if_test(statement))
                 self.nodes['body'].append(node)
             elif statement['_type'] == 'For':
-                pass
+                self.nodes['body'].append(self._parse_for(statement))
+
             elif statement['_type'] == 'While':
-                pass
+                self.nodes['body'].append(self._parse_while(statement))
+            elif statement['_type'] == 'Break':
+                node = Node()
+                node.statements.append(self._parse_if_test(statement))
+            elif statement['_type'] == 'Continue':
+                node = Node()
+                node.statements.append(self._parse_if_test(statement))
 
 
-    def _parse_if(self, statement, is_else=False, if_body="", else_if = ''):
+    def _parse_while(self, statement):
+        """
+        Parse the while body and condition repeat until condition is False
+        """
+        print(f"Begin While Statement {statement['_type']}")
+        result = self._parse_if_test(statement['test']).strip()
+        node = Node()
+        node.statements.append(result)
+        self.while_nodes['while-test'] = node
+        # parse If body
+        result = self._parse_if_body(statement['body'])
+        # print(result)
+        result = result if result.statements else Node()
+        self.while_nodes['while-body'] = result
+
+    def _parse_for(self, statement):
+        """
+        Parse the while body and condition repeat until condition is False
+        """
+        print(f"Begin For Statement {statement['_type']}")
+        target = self._parse_if_test(statement['target'])
+        iter = self._parse_if_test(statement['iter'])
+        result = f"for {target} in " \
+                 f"{iter}"
+        node = Node()
+        node.statements.append(result)
+        for_node = {}
+        for_node['for-test'] = node
+        # parse If body
+        result = self._parse_if_body(statement['body'])
+        result = result if result.statements else Node()
+        for_node['for-body'] = result
+        return for_node
+
+
+    def _parse_if(self, statement, is_else=False, else_if = ''):
         """
         Parse the if body and condition
         """
-        print(f"BEGIN THE IF STATEMENT {statement['_type']}")
+        print(f"BEGIN THE IF STATEMENT {statement['_type']} {else_if}")
         node = Node()
         # parse If test
         result = self._parse_if_test(statement['test']).strip()
-
         node.statements.append(result)
-        if is_else:
-            self.if_nodes[f'{if_body}if-{else_if}test'] = node
-        else:
-            self.if_nodes[f'{if_body}if-test'] = node
-        # parse If body
-        result = self._parse_if_body(statement['body'], if_body)
-        # print(result)
+        if_node = {}
+        if_node[f'if-{else_if}test'] = node
+        result = self._parse_if_body(statement['body'])
         result = result if result.statements else Node()
-        if is_else:
-            self.if_nodes[f'{if_body}if-{else_if}body'] = result
-        else:
-            self.if_nodes[f'{if_body}if-body'] = result
+        if_node[f'if-{else_if}body'] = result
         else_body = []
         for next_if in statement['orelse']:
             if next_if['_type'] == 'If':
-                self._parse_if(next_if, is_else=True, if_body=if_body, else_if=f'{else_if}elif-')
+                if_node.update(self._parse_if(next_if, is_else=True, else_if=f'{else_if}elif-'))
             else:
                 else_body.append(next_if)
         if else_body:
-            result = self._parse_if_body(else_body, if_body)
-            self.if_nodes[f'{if_body}if-{else_if if is_else else ""}else'] = result
+            result = self._parse_if_body(else_body)
+            if_node[f'if-{else_if if is_else else ""}else'] = result
+        return if_node 
 
     
     def _parse_if_test(self, test, expression=""):
         if test['_type'] == 'BoolOp':
             op = self.operators[test['op']['_type']]
             # print(test['values'][0])
-            left = self._parse_if_test(test['values'][0])
-            right = self._parse_if_test(test['values'][1])
-            expression += f" ( {left} {op} {right} )"
+            temp = ''
+            closing = ''
+            opening = ''
+            alternate = True
+            for ind, _ in enumerate(test['values']):
+                if alternate:
+                    left = self._parse_if_test(test['values'][ind])
+                    alternate = not alternate
+                    continue
+                else:
+                    right = self._parse_if_test(test['values'][ind])
+                alternate = not alternate
+                expression = f" {opening} {expression}{temp} ( {left} {op} {right} ) {closing} "
+                temp = f'{op}'
+                closing = ')'
+                opening = '('
             return expression
         elif test['_type'] == 'BinOp':
             op = self.operators[test['op']['_type']]
@@ -202,16 +279,15 @@ class TreeVisitor(ast.NodeVisitor):
             expression += f"{self._get_value_from_ast(test)}"
             return expression
 
-    def _parse_if_body(self, body, if_body="") -> Node:
+    def _parse_if_body(self, body) -> Node:
         """
         
         """
         node = Node()
         for statement in body:
-            if statement['_type'] == 'If':
-                if_body += 'if-'
-                print("NESTED IF")
-                self._parse_if(statement, if_body=if_body)
+            if statement['_type'] == 'If':              
+                node.statements.append(self._parse_if(statement))
+
             elif statement['_type'] == 'Expr':
                 pass
             elif statement['_type'] == 'Assign':
@@ -232,6 +308,14 @@ class TreeVisitor(ast.NodeVisitor):
             elif statement['_type'] == 'Compare':
                 node.statements.append(self._parse_if_test(statement))
             elif statement['_type'] == 'BoolOp':
+                node.statements.append(self._parse_if_test(statement))
+            elif statement['_type'] == 'For':
+                node.statements.append(self._parse_for(statement))
+            elif statement['_type'] == 'While':
+                node.statements.append(self._parse_while(statement))
+            elif statement['_type'] == 'Break':
+                node.statements.append(self._parse_if_test(statement))
+            elif statement['_type'] == 'Continue':
                 node.statements.append(self._parse_if_test(statement))
         return node
 
@@ -256,13 +340,18 @@ class TreeVisitor(ast.NodeVisitor):
         self.function_names.append(node.name)
         self.functions_trees[node.name] = {}
         result = ast2json(node)
-        # print(result)
+        print(result)
         self.curr_func_json = result
         self.re_structure_tree()
         
     def visit_Import(self, node):
         result = ast2json(node)
         print(result)
+        node2 = Node()
+        node2.statements.append(f"import {','.join([name['name'] for name in result['names']])}")
+        for name in result['names']:
+                node2.statements.append(f"self.{name['name']} = {name['name']}")
+        self.nodes['body'].append(node2)
         ast.NodeVisitor.generic_visit(self, node)
     def visit_ImportFrom(self, node):
         result = ast2json(node)
@@ -312,7 +401,28 @@ class TreeVisitor(ast.NodeVisitor):
     #     print('Node type: Pass\nFields:', node._fields)
     #     ast.NodeVisitor.generic_visit(self, node)
 class Fitness:
-        
+
+    def __init__(self) -> None:
+        self.complete_coverage = {}
+        self.coverage = 0
+        self.walked_tree = []
+        self.current_walked_tree = []
+        self.whole_tree = set()
+        self.custom_weights = {}
+
+    def explore(self, node):
+        result = 0
+        for x, v in node.items():
+            print(f"finding if in {x}")
+            if 'if' in x:
+                return 1
+            for y in v.statements:
+                if isinstance(y, dict):
+                    result = self.explore(y)
+        return result
+    def round_half_up(self, n, decimals=0):
+        multiplier = 10 ** decimals
+        return math.floor(n*multiplier + 0.5) / multiplier
     def fitness_function(self, param):
         """
         Fitness function combining both branch distance and approach level
@@ -320,75 +430,201 @@ class Fitness:
         Must return an array j of size (n_particles, )
         """
         particles_fitness = []
-        for particle in param:
+        for index_par, particle in enumerate(param):
             sum_al = 0
             sum_bd = 0
-            for node in visitor.nodes['body']:
+            ifs_num = 0
+            self.coverage = 0
+            for pos, node in enumerate(visitor.nodes['body']):
                 if isinstance(node, dict):
-                    sum_al, sum_bd = self.resolve_if(node, particle, sum_al, sum_bd)
-                        # ap = approach_level(p,p)
-                    #if key == ''
+                    sum_al, sum_bd, coverage, if_num = self.resolve_if(node, particle, sum_al, sum_bd, if_num=0, pos=pos)
+                    #if 'if' in list(node.keys())[0]:
+                    #    ifs_num += 1
+                    ifs_num += self.explore(node)
+                    print(f"COVERAGE and values are {coverage} {sum_al} {sum_bd} {if_num}")
+                    self.coverage += coverage if if_num == 0 else (coverage/if_num)
                 else:
                     for statement in node.statements:
-                        print(statement)
-                        [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)]
                         exec(statement)
+
             normalized_bd = 1 + (-1.001 ** -abs(sum_bd))
             print(normalized_bd)
-            particles_fitness.append(float(normalized_bd+sum_al))
-        return tuple(particles_fitness)
+            self.coverage = 1 if self.coverage == 0 else self.coverage
+            complete_execution_coverage = (self.coverage/ifs_num) if ifs_num > 0 else 1
+            self.complete_coverage.update({f"{float(normalized_bd+sum_al)}": complete_execution_coverage})
+            particles_fitness.insert(index_par, float(normalized_bd+sum_al))
+        return np.array(particles_fitness)
 
-    def resolve_if(self, node, particle, sum_al, sum_bd, al=1):
+    def resolve_if(self, node, particle, sum_al, sum_bd, al=1, if_num=0, pos=0, nested=0, count=''):
         enters_if = False
+        coverage = 0
+        len_statements2 = len(list(filter(lambda x: True if 'test' in x[0] else False, node.items())))
+        aux_count = -1
+        temp = ''
         for key, _ in node.items():
             if 'body' in key:
                 continue
-            if not enters_if and 'elif' in key:
+            aux_count += 1
+            if count:
+                temp = count
+                count = f"{count}-{nested}.{aux_count}"
+            else:
+                count = f"{pos}-{nested}.{aux_count}"
+            self.whole_tree.add(f'{count}')
+            if 'while' in key:
+                statement = node[key].statements[0]
+                len_statements = 0
+                while exec(statement):
+                    statements = node[f'{key.replace("-test", "-body")}'].statements
+                    len_statements += 1
+                    sum_aplevel = sum_brd = 0
+                    for ind, statement1 in enumerate(statements):
+                        if isinstance(statement1, dict):
+                            sum_aplevel, sum_brd_temp, coverage2, if_num = self.resolve_if(statement1, particle, sum_al, sum_bd, 1, if_num, pos=pos, nested=ind, count=count)
+                            print(f"nested returned on for{if_num}")
+                            sum_aplevel += sum_aplevel_temp
+                            sum_brd += sum_brd_temp
+                            enters_if = False
+                            # coverage += coverage2
+                        else:
+                            [statement1:=statement1.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement1.replace(name, f'self.{name}'))
+                print(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
+                sum_al += sum_aplevel/module_cost
+                sum_bd += sum_brd/module_cost
+                # coverage = coverage/len_statements
+                break
+            if 'for' in key and not 'else' in key and not 'elif' in key and not 'if' in key:
+                print(f"Enters {key}")
+                test = node[key].statements[0]
+                iters = test.split('in')[0][4:].strip().split(',')
+                sum_aplevel = sum_brd = 0
+                module_cost = len([x for x in product(eval(test.split('in')[1]))])
+                print(f"for test to iterate is {test.split('in')[1]}")
+                for x in product(eval(test.split('in')[1])):
+                    if len(iters) == 1:
+                        exec(f'{iters[0]} = x[0]')
+                    else:
+                        for num, iter in enumerate(iters):
+                            exec(f'{iter} = x[{num}]')
+                    statements = node[f"{key.replace('-test', '-body')}"].statements
+                    for ind, statement in enumerate(statements):
+                        if isinstance(statement, dict):
+                            print(f"evaluating statement inside {key}  {statement}")
+                            sum_aplevel_temp, sum_brd_temp, coverage2, if_num = self.resolve_if(statement, particle, sum_al, sum_bd, 1, if_num, pos=pos, nested=ind, count=count)
+                            sum_aplevel += sum_aplevel_temp
+                            coverage += coverage2
+                            sum_brd += sum_brd_temp
+                            enters_if = False
+
+                        else:
+                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement.replace(name, f'self.{name}'))
+                print(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
+                sum_al += sum_aplevel/module_cost
+                sum_bd += sum_brd/module_cost
+                print(f"Coverage cost is {coverage}   {if_num}")
+                #coverage = (coverage/(module_cost)) if module_cost > 0 else coverage
+                break
+            if not enters_if and 'elif' in key and 'else' not in key:
+                if_num += 1
                 statement = node[key].statements[0]
                 tokens = deque(statement.split())
-                sum_bd += self.calc_expression(tokens)
                 al = self.approach_level(statement)
+                bd = self.calc_expression(tokens)
+                sum_bd += bd
                 sum_al += al
                 if not al:
                     print(f"Enters ElIF body {key}")
+                    if count in self.custom_weights.keys():
+                        sum_bd += self.custom_weights[count]
+                        sum_al += self.custom_weights[count]
+                    coverage += 1
                     enters_if = True
-                    statements = node[f'{key}-body'].statements
-                    for statement in statements:
+                    statements = node[f'{key.replace("-test", "-body")}'].statements
+                    sum_aplevel = sum_brd = 0
+                    for ind, statement in enumerate(statements):
+                        if isinstance(statement, dict):
+                            sum_aplevel, sum_brd, coverage2, if_num = self.resolve_if(statement, particle, sum_al, sum_bd, 1, if_num, pos=pos, nested=ind, count=count)
+                            coverage += coverage2
+                            sum_bd += sum_brd
+                            sum_al += sum_aplevel
+                        else:
+                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement.replace(name, f'self.{name}')) 
+            elif not enters_if and 'else' in key:
+                print(f"Enters ELSE body {key}")
+                if_num += 1
+                statements = node[key].statements
+                len_statements = len(statements)
+                sum_aplevel = sum_brd = 0
+                coverage += 1
+                if count in self.custom_weights.keys():
+                    sum_bd += self.custom_weights[count]
+                    sum_al += self.custom_weights[count]
+                for ind, statement in enumerate(statements):
+                    if isinstance(statement, dict):
+                        sum_aplevel, sum_brd, coverage2, if_num = self.resolve_if(statement, particle, sum_al, sum_bd, 1, if_num, pos=pos, nested=ind, count=count)
+                        coverage += coverage2
+                        sum_bd += sum_brd
+                        sum_al += sum_aplevel
+                    else:
                         [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
                         try:
                             exec(statement)
                         except NameError as e:
-                            name = str(e).split()[1].replace("'", "")
-                            exec(statement.replace(name, f'self.{name}'))
-            elif not enters_if and 'else' in key:
-                print(f"Enters ELSE body {key}")
-                statements = node[key].statements
-                for statement in statements:
-                    [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                    try:
-                        exec(statement)
-                    except NameError as e:
                             name = str(e).split()[1].replace("'", "")
                             exec(statement.replace(name, f'self.{name}'))
             elif 'else' not in key and 'elif' not in key:
                 statement = node[key].statements[0]
+                if_num += 1 
                 tokens = deque(statement.split())
-                print(f"ENTERS IF {key}")
-                sum_bd += self.calc_expression(tokens)
+                print(f"ENTERS IF {key} {tokens}")
                 al = self.approach_level(statement)
+                bd = self.calc_expression(tokens)
+                sum_bd += bd
                 sum_al += al
                 if not al:
                     print(f"Enters IF body {key}")
+                    if count != '2-0.0-0.0-0.0':
+                        print("hello")
+                    if count in self.custom_weights.keys():
+                        sum_bd += self.custom_weights[count]
+                        sum_al += self.custom_weights[count]
+                    coverage += 1
                     enters_if = True
-                    statements = node[f'{key.replace("-test", "")}-body'].statements
-                    for statement in statements:
-                        [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
-                        try:
-                            exec(statement)
-                        except NameError as e:
-                            name = str(e).split()[1].replace("'", "")
-                            exec(statement.replace(name, f'self.{name}'))
-        return sum_al, sum_bd
+                    statements = node[f'{key.replace("-test", "-body")}'].statements
+                    len_statements = len(statements)
+                    sum_aplevel = sum_brd = 0
+                    for ind, statement in enumerate(statements):
+                        if isinstance(statement, dict):
+                            sum_aplevel, sum_brd, coverage2, if_num = self.resolve_if(statement, particle, sum_al, sum_bd, 1, if_num, pos=pos, nested=ind, count=count)
+                            coverage += coverage2
+                            sum_bd += sum_brd
+                            sum_al += sum_aplevel
+                        else:
+                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement.replace(name, f'self.{name}'))
+            count = '' if not temp else temp
+        coverage = (coverage/len_statements2) if len_statements2 > 0 else 1                
+        return sum_al, sum_bd, coverage, if_num
     
     
     def calc_expression(self, tokens):
@@ -400,6 +636,7 @@ class Fitness:
     
         else:
             try:
+                print(f"Value trying to parse {lhs}")
                 lhs = int(lhs)
             except ValueError:
                 lhs = eval(lhs)
@@ -473,28 +710,182 @@ class Fitness:
             return 0
         return 1
     
-    
+    def resolve_path(self, param, costs=[1048576]):
+        """
+        Fitness function combining both branch distance and approach level
+        Must accept a (numpy.ndarray) with shape (n_particles, dimensions)
+        Must return an array j of size (n_particles, )
+        """
+        for index_par, particle in enumerate(param):
+            self.current_walked_tree = []
+            for index, node in enumerate(visitor.nodes['body']):
+                if isinstance(node, dict):
+                    self.resolve_dict_path(node, particle, f'{index}')
+                else:
+                    for statement in node.statements:
+                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)]
+                        exec(statement)
+            prefix_path = []
+            has_element = lambda x: lambda y: x in y
+            for x in sorted(self.current_walked_tree, key=len, reverse=True):
+                if not any(map(has_element(x), prefix_path)):
+                    prefix_path.append(x)
+            for x in prefix_path:
+                divide_ = x.count('-')
+                self.custom_weights.update({f"{x}": max(costs)/2**divide_})
+            self.current_walked_tree = prefix_path
+
+    def resolve_dict_path(self, node, particle, pos, al=1, nested=0, count=''):
+        enters_if = False
+        aux_count = -1
+        temp = ''
+        print(node.items())
+        for key, _ in node.items():
+            if 'body' in key:
+                continue
+            aux_count += 1
+            if count:
+                temp = count
+                count = f"{count}-{nested}.{aux_count}"
+            else:
+                count = f"{pos}-{nested}.{aux_count}"
+            if 'while' in key:
+                statement = node[key].statements[0]
+                while exec(statement):
+                    statements = node[f'{key.replace("-test", "-body")}'].statements
+                    for ind, statement in enumerate(statements):
+                        if isinstance(statement, dict):
+                            self.resolve_dict_path(statement, particle, pos, 1, ind, count)
+                            enters_if = False
+                        else:
+                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement.replace(name, f'self.{name}'))
+                break
+            if 'for' in key and not 'else' in key and not 'elif' in key and not 'if' in key:
+                print(f"Enters {key}")
+                test = node[key].statements[0]
+                iters = test.split('in')[0][4:].strip().split(',')
+                for x in product(eval(test.split('in')[1])):
+                    if len(iters) == 1:
+                        exec(f'{iters[0]} = x[0]')
+                    else:
+                        for num, iter in enumerate(iters):
+                            exec(f'{iter} = x[{num}]')
+                    statements = node[f"{key.replace('-test', '-body')}"].statements
+                    for ind, statement in enumerate(statements):
+                        if isinstance(statement, dict):
+                            print(f"evaluating statement inside {key}  {statement}")
+                            self.resolve_dict_path(statement, particle, pos, 1, ind, count)
+                            enters_if = False
+                        else:
+                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement.replace(name, f'self.{name}'))
+                break
+            if not enters_if and 'elif' in key and 'else' not in key:
+                statement = node[key].statements[0]
+                tokens = deque(statement.split())
+                al = self.approach_level(statement)
+                if not al:
+                    print(f"Enters ElIF body {key}")
+                    enters_if = True
+                    self.walked_tree.append(f'{count}')
+                    self.current_walked_tree.append(f'{count}')
+                    statements = node[f'{key.replace("-test", "-body")}'].statements
+                    for ind, statement in enumerate(statements):
+                        if isinstance(statement, dict):
+                            self.resolve_dict_path(statement, particle, pos, 1, ind, count)
+                        else:
+                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement.replace(name, f'self.{name}'))
+            elif not enters_if and 'else' in key:
+                print(f"Enters ELSE body {key}")
+                statements = node[key].statements
+                self.walked_tree.append(f'{count}')
+                self.current_walked_tree.append(f'{count}')
+                for ind, statement in enumerate(statements):
+                    if isinstance(statement, dict):
+                        self.resolve_dict_path(statement, particle, pos, 1, ind, count)
+                    else:
+                        [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                        try:
+                            exec(statement)
+                        except NameError as e:
+                            name = str(e).split()[1].replace("'", "")
+                            exec(statement.replace(name, f'self.{name}'))
+            elif 'else' not in key and 'elif' not in key:
+                statement = node[key].statements[0]
+                tokens = deque(statement.split())
+                print(f"ENTERS IF {key} {tokens}")
+                al = self.approach_level(statement)
+                if not al:
+                    self.walked_tree.append(f'{count}')
+                    self.current_walked_tree.append(f'{count}')
+                    print(f"Enters IF body {key}")
+                    enters_if = True
+                    statements = node[f'{key.replace("-test", "-body")}'].statements
+                    for ind, statement in enumerate(statements):
+                        if isinstance(statement, dict):
+                            self.resolve_dict_path(statement, particle, pos, 1, ind, count)
+                        else:
+                            [statement:=statement.replace(f'[{index}]', f'{gene}') for index, gene in enumerate(particle)]
+                            try:
+                                exec(statement)
+                            except NameError as e:
+                                name = str(e).split()[1].replace("'", "")
+                                exec(statement.replace(name, f'self.{name}'))    
+            count = '' if not temp else temp          
 if __name__ == '__main__':
     #shape (n_particles, n_dimensions)
     # a.shape[1] = number of values
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("trig_area.py", 'r+') as filename:
+    with open("test.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
-    print(ast.dump(tree))
+    # print(ast.dump(tree))
     tree = ast.parse(tree)
     visitor = TreeVisitor()
     visitor.visit(tree)
     print(visitor.nodes)
-    
+    best_positions = {}
     # print(visitor.function_names)
-    options = {'c1': 0.9, 'c2': 0.5, 'w': 0.9, 'k': 3, 'p': 3}
-    # bpso = binaryPSO(20, 2, options=options)
-    gbpso = GBPSO(20,3,options=options)
     fitness = Fitness()
-    #fitness.calc_expression(deque('( (  ( 1 == 3 ) and  ( 101 > 100 ) ) or  ( 100 + 3 ) )'.split()))
-    cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
-    print(f"Best cost is {cost} and best position of particle is {pos}")
-    
+    more_paths = True
+    max_paths = 0
+    coverage = 0
+    past_walking = []
+    while more_paths:
+        options = {'c1': 2, 'c2': 2, 'w': 0.7}
+        gbpso = GBPSO(100,2,options=options)
+        cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
+        #lbpso = LBPSO(40,3,options=options)
+        #cost, pos = lbpso.optimize(fitness.fitn1ess_function, iters=100)
+        particle_pos = np.array([pos],np.float32)
+        fitness.resolve_path(particle_pos)
+        has_path = lambda x: lambda y: y in x
+        if all(map(has_path(list(set(past_walking))),fitness.current_walked_tree)) and past_walking:
+            break
+        coverage = len(list(set(fitness.walked_tree)))/len(fitness.whole_tree)
+        best_positions.update({f"{pos}": f"Cost is {cost} and coverage is {coverage}"})
+        print(f"Real coverage is {coverage}")
+        past_walking.extend(fitness.current_walked_tree)
+        # plot_cost_history(cost_history=gbpso.cost_history)
+        # plt.show()
+    print(fitness.custom_weights)
+    print(f"Positions and coverage are {best_positions}")
+    print(f"The coverage of the matrix is {coverage}")
+    print(f"whole tree is {list(set(fitness.whole_tree))} .  {list(set(fitness.walked_tree))}")
+    # print(f"Custom weights are {temp_arr}")    
