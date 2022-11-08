@@ -9,5 +9,7 @@ def three_number_sort(a,b,c):
 
 
 if __name__ == '__main__':
-    a=b=c=1
+    a=6
+    b=0
+    c=1
     three_number_sort(a,b,c)

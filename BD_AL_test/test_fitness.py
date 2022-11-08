@@ -14,6 +14,7 @@ from pyswarms.single import LocalBestPSO as LBPSO
 from collections import deque, defaultdict
 from ast2json import ast2json
 import sys
+import time
 import ast
 
 k = 0.1
@@ -100,10 +101,21 @@ class TreeVisitor(ast.NodeVisitor):
             return "pass"
         elif obj['_type'] == 'Tuple':
             return ','.join([self._get_value_from_ast(element) for element in obj['elts']])
-        elif isinstance(obj, ast.List):
-            return [self._get_value_from_ast(e) for e in obj.elts]
-        elif isinstance(obj, ast.Tuple):
-            return tuple([self._get_value_from_ast(e) for e in obj.elts])
+        elif obj['_type'] == 'List':
+            return f"[{','.join([self._get_value_from_ast(e) for e in obj['elts']])}]"
+        elif obj['_type'] == 'Subscript':
+            return f"{self._get_value_from_ast(obj['value'])}[{''.join(self._get_value_from_ast(obj['slice'])).replace('(', '').replace(')', '').replace(' ', '').strip()}]"
+        elif obj['_type'] == 'Slice':
+            if obj.get('step'):
+                return f"{self._get_value_from_ast(obj['lower']) if obj.get('lower', '') else ''}:" \
+                       f"{self._get_value_from_ast(obj['upper']) if obj.get('upper', '') else ''}:" \
+                       f"{self._get_value_from_ast(obj['step'])}"
+            return f"{self._get_value_from_ast(obj['lower']) if obj.get('lower', '') else ''}:" \
+                   f"{self._get_value_from_ast(obj['upper']) if obj.get('upper', '') else ''}:"
+        elif obj['_type'] == 'BinOp':
+            return self._parse_if_test(obj)
+        elif obj['_type'] == 'UnaryOp':
+            return f"{self.operators[obj['op']['_type']]} {self._get_value_from_ast(obj['operand'])}"
         # Probably passed a variable name.
         # Or passed a single word without wrapping it in quotes as an argument
         # ex: p.inflect("I plural(see)") instead of p.inflect("I plural('see')")
@@ -445,7 +457,8 @@ class Fitness:
                     self.coverage += coverage if if_num == 0 else (coverage/if_num)
                 else:
                     for statement in node.statements:
-                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)]
+                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)
+                        if not re.match(r'\b([a-zA-Z_.0-9]*)\[[0-9]+\]', statement.split('=')[1].strip())]
                         exec(statement)
 
             normalized_bd = 1 + (-1.001 ** -abs(sum_bd))
@@ -630,7 +643,9 @@ class Fitness:
     def calc_expression(self, tokens):
         """Calculate a list like [1, +, 2] or [1, +, (, 2, *, 3, )]"""
         lhs = tokens.popleft()
-    
+        if lhs == 'not':
+            print("skipping the math since unary operator is exception")
+            return 0
         if lhs == "(":
             lhs = self.calc_expression(tokens)
     
@@ -723,7 +738,8 @@ class Fitness:
                     self.resolve_dict_path(node, particle, f'{index}')
                 else:
                     for statement in node.statements:
-                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)]
+                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)
+                        if not re.match(r'\b([a-zA-Z_.0-9]*)\[[0-9]+\]', statement.split('=')[1].strip())]
                         exec(statement)
             prefix_path = []
             has_element = lambda x: lambda y: x in y
@@ -751,6 +767,8 @@ class Fitness:
                 count = f"{pos}-{nested}.{aux_count}"
             if 'while' in key:
                 statement = node[key].statements[0]
+                self.walked_tree.append(f'{count}')
+                self.current_walked_tree.append(f'{count}')
                 while exec(statement):
                     statements = node[f'{key.replace("-test", "-body")}'].statements
                     for ind, statement in enumerate(statements):
@@ -769,6 +787,8 @@ class Fitness:
                 print(f"Enters {key}")
                 test = node[key].statements[0]
                 iters = test.split('in')[0][4:].strip().split(',')
+                self.walked_tree.append(f'{count}')
+                self.current_walked_tree.append(f'{count}')
                 for x in product(eval(test.split('in')[1])):
                     if len(iters) == 1:
                         exec(f'{iters[0]} = x[0]')
@@ -847,6 +867,7 @@ class Fitness:
                                 exec(statement.replace(name, f'self.{name}'))    
             count = '' if not temp else temp          
 if __name__ == '__main__':
+    st = time.time()
     #shape (n_particles, n_dimensions)
     # a.shape[1] = number of values
     #with open("test.py", 'r+') as filename:
@@ -887,5 +908,8 @@ if __name__ == '__main__':
     print(fitness.custom_weights)
     print(f"Positions and coverage are {best_positions}")
     print(f"The coverage of the matrix is {coverage}")
-    print(f"whole tree is {list(set(fitness.whole_tree))} .  {list(set(fitness.walked_tree))}")
+    print(f"whole tree is {list(set(fitness.whole_tree))} Walked tree:  {list(set(fitness.walked_tree))}")
+    et = time.time()
+    total_time = et - st
+    print(f"Total elapsed time is {total_time} seconds")
     # print(f"Custom weights are {temp_arr}")    
