@@ -1,5 +1,6 @@
-def bubbleSort(*arr):
-    n = len(arr)
+def bubbleSort(a, b, c, d):
+    n = 4
+    arr = [a, b, c, d]
     # optimize code, so if the array is already sorted, it doesn't need
     # to go through the entire process
     swapped = False
