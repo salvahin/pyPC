@@ -8,8 +8,23 @@ from itertools import product
 import re
 import math
 from pyparsing import nested_expr
-from pyswarms.single import GlobalBestPSO as GBPSO
-from pyswarms.single import LocalBestPSO as LBPSO
+
+### for Fitness
+import pymoo.gradient.toolbox as anp
+from pymoo.core.problem import Problem
+
+from pymoo.algorithms.soo.nonconvex.de import DE 
+from pymoo.operators.sampling.lhs import LHS
+
+from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch
+from pymoo.algorithms.soo.nonconvex.pso import PSO
+from pymoo.algorithms.soo.nonconvex.cmaes import CMAES
+
+from pymoo.optimize import minimize
+
+
+
+
 from collections import deque, defaultdict
 from ast2json import ast2json
 import sys
@@ -411,9 +426,10 @@ class TreeVisitor(ast.NodeVisitor):
     # def visit_Pass(self, node):
     #     print('Node type: Pass\nFields:', node._fields)
     #     ast.NodeVisitor.generic_visit(self, node)
-class Fitness:
+class Fitness(Problem):
 
-    def __init__(self) -> None:
+    def __init__(self,n_var=3) -> None:
+        super().__init__(n_var=n_var,n_obj=1,n_ieq_constr=0,xl=-5,xu=5,vtype=float)
         self.complete_coverage = {}
         self.coverage = 0
         self.walked_tree = []
@@ -434,7 +450,7 @@ class Fitness:
     def round_half_up(self, n, decimals=0):
         multiplier = 10 ** decimals
         return math.floor(n*multiplier + 0.5) / multiplier
-    def fitness_function(self, param):
+    def _evaluate(self, param, out, *args, **kwargs):
         """
         Fitness function combining both branch distance and approach level
         Must accept a (numpy.ndarray) with shape (n_particles, dimensions)
@@ -466,7 +482,7 @@ class Fitness:
             complete_execution_coverage = (self.coverage/ifs_num) if ifs_num > 0 else 1
             self.complete_coverage.update({f"{float(normalized_bd+sum_al)}": complete_execution_coverage})
             particles_fitness.insert(index_par, float(normalized_bd+sum_al))
-        return np.array(particles_fitness)
+            out['F'] =np.array(particles_fitness)
 
     def resolve_if(self, node, particle, sum_al, sum_bd, al=1, if_num=0, pos=0, nested=0, count=''):
         enters_if = False
@@ -872,7 +888,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("SUT/test.py", 'r+') as filename:
+    with open("SUT/test2.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
@@ -887,12 +903,17 @@ if __name__ == '__main__':
     max_paths = 0
     coverage = 0
     past_walking = []
+    
+    algorithm = PatternSearch(pop_size=100)
+
     while more_paths:
-        options = {'c1': 2, 'c2': 2, 'w': 0.7}
-        gbpso = GBPSO(100,2,options=options)
-        cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
-        #lbpso = LBPSO(40,3,options=options)
-        #cost, pos = lbpso.optimize(fitness.fitn1ess_function, iters=100)
+        res = minimize(fitness,
+               algorithm,
+               seed=1,
+               verbose=False)
+        cost = res.F
+        pos = res.X
+
         particle_pos = np.array([pos],np.float32)
         fitness.resolve_path(particle_pos)
         has_path = lambda x: lambda y: y in x
