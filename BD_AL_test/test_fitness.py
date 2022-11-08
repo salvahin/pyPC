@@ -7,7 +7,6 @@ import numpy as np
 from itertools import product
 import re
 import math
-from functools import reduce
 from pyparsing import nested_expr
 from pyswarms.single import GlobalBestPSO as GBPSO
 from pyswarms.single import LocalBestPSO as LBPSO
@@ -873,7 +872,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("test.py", 'r+') as filename:
+    with open("SUT/test.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
