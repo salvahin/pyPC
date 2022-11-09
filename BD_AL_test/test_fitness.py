@@ -428,7 +428,7 @@ class TreeVisitor(ast.NodeVisitor):
     #     ast.NodeVisitor.generic_visit(self, node)
 class Fitness(Problem):
 
-    def __init__(self,n_var=3) -> None:
+    def __init__(self,n_var=2) -> None:
         super().__init__(n_var=n_var,n_obj=1,n_ieq_constr=0,xl=-5,xu=5,vtype=float)
         self.complete_coverage = {}
         self.coverage = 0
@@ -888,7 +888,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("SUT/test2.py", 'r+') as filename:
+    with open("./BD_AL_test/SUT/test.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
@@ -911,7 +911,7 @@ if __name__ == '__main__':
                algorithm,
                seed=1,
                verbose=False)
-        cost = res.F
+        cost = res.F[0]
         pos = res.X
 
         particle_pos = np.array([pos],np.float32)
@@ -923,7 +923,6 @@ if __name__ == '__main__':
         best_positions.update({f"{pos}": f"Cost is {cost} and coverage is {coverage}"})
         print(f"Real coverage is {coverage}")
         past_walking.extend(fitness.current_walked_tree)
-        # plot_cost_history(cost_history=gbpso.cost_history)
         # plt.show()
     print(fitness.custom_weights)
     print(f"Positions and coverage are {best_positions}")
