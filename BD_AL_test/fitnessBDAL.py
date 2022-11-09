@@ -1,6 +1,5 @@
 #from multiprocessing.sharedctypes import Value
 
-from pyswarms.utils.plotters import (plot_cost_history, plot_contour, plot_surface)
 from tokenize import Double
 import numpy as np
 from itertools import product
@@ -22,7 +21,8 @@ k = 0.1
 class Fitness(Problem):
 
 
-    def __init__(self,SUTpath='',n_var=2) -> None:
+
+    def __init__(self,SUTpath='',n_var=2,verbose=False) -> None:
         super().__init__(n_var=n_var,n_obj=1,n_ieq_constr=0,xl=-50000,xu=50000,vtype=float)
         self.complete_coverage = {}
         self.coverage = 0
@@ -31,14 +31,16 @@ class Fitness(Problem):
         self.whole_tree = set()
         self.custom_weights = {}
         self.tree = {}
-        self.visitor = TreeVisitor()
+        self.visitor = TreeVisitor(verbose=verbose)
         self._create_tree(SUTpath)
+        self.vprint = print if verbose else lambda *a, **k: None
+
 
     def _create_tree(self,SUTpath):
         with open(SUTpath, 'r+') as filename:
             lines = filename.readlines()
             tree = ast.parse(''.join(lines))
-         # print(ast.dump(tree))
+         # self.vprint(ast.dump(tree))
         tree = ast.parse(tree)
         self.visitor.visit(tree)
         #print(visitor.nodes)
@@ -47,7 +49,7 @@ class Fitness(Problem):
     def explore(self, node):
         result = 0
         for x, v in node.items():
-            print(f"finding if in {x}")
+            self.vprint(f"finding if in {x}")
             if 'if' in x:
                 return 1
             for y in v.statements:
@@ -75,7 +77,7 @@ class Fitness(Problem):
                     #if 'if' in list(node.keys())[0]:
                     #    ifs_num += 1
                     ifs_num += self.explore(node)
-                    print(f"COVERAGE and values are {coverage} {sum_al} {sum_bd} {if_num}")
+                    self.vprint(f"COVERAGE and values are {coverage} {sum_al} {sum_bd} {if_num}")
                     self.coverage += coverage if if_num == 0 else (coverage/if_num)
                 else:
                     for statement in node.statements:
@@ -84,7 +86,7 @@ class Fitness(Problem):
                         exec(statement)
 
             normalized_bd = 1 + (-1.001 ** -abs(sum_bd))
-            print(normalized_bd)
+            self.vprint(normalized_bd)
             self.coverage = 1 if self.coverage == 0 else self.coverage
             complete_execution_coverage = (self.coverage/ifs_num) if ifs_num > 0 else 1
             self.complete_coverage.update({f"{float(normalized_bd+sum_al)}": complete_execution_coverage})
@@ -117,7 +119,7 @@ class Fitness(Problem):
                     for ind, statement1 in enumerate(statements):
                         if isinstance(statement1, dict):
                             sum_aplevel, sum_brd_temp, coverage2, if_num = self.resolve_if(statement1, particle, sum_al, sum_bd, 1, if_num, pos=pos, nested=ind, count=count)
-                            print(f"nested returned on for{if_num}")
+                            self.vprint(f"nested returned on for{if_num}")
                             sum_aplevel += sum_aplevel_temp
                             sum_brd += sum_brd_temp
                             enters_if = False
@@ -129,18 +131,18 @@ class Fitness(Problem):
                             except NameError as e:
                                 name = str(e).split()[1].replace("'", "")
                                 exec(statement1.replace(name, f'self.{name}'))
-                print(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
+                self.vprint(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
                 sum_al += sum_aplevel/module_cost
                 sum_bd += sum_brd/module_cost
                 # coverage = coverage/len_statements
                 break
             if 'for' in key and not 'else' in key and not 'elif' in key and not 'if' in key:
-                print(f"Enters {key}")
+                self.vprint(f"Enters {key}")
                 test = node[key].statements[0]
                 iters = test.split('in')[0][4:].strip().split(',')
                 sum_aplevel = sum_brd = 0
                 module_cost = len([x for x in product(eval(test.split('in')[1]))])
-                print(f"for test to iterate is {test.split('in')[1]}")
+                self.vprint(f"for test to iterate is {test.split('in')[1]}")
                 for x in product(eval(test.split('in')[1])):
                     if len(iters) == 1:
                         exec(f'{iters[0]} = x[0]')
@@ -150,7 +152,7 @@ class Fitness(Problem):
                     statements = node[f"{key.replace('-test', '-body')}"].statements
                     for ind, statement in enumerate(statements):
                         if isinstance(statement, dict):
-                            print(f"evaluating statement inside {key}  {statement}")
+                            self.vprint(f"evaluating statement inside {key}  {statement}")
                             sum_aplevel_temp, sum_brd_temp, coverage2, if_num = self.resolve_if(statement, particle, sum_al, sum_bd, 1, if_num, pos=pos, nested=ind, count=count)
                             sum_aplevel += sum_aplevel_temp
                             coverage += coverage2
@@ -164,10 +166,10 @@ class Fitness(Problem):
                             except NameError as e:
                                 name = str(e).split()[1].replace("'", "")
                                 exec(statement.replace(name, f'self.{name}'))
-                print(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
+                self.vprint(f"moduling cost {sum_aplevel} to a value between 1 and 0, iter is {module_cost} {sum_aplevel/module_cost}")
                 sum_al += sum_aplevel/module_cost
                 sum_bd += sum_brd/module_cost
-                print(f"Coverage cost is {coverage}   {if_num}")
+                self.vprint(f"Coverage cost is {coverage}   {if_num}")
                 #coverage = (coverage/(module_cost)) if module_cost > 0 else coverage
                 break
             if not enters_if and 'elif' in key and 'else' not in key:
@@ -179,7 +181,7 @@ class Fitness(Problem):
                 sum_bd += bd
                 sum_al += al
                 if not al:
-                    print(f"Enters ElIF body {key}")
+                    self.vprint(f"Enters ElIF body {key}")
                     if count in self.custom_weights.keys():
                         sum_bd += self.custom_weights[count]
                         sum_al += self.custom_weights[count]
@@ -201,7 +203,7 @@ class Fitness(Problem):
                                 name = str(e).split()[1].replace("'", "")
                                 exec(statement.replace(name, f'self.{name}')) 
             elif not enters_if and 'else' in key:
-                print(f"Enters ELSE body {key}")
+                self.vprint(f"Enters ELSE body {key}")
                 if_num += 1
                 statements = node[key].statements
                 len_statements = len(statements)
@@ -227,15 +229,15 @@ class Fitness(Problem):
                 statement = node[key].statements[0]
                 if_num += 1 
                 tokens = deque(statement.split())
-                print(f"ENTERS IF {key} {tokens}")
+                self.vprint(f"ENTERS IF {key} {tokens}")
                 al = self.approach_level(statement)
                 bd = self.calc_expression(tokens)
                 sum_bd += bd
                 sum_al += al
                 if not al:
-                    print(f"Enters IF body {key}")
+                    self.vprint(f"Enters IF body {key}")
                     if count != '2-0.0-0.0-0.0':
-                        print("hello")
+                        self.vprint("hello")
                     if count in self.custom_weights.keys():
                         sum_bd += self.custom_weights[count]
                         sum_al += self.custom_weights[count]
@@ -266,14 +268,14 @@ class Fitness(Problem):
         """Calculate a list like [1, +, 2] or [1, +, (, 2, *, 3, )]"""
         lhs = tokens.popleft()
         if lhs == 'not':
-            print("skipping the math since unary operator is exception")
+            self.vprint("skipping the math since unary operator is exception")
             return 0
         if lhs == "(":
             lhs = self.calc_expression(tokens)
     
         else:
             try:
-                print(f"Value trying to parse {lhs}")
+                self.vprint(f"Value trying to parse {lhs}")
                 lhs = int(lhs)
             except ValueError:
                 lhs = eval(lhs)
@@ -301,7 +303,7 @@ class Fitness(Problem):
                 "bad expression, expected closing-paren"
     
         # Do the math
-        print(f"Doing the math for {lhs} {operator} {rhs}")
+        self.vprint(f"Doing the math for {lhs} {operator} {rhs}")
     
         if operator == "+" or operator == 'and':
             result = lhs + rhs
@@ -342,7 +344,7 @@ class Fitness(Problem):
         """
         Obtains the approach level of the branch to the ideal path
         """
-        print(f"EVAL {eval(pred)} ")
+        self.vprint(f"EVAL {eval(pred)} ")
         if eval(pred):
             return 0
         return 1
@@ -377,7 +379,7 @@ class Fitness(Problem):
         enters_if = False
         aux_count = -1
         temp = ''
-        print(node.items())
+        self.vprint(node.items())
         for key, _ in node.items():
             if 'body' in key:
                 continue
@@ -406,7 +408,7 @@ class Fitness(Problem):
                                 exec(statement.replace(name, f'self.{name}'))
                 break
             if 'for' in key and not 'else' in key and not 'elif' in key and not 'if' in key:
-                print(f"Enters {key}")
+                self.vprint(f"Enters {key}")
                 test = node[key].statements[0]
                 iters = test.split('in')[0][4:].strip().split(',')
                 self.walked_tree.append(f'{count}')
@@ -420,7 +422,7 @@ class Fitness(Problem):
                     statements = node[f"{key.replace('-test', '-body')}"].statements
                     for ind, statement in enumerate(statements):
                         if isinstance(statement, dict):
-                            print(f"evaluating statement inside {key}  {statement}")
+                            self.vprint(f"evaluating statement inside {key}  {statement}")
                             self.resolve_dict_path(statement, particle, pos, 1, ind, count)
                             enters_if = False
                         else:
@@ -436,7 +438,7 @@ class Fitness(Problem):
                 tokens = deque(statement.split())
                 al = self.approach_level(statement)
                 if not al:
-                    print(f"Enters ElIF body {key}")
+                    self.vprint(f"Enters ElIF body {key}")
                     enters_if = True
                     self.walked_tree.append(f'{count}')
                     self.current_walked_tree.append(f'{count}')
@@ -452,7 +454,7 @@ class Fitness(Problem):
                                 name = str(e).split()[1].replace("'", "")
                                 exec(statement.replace(name, f'self.{name}'))
             elif not enters_if and 'else' in key:
-                print(f"Enters ELSE body {key}")
+                self.vprint(f"Enters ELSE body {key}")
                 statements = node[key].statements
                 self.walked_tree.append(f'{count}')
                 self.current_walked_tree.append(f'{count}')
@@ -469,12 +471,12 @@ class Fitness(Problem):
             elif 'else' not in key and 'elif' not in key:
                 statement = node[key].statements[0]
                 tokens = deque(statement.split())
-                print(f"ENTERS IF {key} {tokens}")
+                self.vprint(f"ENTERS IF {key} {tokens}")
                 al = self.approach_level(statement)
                 if not al:
                     self.walked_tree.append(f'{count}')
                     self.current_walked_tree.append(f'{count}')
-                    print(f"Enters IF body {key}")
+                    self.vprint(f"Enters IF body {key}")
                     enters_if = True
                     statements = node[f'{key.replace("-test", "-body")}'].statements
                     for ind, statement in enumerate(statements):

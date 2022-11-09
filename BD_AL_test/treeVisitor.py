@@ -9,7 +9,7 @@ class Node:
         return f"{self.statements} \n"
 
 class TreeVisitor(ast.NodeVisitor):
-    def __init__(self) -> None:
+    def __init__(self, verbose=False) -> None:
         self.function_names = []
         self.functions_trees = defaultdict(list)
         self.curr_func_json = None
@@ -43,13 +43,15 @@ class TreeVisitor(ast.NodeVisitor):
             "Invert": "~"
         }
         super().__init__()
+        self.vprint = print if verbose else lambda *a, **k: None
+
     
     def _rename_while_keys(self, if_body="", else_if="", is_while=False, while_body="", if_parent=False):
         """
         Method to rename the while_node keys if is inside the if clause.
         Example: If x:
                     for y in range(1):
-                         print(x)
+                         self.vprint(x)
         first it is going to parse the If then the for but the for keys parsed won't 
         have the If as a parent key so this will change for-test and for-body keys to 
         {if_body}-for-test and {if_body}-for-body keys
@@ -77,7 +79,7 @@ class TreeVisitor(ast.NodeVisitor):
             return f"{obj['value']}"
         elif obj['_type'] == 'Call':
             arguments = ','.join([self._parse_if_test(arg) for arg in obj['args']])
-            print(f"{obj['func']['id']}({arguments})")
+            self.vprint(f"{obj['func']['id']}({arguments})")
             return f"{obj['func']['id']}({arguments})"
         elif obj['_type'] == 'Break':
             return "pass"
@@ -130,7 +132,7 @@ class TreeVisitor(ast.NodeVisitor):
         node = Node()
         node.statements.extend([f'self.{x} = [{num}]' for num, x in enumerate(self._args)])
         self.nodes['body'].append(node)
-        print(f"INITIALIZING VARS {self.nodes['body'][0].statements}")
+        self.vprint(f"INITIALIZING VARS {self.nodes['body'][0].statements}")
         for statement in body:
             # print(statement.keys())
             if statement['_type'] == 'If':
@@ -177,7 +179,7 @@ class TreeVisitor(ast.NodeVisitor):
         """
         Parse the while body and condition repeat until condition is False
         """
-        print(f"Begin While Statement {statement['_type']}")
+        self.vprint(f"Begin While Statement {statement['_type']}")
         result = self._parse_if_test(statement['test']).strip()
         node = Node()
         node.statements.append(result)
@@ -192,7 +194,7 @@ class TreeVisitor(ast.NodeVisitor):
         """
         Parse the while body and condition repeat until condition is False
         """
-        print(f"Begin For Statement {statement['_type']}")
+        self.vprint(f"Begin For Statement {statement['_type']}")
         target = self._parse_if_test(statement['target'])
         iter = self._parse_if_test(statement['iter'])
         result = f"for {target} in " \
@@ -212,7 +214,7 @@ class TreeVisitor(ast.NodeVisitor):
         """
         Parse the if body and condition
         """
-        print(f"BEGIN THE IF STATEMENT {statement['_type']} {else_if}")
+        self.vprint(f"BEGIN THE IF STATEMENT {statement['_type']} {else_if}")
         node = Node()
         # parse If test
         result = self._parse_if_test(statement['test']).strip()
@@ -336,13 +338,13 @@ class TreeVisitor(ast.NodeVisitor):
         self.function_names.append(node.name)
         self.functions_trees[node.name] = {}
         result = ast2json(node)
-        print(result)
+        self.vprint(result)
         self.curr_func_json = result
         self.re_structure_tree()
         
     def visit_Import(self, node):
         result = ast2json(node)
-        print(result)
+        self.vprint(result)
         node2 = Node()
         node2.statements.append(f"import {','.join([name['name'] for name in result['names']])}")
         for name in result['names']:
@@ -351,7 +353,7 @@ class TreeVisitor(ast.NodeVisitor):
         ast.NodeVisitor.generic_visit(self, node)
     def visit_ImportFrom(self, node):
         result = ast2json(node)
-        print(result)
+        self.vprint(result)
         node2 = Node()
         if list(filter(lambda x: True if x else False, [name['asname'] for name in result['names']])):
             node2.statements.append(f"from {result['module']} import " \
@@ -366,33 +368,33 @@ class TreeVisitor(ast.NodeVisitor):
             self.nodes['body'].append(node2)
         ast.NodeVisitor.generic_visit(self, node)
     # def visit_BoolOp(self, node):
-    #     print(f"Bool op {node._fields}")
-    #     print(f"{node.op}  {node.values}")
+    #     self.vprint(f"Bool op {node._fields}")
+    #     self.vprint(f"{node.op}  {node.values}")
     #     ast.NodeVisitor.generic_visit(self, node)
 
     # def visit_Str(self, node):
-    #     print(f"Node type: Str\nFields: {node._fields}")
-    #     print(f"{node.s}")
+    #     self.vprint(f"Node type: Str\nFields: {node._fields}")
+    #     self.vprint(f"{node.s}")
     #     ast.NodeVisitor.generic_visit(self, node)
     # def visit_Num(self, node):
-    #     print(f"Node type: Num\nFields: {node._fields}")
-    #     print(f"{node.n}")
+    #     self.vprint(f"Node type: Num\nFields: {node._fields}")
+    #     self.vprint(f"{node.n}")
     #     ast.NodeVisitor.generic_visit(self, node)              
     # def visit_Expr(self, node):
-    #     print(f"Node type: Expr\nFields: {node._fields}")
+    #     self.vprint(f"Node type: Expr\nFields: {node._fields}")
     #     ast.NodeVisitor.generic_visit(self, node)
     # def visit_BinOp(self, node):
-    #     print(f"Node type: Expr\nFields: {node._fields}")
+    #     self.vprint(f"Node type: Expr\nFields: {node._fields}")
     #     ast.NodeVisitor.generic_visit(self, node)
     # def visit_Name(self, node):
-    #     print('Node type: Name\nFields:', node._fields)
-    #     print(f"{node.id}")
+    #     self.vprint('Node type: Name\nFields:', node._fields)
+    #     self.vprint(f"{node.id}")
     #     ast.NodeVisitor.generic_visit(self, node)
 
     # def visit_Constant(self, node):
-    #     print('Node type: Constant\nFields:', node._fields)
+    #     self.vprint('Node type: Constant\nFields:', node._fields)
     #     ast.NodeVisitor.generic_visit(self, node)
 
     # def visit_Pass(self, node):
-    #     print('Node type: Pass\nFields:', node._fields)
+    #     self.vprint('Node type: Pass\nFields:', node._fields)
     #     ast.NodeVisitor.generic_visit(self, node)
