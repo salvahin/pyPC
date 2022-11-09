@@ -1,33 +1,5 @@
-#from multiprocessing.sharedctypes import Value
-#import matplotlib.pyplot as plt
-#from IPython.display import Image
-#from pyswarms.utils.plotters import (plot_cost_history, plot_contour, plot_surface)
-#from tokenize import Double
-#import numpy as np
-#from itertools import product
-import re
-import math
-#from pyparsing import nested_expr
-
-### for Fitness
-"""import pymoo.gradient.toolbox as anp
-from pymoo.core.problem import Problem
-
-from pymoo.algorithms.soo.nonconvex.de import DE 
-from pymoo.operators.sampling.lhs import LHS
-
-from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch
-from pymoo.algorithms.soo.nonconvex.pso import PSO
-
-from pymoo.optimize import minimize
-
-"""
-
-
-from collections import deque, defaultdict
+from collections import  defaultdict
 from ast2json import ast2json
-import sys
-import time
 import ast
 
 class Node:
