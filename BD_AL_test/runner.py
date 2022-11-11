@@ -3,6 +3,9 @@ import pandas as pd
 import csv
 import os
 
+from inspect import signature
+from utils import get_dim
+
 
 ### for Fitness
 import pymoo.gradient.toolbox as anp
@@ -38,6 +41,8 @@ def getSUTS():
         if file.endswith('.py'):
             res.append(file)
     return res
+    
+
 
 def getAlgorithm(alg):
     #This function receives a string representation of the algorithm and returns the configured pymoo algorithm object
@@ -52,7 +57,7 @@ def getAlgorithm(alg):
     elif alg == 'NM':
         algorithm = NelderMead()
     elif alg == 'CMAES':
-        algorithm = CMAES(x0=np.random.random(2))## This argument should change as he dimensions change
+        algorithm = CMAES(x0=np.random.random(2))## This argument should change as the dimensions change
     elif alg == 'ES':
         algorithm = ES(n_offsprings=pop_size, rule=1.0 / 7.0)
     elif alg == 'SRES':
@@ -69,17 +74,21 @@ def getAlgorithm(alg):
 
 
 
-algs = ('PSO','DE','PS','GA','NM','CMAES','ES','SRES','ISRES')
+algs = ('PSO','DE','PS','GA','NM','ES','SRES','ISRES')
 data = []
 
 SUTS = getSUTS()
 for SUT in SUTS:
-    print("*************\Analyzing ",SUT)
+    SUT_path = SUT_dir+SUT
+    func_dim,func_name = get_dim(SUT_path)
+    print("*************\Analyzing ",func_name, "dim: ",func_dim)
     for alg_name in algs:
         print("*************\nRunning ",alg_name)
-        res = TestGenerator(SUT_dir+SUT,algorithm=getAlgorithm(alg_name),n_var=2)
+       
+        res = TestGenerator(SUT_path,algorithm=getAlgorithm(alg_name),n_var=func_dim)
         res.data['Alg'] = alg_name
-        res.data['SUT'] = SUT
+        res.data['SUT'] = func_name
+        res.data['dim'] = func_dim
         data.append(res.data)
 #print(data[4])
 
