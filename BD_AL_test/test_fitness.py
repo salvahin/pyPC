@@ -16,15 +16,18 @@ import time
 class TestGenerator:
 
     def __init__(self,SUTpath="",algorithm={},n_var=2,multipath=True,verbose=False):
-        self.fitness = Fitness(SUTpath=SUTpath,n_var=n_var)
+        self.fitness = Fitness(SUTpath=SUTpath,n_var=n_var,verbose =False)
         if algorithm == {}:
             algorithm = PSO(pop_size=10)
         self.algorithm = algorithm
+        self.vprint = print if verbose else lambda *a, **k: None
         self.generate()
+        
+
     
     def generate(self):
         st = time.time()
-        best_positions = {}
+        self.best_positions = {}
         more_paths = True
         past_walking = []
         while more_paths:
@@ -39,17 +42,18 @@ class TestGenerator:
             has_path = lambda x: lambda y: y in x
             if all(map(has_path(list(set(past_walking))),self.fitness.current_walked_tree)) and past_walking:
                 break
-            coverage = len(list(set(self.fitness.walked_tree)))/len(self.fitness.whole_tree)
-            best_positions.update({f"{pos}": f"Cost is {cost} and coverage is {coverage}"})
-            print(f"Real coverage is {coverage}")
+            self.coverage = len(list(set(self.fitness.walked_tree)))/len(self.fitness.whole_tree)
+            self.best_positions.update({f"{pos}": f"Cost is {cost} and coverage is {self.coverage}"})
+            print(f"Real coverage is {self.coverage}")
             past_walking.extend(self.fitness.current_walked_tree)
-        print(self.fitness.custom_weights)
-        print(f"Positions and coverage are {best_positions}")
-        print(f"The coverage of the matrix is {coverage}")
-        print(f"whole tree is {list(set(self.fitness.whole_tree))} Walked tree:  {list(set(self.fitness.walked_tree))}")
+        self.vprint(self.fitness.custom_weights)
+        self.vprint(f"Positions and coverage are {self.best_positions}")
+        self.vprint(f"The coverage of the matrix is {self.coverage}")
+        self.vprint(f"whole tree is {list(set(self.fitness.whole_tree))} Walked tree:  {list(set(self.fitness.walked_tree))}")
         et = time.time()
-        total_time = et - st
-        print(f"Total elapsed time is {total_time} seconds")
+        self.total_time = et - st
+        self.vprint(f"Total elapsed time is {self.total_time} seconds")
+        self.data = {'Coverage': self.coverage,'Time':self.total_time,'Positions':self.best_positions,'Total tree':self.fitness.walked_tree,'Walked tree':self.fitness.walked_tree}
         # print(f"Custom weights are {temp_arr}") 
     
 
