@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 import csv
-import os
 
-from inspect import signature
-from utils import get_dim
+from utils import get_dim, getSUTS
+from test_fitness import TestGenerator
+
 
 
 ### for Fitness
@@ -29,19 +29,9 @@ from pymoo.algorithms.soo.nonconvex.cmaes import CMAES
 
 
 
-from test_fitness import TestGenerator
 pop_size=10
 SUT_dir = './SUT/'
 
-def getSUTS():
-    res = []
-    # Iterate directory
-    for file in os.listdir(SUT_dir):
-        # check if current file is .py
-        if file.endswith('.py'):
-            res.append(file)
-    return res
-    
 
 
 def getAlgorithm(alg):
@@ -77,13 +67,14 @@ def getAlgorithm(alg):
 algs = ('PSO','DE','PS','GA','NM','ES','SRES','ISRES')
 data = []
 
-SUTS = getSUTS()
+SUTS = getSUTS(SUT_dir)
+#SUTS = [ 'test.py']
 for SUT in SUTS:
     SUT_path = SUT_dir+SUT
     func_dim,func_name = get_dim(SUT_path)
-    print("*************\Analyzing ",func_name, "dim: ",func_dim)
+    #print("*************\Analyzing ",func_name, "dim: ",func_dim)
     for alg_name in algs:
-        print("*************\nRunning ",alg_name)
+        #print("*************\nRunning ",alg_name)
        
         res = TestGenerator(SUT_path,algorithm=getAlgorithm(alg_name),n_var=func_dim)
         res.data['Alg'] = alg_name
