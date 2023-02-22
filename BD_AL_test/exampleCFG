@@ -1,0 +1,68 @@
+digraph "clustertest.py" {
+	graph [label="test.py"]
+	1 [label="def test_code(x: int, y, a=2, *defaultlistx, **args) ->int:...
+"]
+	subgraph clustertest_code {
+		graph [label=test_code]
+		3 [label="if x > 2 and y > 100:
+"]
+		4 [label="x = x ** 2
+if x == 4:
+"]
+		12 [label="print(i)
+"]
+		"12_calls" [label=print shape=box]
+		12 -> "12_calls" [label=calls style=dashed]
+		13 [label="if y == 120:
+"]
+		14 [label="print(i)
+"]
+		"14_calls" [label=print shape=box]
+		14 -> "14_calls" [label=calls style=dashed]
+		5 [label="test = x
+if y > 100:
+"]
+		16 [label="test = 1
+if x > 2 and y < 200:
+"]
+		19 [label="test = 0
+"]
+		17 [label="return 0
+"]
+		19 -> 17 [label=""]
+		16 -> 19 [label="x > 2 and y < 200"]
+		16 -> 17 [label="(not (x > 2 and y < 200))"]
+		5 -> 16 [label="y > 100"]
+		18 [label="print('success')
+print('s')
+a = 6
+"]
+		"18_calls" [label="print
+print" shape=box]
+		18 -> "18_calls" [label=calls style=dashed]
+		18 -> 17 [label=""]
+		5 -> 18 [label="(y <= 100)"]
+		14 -> 5 [label=""]
+		13 -> 14 [label="y == 120"]
+		13 -> 5 [label="(y != 120)"]
+		12 -> 13 [label=""]
+		4 -> 12 [label="x == 4"]
+		4 -> 13 [label="(x != 4)"]
+		3 -> 4 [label="x > 2 and y > 100"]
+		6 [label="if x < 2:
+"]
+		7 [label="test = y
+"]
+		7 -> 5 [label=""]
+		6 -> 7 [label="x < 2"]
+		9 [label="if y < 99:
+"]
+		10 [label="test = 0
+"]
+		10 -> 5 [label=""]
+		9 -> 10 [label="y < 99"]
+		9 -> 5 [label="(y >= 99)"]
+		6 -> 9 [label="(x >= 2)"]
+		3 -> 6 [label="(not (x > 2 and y > 100))"]
+	}
+}

@@ -56,7 +56,8 @@ class TreeVisitor(ast.NodeVisitor):
             "In": "in",
             "NotIn": "not in",
             "Not": "not",
-            "Invert": "~"
+            "Invert": "~",
+            "USub": "-"
         }
         super().__init__()
     
@@ -115,7 +116,7 @@ class TreeVisitor(ast.NodeVisitor):
         elif obj['_type'] == 'BinOp':
             return self._parse_if_test(obj)
         elif obj['_type'] == 'UnaryOp':
-            return f"{self.operators[obj['op']['_type']]} {self._get_value_from_ast(obj['operand'])}"
+            return f"{self.operators[obj['op']['_type']]}{self._get_value_from_ast(obj['operand'])}"
         # Probably passed a variable name.
         # Or passed a single word without wrapping it in quotes as an argument
         # ex: p.inflect("I plural(see)") instead of p.inflect("I plural('see')")
@@ -457,8 +458,9 @@ class Fitness:
                     self.coverage += coverage if if_num == 0 else (coverage/if_num)
                 else:
                     for statement in node.statements:
-                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)
-                        if not re.match(r'\b([a-zA-Z_.0-9]*)\[[0-9]+\]', statement.split('=')[1].strip())]
+                        if not 'import' in statement:
+                            [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)
+                            if not re.match(r'\b([a-zA-Z_.0-9]*)\[[0-9]+\]', statement.split('=')[1].strip())]
                         exec(statement)
 
             normalized_bd = 1 + (-1.001 ** -abs(sum_bd))
@@ -738,8 +740,9 @@ class Fitness:
                     self.resolve_dict_path(node, particle, f'{index}')
                 else:
                     for statement in node.statements:
-                        [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)
-                        if not re.match(r'\b([a-zA-Z_.0-9]*)\[[0-9]+\]', statement.split('=')[1].strip())]
+                        if not 'import' in statement:
+                            [statement:=statement.replace(f'[{index}]', f'{self.round_half_up(gene, 1)}') for index, gene in enumerate(particle)
+                            if not re.match(r'\b([a-zA-Z_.0-9]*)\[[0-9]+\]', statement.split('=')[1].strip())]
                         exec(statement)
             prefix_path = []
             has_element = lambda x: lambda y: x in y
@@ -873,7 +876,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("test.py", 'r+') as filename:
+    with open("test_game_programs/function_only_testings/rock_paper_scissor_player_choice.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
@@ -890,7 +893,7 @@ if __name__ == '__main__':
     past_walking = []
     while more_paths:
         options = {'c1': 2, 'c2': 2, 'w': 0.7}
-        gbpso = GBPSO(100,2,options=options)
+        gbpso = GBPSO(100,1,options=options)
         cost, pos = gbpso.optimize(fitness.fitness_function, iters=100)
         #lbpso = LBPSO(40,3,options=options)
         #cost, pos = lbpso.optimize(fitness.fitn1ess_function, iters=100)

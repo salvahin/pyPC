@@ -1,5 +1,5 @@
-def insertionSort(*alist):
-    alist = list(alist)
+def insertionSort(a,b,c,d,e):
+    alist = [a,b,c,d,e]
     for index in range(1,len(alist)):
 
         currentvalue = alist[index]

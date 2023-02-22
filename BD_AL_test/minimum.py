@@ -1,5 +1,5 @@
-def min(*var):
-    a = list(var)
+def min(b,c,d,x):
+    a = [b,c,d,x]
     # smallest number
     smallest = a[0]
     

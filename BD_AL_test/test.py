@@ -1,4 +1,4 @@
-def excecute(x: int, y, a=2, *defaultlistx, **args) -> int:
+def test_code(x: int, y, a=2, *defaultlistx, **args) -> int:
     #function execute
     if x > 2 and y > 100:
         x = x ** 2
