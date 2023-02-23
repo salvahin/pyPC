@@ -91,7 +91,12 @@ class TreeVisitor(ast.NodeVisitor):
         elif obj['_type'] == 'Str':
             return f"{obj['s']}"
         elif obj['_type'] == 'Constant':
-            return f"{obj['value']}"
+            value = ""
+            try:
+                value = f"\"{obj['value']}\"" if obj['value'].isalpha() else obj['value']
+            except AttributeError:
+                value = obj['value']
+            return f"{value}"
         elif obj['_type'] == 'Call':
             arguments = ','.join([self._parse_if_test(arg) for arg in obj['args']])
             print(f"{obj['func']['id']}({arguments})")
@@ -117,6 +122,11 @@ class TreeVisitor(ast.NodeVisitor):
             return self._parse_if_test(obj)
         elif obj['_type'] == 'UnaryOp':
             return f"{self.operators[obj['op']['_type']]}{self._get_value_from_ast(obj['operand'])}"
+        elif obj['_type'] == 'Dict':
+            keys = [x['value'] for x in obj['keys']]
+            values = [y['value'] for y in obj['values']]
+            return f"{dict(zip(keys, values))}"
+        
         # Probably passed a variable name.
         # Or passed a single word without wrapping it in quotes as an argument
         # ex: p.inflect("I plural(see)") instead of p.inflect("I plural('see')")
@@ -876,7 +886,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("test_game_programs/function_only_testings/rock_paper_scissor_player_choice.py", 'r+') as filename:
+    with open("test_game_programs/function_only_testings/TRPG_character_create_character.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
