@@ -886,7 +886,7 @@ if __name__ == '__main__':
     #with open("test.py", 'r+') as filename:
     #   lines = filename.readlines()
     #   tree = ast.parse(''.join(lines))
-    with open("test_game_programs/function_only_testings/TRPG_character_create_character.py", 'r+') as filename:
+    with open("test_game_programs/function_only_testings/jogo_da_velha_python_actualizar_jogadas.py", 'r+') as filename:
        lines = filename.readlines()
        tree = ast.parse(''.join(lines))
     # print(ast.dump(tree))
