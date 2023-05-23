@@ -105,7 +105,9 @@ class TreeVisitor(ast.NodeVisitor):
         elif obj['_type'] == 'BinOp':
             return self._parse_if_test(obj)
         elif obj['_type'] == 'UnaryOp':
-            return f"{self.operators[obj['op']['_type']]}{self._get_value_from_ast(obj['operand'])}"
+            op = self.operators[obj['op']['_type']]
+            new_op = f"{op} "
+            return f"{op if op != 'not' else new_op}{self._get_value_from_ast(obj['operand'])}"
         elif obj['_type'] == 'Dict':
             keys = [x['value'] for x in obj['keys']]
             values = [y['value'] for y in obj['values']]
