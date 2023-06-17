@@ -120,12 +120,7 @@ if __name__ == '__main__':
     for path, dimensions in paths.items():
     #path = "test_programs/test_game_programs/function_only_testings/bounce_draw.py"
         visitor = convert_tree(path)
-        best_positions = {}
         fitness = Fitness(visitor)
-        more_paths = True
-        max_paths = 0
-        coverage = 0
-        past_walking = []
         #options = {'c1': 2, 'c2': 2, 'w': 0.7}
         # particles = 100
         # dimensions = 2
@@ -134,6 +129,13 @@ if __name__ == '__main__':
         #    algorithms.append(CMAES(x0=np.random.random(dimensions)))
         for algorithm in algorithms:
             for i in range(1, 31):
+                max_paths = 0
+                coverage = 0
+                past_walking = []
+                best_positions = {}
+                more_paths = True
+                fitness.current_walked_tree = []
+                fitness.walked_tree = []
                 iteration.append(i)
                 st = time.time()
                 programs.append(path.split('/')[-1])
