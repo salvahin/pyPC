@@ -63,7 +63,7 @@ def run_algorithm(algorithm, problem=None):
         result = minimize(
                           problem, 
                           algorithm, 
-                          ('n_iter', 100),
+                          ('n_gen', 100),
                           
                           verbose=True)
     return result.F, result.X
@@ -120,11 +120,9 @@ if __name__ == '__main__':
     for path, dimensions in paths.items():
     #path = "test_programs/test_game_programs/function_only_testings/bounce_draw.py"
         visitor = convert_tree(path)
-        fitness = Fitness(visitor)
         #options = {'c1': 2, 'c2': 2, 'w': 0.7}
         # particles = 100
         # dimensions = 2
-        problem = FitnessProblem(fitness, dimensions)
         #if dimensions > 1:
         #    algorithms.append(CMAES(x0=np.random.random(dimensions)))
         for algorithm in algorithms:
@@ -134,8 +132,8 @@ if __name__ == '__main__':
                 past_walking = []
                 best_positions = {}
                 more_paths = True
-                fitness.current_walked_tree = []
-                fitness.walked_tree = []
+                fitness = Fitness(visitor)
+                problem = FitnessProblem(fitness, dimensions)
                 iteration.append(i)
                 st = time.time()
                 programs.append(path.split('/')[-1])
