@@ -44,6 +44,7 @@ class TreeVisitor(ast.NodeVisitor):
             "USub": "-"
         }
         super().__init__()
+        self.verbose = False
     
     def _rename_while_keys(self, if_body="", else_if="", is_while=False, while_body="", if_parent=False):
         """
@@ -83,7 +84,8 @@ class TreeVisitor(ast.NodeVisitor):
             return f"{value}"
         elif obj['_type'] == 'Call':
             arguments = ','.join([self._parse_if_test(arg) for arg in obj['args']])
-            print(f"{obj['func']['id']}({arguments})")
+            if self.verbose:
+                print(f"{obj['func']['id']}({arguments})")
             return f"{obj['func']['id']}({arguments})"
         elif obj['_type'] == 'Break':
             return "pass"
@@ -143,7 +145,8 @@ class TreeVisitor(ast.NodeVisitor):
         node = Node()
         node.statements.extend([f'self.{x} = [{num}]' for num, x in enumerate(self._args)])
         self.nodes['body'].append(node)
-        print(f"INITIALIZING VARS {self.nodes['body'][0].statements}")
+        if self.verbose:
+            print(f"INITIALIZING VARS {self.nodes['body'][0].statements}")
         for statement in body:
             # print(statement.keys())
             if statement['_type'] == 'If':
@@ -190,7 +193,8 @@ class TreeVisitor(ast.NodeVisitor):
         """
         Parse the while body and condition repeat until condition is False
         """
-        print(f"Begin While Statement {statement['_type']}")
+        if self.verbose:
+            print(f"Begin While Statement {statement['_type']}")
         result = self._parse_if_test(statement['test']).strip()
         node = Node()
         node.statements.append(result)
@@ -205,7 +209,8 @@ class TreeVisitor(ast.NodeVisitor):
         """
         Parse the while body and condition repeat until condition is False
         """
-        print(f"Begin For Statement {statement['_type']}")
+        if self.verbose:
+            print(f"Begin For Statement {statement['_type']}")
         target = self._parse_if_test(statement['target'])
         iter = self._parse_if_test(statement['iter'])
         result = f"for {target} in " \
@@ -225,7 +230,8 @@ class TreeVisitor(ast.NodeVisitor):
         """
         Parse the if body and condition
         """
-        print(f"BEGIN THE IF STATEMENT {statement['_type']} {else_if}")
+        if self.verbose:
+            print(f"BEGIN THE IF STATEMENT {statement['_type']} {else_if}")
         node = Node()
         # parse If test
         result = self._parse_if_test(statement['test']).strip()
@@ -349,13 +355,15 @@ class TreeVisitor(ast.NodeVisitor):
         self.function_names.append(node.name)
         self.functions_trees[node.name] = {}
         result = ast2json(node)
-        print(result)
+        if self.verbose:
+            print(result)
         self.curr_func_json = result
         self.re_structure_tree()
         
     def visit_Import(self, node):
         result = ast2json(node)
-        print(result)
+        if self.verbose:
+            print(result)
         node2 = Node()
         node2.statements.append(f"import {','.join([name['name'] for name in result['names']])}")
         for name in result['names']:
@@ -364,7 +372,9 @@ class TreeVisitor(ast.NodeVisitor):
         ast.NodeVisitor.generic_visit(self, node)
     def visit_ImportFrom(self, node):
         result = ast2json(node)
-        print(result)
+        
+        if self.verbose:
+            print(result)
         node2 = Node()
         if list(filter(lambda x: True if x else False, [name['asname'] for name in result['names']])):
             node2.statements.append(f"from {result['module']} import " \

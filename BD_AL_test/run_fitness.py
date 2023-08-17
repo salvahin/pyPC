@@ -36,7 +36,8 @@ paths = {
 }
 
 algorithms = [PSO(pop_size=100, w= 0.7, c1=2, c2=2),
-              GA(pop_size=100, eliminate_duplicates=True),
+              GA(pop_size=100, eliminate_duplicates=True)]
+"""
               DE(
                  pop_size=100,
                  sampling=LHS(),
@@ -50,7 +51,7 @@ algorithms = [PSO(pop_size=100, w= 0.7, c1=2, c2=2),
               SRES(n_offsprings=200, rule=1.0 / 7.0, gamma=0.85, alpha=0.2),
               ISRES(n_offsprings=200, rule=1.0 / 7.0, gamma=0.85, alpha=0.2)]
 # algorithm = CMAES(x0=np.random.random(dimensions))  # Only for more than 1 dimension
-
+"""
 
 
 def run_algorithm(algorithm, problem=None):
@@ -79,7 +80,8 @@ def convert_tree(path):
     tree = ast.parse(tree)
     visitor = TreeVisitor()
     visitor.visit(tree)
-    print(visitor.nodes)
+    if visitor.verbose:
+        print(visitor.nodes)
     return visitor
 
 class MyOutput(Output):
@@ -126,7 +128,7 @@ if __name__ == '__main__':
         #if dimensions > 1:
         #    algorithms.append(CMAES(x0=np.random.random(dimensions)))
         for algorithm in algorithms:
-            for i in range(1, 31):
+            for i in range(1, 2):
                 max_paths = 0
                 coverage = 0
                 past_walking = []
