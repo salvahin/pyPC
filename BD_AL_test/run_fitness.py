@@ -175,5 +175,7 @@ if __name__ == '__main__':
     results_df["Code Tested"] = programs
     results_df['Coverage'] = coverages
     results_df['Execution Time'] = times
+    results_df['Weights'] = weights
+    results_df['Walked tree'] =walkedTree
     results_df.to_csv("output_results.csv", index=False)
             # print(f"Custom weights are {temp_arr}")    
