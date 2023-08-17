@@ -2,7 +2,7 @@ from multiprocessing.sharedctypes import Value
 import matplotlib.pyplot as plt
 from collections import deque, defaultdict
 from IPython.display import Image
-from pyswarms.utils.plotters import (plot_cost_history, plot_contour, plot_surface)
+#from pyswarms.utils.plotters import (plot_cost_history, plot_contour, plot_surface)
 from tokenize import Double
 import numpy as np
 from itertools import product
