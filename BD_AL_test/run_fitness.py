@@ -1,6 +1,6 @@
 from lib2to3.pytree import convert
-from pyswarms.single import GlobalBestPSO as GBPSO
-from pyswarms.single import LocalBestPSO as LBPSO
+#from pyswarms.single import GlobalBestPSO as GBPSO
+#from pyswarms.single import LocalBestPSO as LBPSO
 import time
 import ast
 import numpy as np
@@ -54,19 +54,19 @@ algorithms = [PSO(pop_size=100, w= 0.7, c1=2, c2=2),
 """
 
 
-def run_algorithm(algorithm, problem=None):
+def run_algorithm(algorithm, problem=None,verbose=False):
     """
     Function that runs the selected algorithm into the tree nodes
     """
     try:
-        cost, pos = algorithm.optimize(fitness.fitness_function, iters=100)
+        cost, pos = algorithm.optimize(fitness.fitness_function, iters=100,verbose=False)
     except:
         result = minimize(
                           problem, 
                           algorithm, 
                           ('n_gen', 100),
                           
-                          verbose=True)
+                          verbose=False)
     return result.F, result.X
 
 def convert_tree(path):
@@ -128,7 +128,7 @@ if __name__ == '__main__':
         #if dimensions > 1:
         #    algorithms.append(CMAES(x0=np.random.random(dimensions)))
         for algorithm in algorithms:
-            for i in range(1, 2):
+            for i in range(1, 3):
                 max_paths = 0
                 coverage = 0
                 past_walking = []
@@ -140,6 +140,8 @@ if __name__ == '__main__':
                 st = time.time()
                 programs.append(path.split('/')[-1])
                 algorithms_list.append(algorithm.__module__)
+                weights = []
+                walkedTree = []
                 # algorithm = algorithms[1]
                 # algorithm = CMAES(x0=np.random.random(dimensions))  # Only for more than 1 dimension
                 # gbpso = GBPSO(particles,dimensions,options=options)
@@ -166,6 +168,8 @@ if __name__ == '__main__':
                 times.append(total_time)
                 coverages.append(f"{coverage*100}%")
                 print(f"Total elapsed time is {total_time} seconds")
+                weights.append(fitness.custom_weights)
+                walkedTree.append(list(set(fitness.walked_tree)))
     results_df['Algorithm'] = algorithms_list
     results_df['Iteration'] = iteration
     results_df["Code Tested"] = programs
