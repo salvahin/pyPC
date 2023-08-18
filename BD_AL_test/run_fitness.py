@@ -128,7 +128,7 @@ if __name__ == '__main__':
         #if dimensions > 1:
         #    algorithms.append(CMAES(x0=np.random.random(dimensions)))
         for algorithm in algorithms:
-            for i in range(1, 3):
+            for i in range(1, 31):
                 max_paths = 0
                 coverage = 0
                 past_walking = []
