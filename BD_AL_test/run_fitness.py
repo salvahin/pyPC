@@ -170,14 +170,7 @@ if __name__ == '__main__':
                 times.append(total_time)
                 coverages.append(f"{coverage*100}%")
                 print(f"Total elapsed time is {total_time} seconds")
-                # Create an empty string
-                weightstr = ""
-                # Convert the dictionary to a string
-                # using for loop only
-                for item in fitness.custom_weights:
-                    weightstr += item + ':' + str(fitness.custom_weights[item]) + ' '
-                print(weightstr)
-                weights.append(weightstr)
+                weights.append(fitness.custom_weights)
                 walkedTree.append(list(set(fitness.walked_tree)))
     results_df['Algorithm'] = algorithms_list
     results_df['Iteration'] = iteration
