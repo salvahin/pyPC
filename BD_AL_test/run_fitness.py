@@ -119,6 +119,10 @@ if __name__ == '__main__':
     coverages = []
     times = []
     iteration = []
+    weights = []
+    walkedTree = []
+
+
     for path, dimensions in paths.items():
     #path = "test_programs/test_game_programs/function_only_testings/bounce_draw.py"
         visitor = convert_tree(path)
@@ -128,7 +132,7 @@ if __name__ == '__main__':
         #if dimensions > 1:
         #    algorithms.append(CMAES(x0=np.random.random(dimensions)))
         for algorithm in algorithms:
-            for i in range(1, 31):
+            for i in range(1, 2):
                 max_paths = 0
                 coverage = 0
                 past_walking = []
@@ -140,8 +144,6 @@ if __name__ == '__main__':
                 st = time.time()
                 programs.append(path.split('/')[-1])
                 algorithms_list.append(algorithm.__module__)
-                weights = []
-                walkedTree = []
                 # algorithm = algorithms[1]
                 # algorithm = CMAES(x0=np.random.random(dimensions))  # Only for more than 1 dimension
                 # gbpso = GBPSO(particles,dimensions,options=options)
@@ -159,7 +161,7 @@ if __name__ == '__main__':
                     past_walking.extend(fitness.current_walked_tree)
                     # plot_cost_history(cost_history=gbpso.cost_history)
                     # plt.show()
-                print(fitness.custom_weights)
+                print(f"Estos son custom{fitness.custom_weights}")
                 print(f"Positions and coverage are {best_positions}")
                 print(f"The coverage of the matrix is {coverage*100}%")
                 print(f"whole tree is {list(set(fitness.whole_tree))} Walked tree:  {list(set(fitness.walked_tree))}")
@@ -168,7 +170,14 @@ if __name__ == '__main__':
                 times.append(total_time)
                 coverages.append(f"{coverage*100}%")
                 print(f"Total elapsed time is {total_time} seconds")
-                weights.append(fitness.custom_weights)
+                # Create an empty string
+                weightstr = ""
+                # Convert the dictionary to a string
+                # using for loop only
+                for item in fitness.custom_weights:
+                    weightstr += item + ':' + str(fitness.custom_weights[item]) + ' '
+                print(weightstr)
+                weights.append(weightstr)
                 walkedTree.append(list(set(fitness.walked_tree)))
     results_df['Algorithm'] = algorithms_list
     results_df['Iteration'] = iteration

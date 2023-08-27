@@ -1,41 +1,21 @@
-Algorithm,Iteration,Code Tested,Coverage,Execution Time
-pymoo.algorithms.soo.nonconvex.pso,1,rock_paper_scissor_player_choice.py,100.0%,8.209237098693848
-pymoo.algorithms.soo.nonconvex.pso,2,rock_paper_scissor_player_choice.py,100.0%,8.438653945922852
-pymoo.algorithms.soo.nonconvex.ga,1,rock_paper_scissor_player_choice.py,100.0%,9.153444290161133
-pymoo.algorithms.soo.nonconvex.ga,2,rock_paper_scissor_player_choice.py,100.0%,9.171836376190186
-pymoo.algorithms.soo.nonconvex.pso,1,bounce_draw.py,100.0%,2.929650068283081
-pymoo.algorithms.soo.nonconvex.pso,2,bounce_draw.py,100.0%,2.923901081085205
-pymoo.algorithms.soo.nonconvex.ga,1,bounce_draw.py,100.0%,3.133723020553589
-pymoo.algorithms.soo.nonconvex.ga,2,bounce_draw.py,100.0%,3.086822032928467
-pymoo.algorithms.soo.nonconvex.pso,1,guess_the_number_input_guess.py,75.0%,5.550215482711792
-pymoo.algorithms.soo.nonconvex.pso,2,guess_the_number_input_guess.py,75.0%,5.592198371887207
-pymoo.algorithms.soo.nonconvex.ga,1,guess_the_number_input_guess.py,75.0%,6.506533861160278
-pymoo.algorithms.soo.nonconvex.ga,2,guess_the_number_input_guess.py,75.0%,6.469146013259888
-pymoo.algorithms.soo.nonconvex.pso,1,jogo_da_velha_python_actualizar_jogadas.py,100.0%,21.543052196502686
-pymoo.algorithms.soo.nonconvex.pso,2,jogo_da_velha_python_actualizar_jogadas.py,100.0%,21.295588970184326
-pymoo.algorithms.soo.nonconvex.ga,1,jogo_da_velha_python_actualizar_jogadas.py,55.55555555555556%,14.05083703994751
-pymoo.algorithms.soo.nonconvex.ga,2,jogo_da_velha_python_actualizar_jogadas.py,22.22222222222222%,6.871293783187866
-pymoo.algorithms.soo.nonconvex.pso,1,rock_paper_scissor_number_to_name.py,100.0%,10.632606029510498
-pymoo.algorithms.soo.nonconvex.pso,2,rock_paper_scissor_number_to_name.py,100.0%,17.84062099456787
-pymoo.algorithms.soo.nonconvex.ga,1,rock_paper_scissor_number_to_name.py,50.0%,15.319185018539429
-pymoo.algorithms.soo.nonconvex.ga,2,rock_paper_scissor_number_to_name.py,50.0%,14.22027063369751
-pymoo.algorithms.soo.nonconvex.pso,1,TRPG_character_create_character.py,100.0%,14.988977909088135
-pymoo.algorithms.soo.nonconvex.pso,2,TRPG_character_create_character.py,100.0%,15.345813989639282
-pymoo.algorithms.soo.nonconvex.ga,1,TRPG_character_create_character.py,100.0%,17.285513639450073
-pymoo.algorithms.soo.nonconvex.ga,2,TRPG_character_create_character.py,50.0%,10.654313564300537
-pymoo.algorithms.soo.nonconvex.pso,1,bubble_sort.py,100.0%,46.32113480567932
-pymoo.algorithms.soo.nonconvex.pso,2,bubble_sort.py,100.0%,45.35674977302551
-pymoo.algorithms.soo.nonconvex.ga,1,bubble_sort.py,100.0%,44.942261695861816
-pymoo.algorithms.soo.nonconvex.ga,2,bubble_sort.py,100.0%,45.673423767089844
-pymoo.algorithms.soo.nonconvex.pso,1,minimum.py,100.0%,20.126483917236328
-pymoo.algorithms.soo.nonconvex.pso,2,minimum.py,100.0%,13.707829475402832
-pymoo.algorithms.soo.nonconvex.ga,1,minimum.py,100.0%,15.587707757949829
-pymoo.algorithms.soo.nonconvex.ga,2,minimum.py,100.0%,20.673730850219727
-pymoo.algorithms.soo.nonconvex.pso,1,three_number_sort.py,100.0%,8.788277626037598
-pymoo.algorithms.soo.nonconvex.pso,2,three_number_sort.py,100.0%,9.201472520828247
-pymoo.algorithms.soo.nonconvex.ga,1,three_number_sort.py,100.0%,9.66724443435669
-pymoo.algorithms.soo.nonconvex.ga,2,three_number_sort.py,100.0%,9.851819276809692
-pymoo.algorithms.soo.nonconvex.pso,1,trig_area.py,30.0%,27.11202383041382
-pymoo.algorithms.soo.nonconvex.pso,2,trig_area.py,30.0%,23.38757300376892
-pymoo.algorithms.soo.nonconvex.ga,1,trig_area.py,30.0%,23.940870761871338
-pymoo.algorithms.soo.nonconvex.ga,2,trig_area.py,30.0%,25.771728992462158
+Algorithm,Iteration,Code Tested,Coverage,Execution Time,Weights,Walked tree
+pymoo.algorithms.soo.nonconvex.pso,1,rock_paper_scissor_player_choice.py,100.0%,9.419522047042847,6-0.0:524288.0 6-0.1:524288.0 6-0.2:524288.0 ,"['6-0.1', '6-0.2', '6-0.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,rock_paper_scissor_player_choice.py,100.0%,10.761240005493164,6-0.0:524288.0 6-0.1:524288.0 6-0.2:524288.0 ,"['6-0.1', '6-0.2', '6-0.0']"
+pymoo.algorithms.soo.nonconvex.pso,1,bounce_draw.py,100.0%,3.343888998031616,1-0.0:524288.0 2-0.0:524288.0 ,"['2-0.0', '1-0.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,bounce_draw.py,100.0%,3.6646506786346436,1-0.0:524288.0 2-0.0:524288.0 ,"['2-0.0', '1-0.0']"
+pymoo.algorithms.soo.nonconvex.pso,1,guess_the_number_input_guess.py,75.0%,6.299872875213623,5-0.0:524288.0 6-0.0:524288.0 5-0.1:524288.0 ,"['5-0.0', '5-0.1', '6-0.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,guess_the_number_input_guess.py,75.0%,7.3311545848846436,5-0.0:524288.0 6-0.0:524288.0 5-0.1:524288.0 ,"['5-0.0', '5-0.1', '6-0.0']"
+pymoo.algorithms.soo.nonconvex.pso,1,jogo_da_velha_python_actualizar_jogadas.py,100.0%,24.041078090667725,2-0.0:524288.0 2-0.1:524288.0 2-0.2:524288.0 2-0.3:524288.0 2-0.4:524288.0 2-0.5:524288.0 2-0.6:524288.0 2-0.7:524288.0 2-0.8:524288.0 ,"['2-0.8', '2-0.1', '2-0.5', '2-0.6', '2-0.0', '2-0.2', '2-0.4', '2-0.7', '2-0.3']"
+pymoo.algorithms.soo.nonconvex.ga,1,jogo_da_velha_python_actualizar_jogadas.py,77.77777777777779%,21.657347917556763,2-0.0:524288.0 2-0.1:524288.0 2-0.3:524288.0 2-0.5:524288.0 2-0.4:524288.0 2-0.8:524288.0 2-0.6:524288.0 ,"['2-0.8', '2-0.1', '2-0.5', '2-0.6', '2-0.0', '2-0.4', '2-0.3']"
+pymoo.algorithms.soo.nonconvex.pso,1,rock_paper_scissor_number_to_name.py,100.0%,11.611736059188843,1-0.0:524288.0 1-0.1:524288.0 1-0.2:524288.0 1-0.3:524288.0 1-0.4:524288.0 1-0.5:524288.0 ,"['1-0.3', '1-0.5', '1-0.4', '1-0.1', '1-0.2', '1-0.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,rock_paper_scissor_number_to_name.py,33.33333333333333%,6.65740966796875,1-0.0:524288.0 1-0.5:524288.0 ,"['1-0.5', '1-0.0']"
+pymoo.algorithms.soo.nonconvex.pso,1,TRPG_character_create_character.py,100.0%,8.759891986846924,9-0.0:524288.0 9-0.1:524288.0 ,"['9-0.1', '9-0.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,TRPG_character_create_character.py,50.0%,6.602054595947266,9-0.0:524288.0 ,['9-0.0']
+pymoo.algorithms.soo.nonconvex.pso,1,bubble_sort.py,100.0%,26.64506506919861,4-0.0-0.0-0.0:131072.0 4-0.0-0.0:262144.0 4-0.0-1.0:262144.0 ,"['4-0.0-0.0-0.0', '4-0.0', '4-0.0-0.0', '4-0.0-1.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,bubble_sort.py,100.0%,26.646220207214355,4-0.0-0.0-0.0:131072.0 4-0.0-0.0:262144.0 4-0.0-1.0:262144.0 ,"['4-0.0-0.0-0.0', '4-0.0', '4-0.0-0.0', '4-0.0-1.0']"
+pymoo.algorithms.soo.nonconvex.pso,1,minimum.py,100.0%,12.794588565826416,3-0.0-0.0:262144.0 3-0.0:524288.0 ,"['3-0.0', '3-0.0-0.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,minimum.py,100.0%,12.652549266815186,3-0.0-0.0:262144.0 3-0.0:524288.0 ,"['3-0.0', '3-0.0-0.0']"
+pymoo.algorithms.soo.nonconvex.pso,1,three_number_sort.py,100.0%,5.111121654510498,1-0.0:524288.0 2-0.0:524288.0 3-0.0:524288.0 ,"['3-0.0', '2-0.0', '1-0.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,three_number_sort.py,100.0%,5.248465061187744,1-0.0:524288.0 2-0.0:524288.0 3-0.0:524288.0 ,"['3-0.0', '2-0.0', '1-0.0']"
+pymoo.algorithms.soo.nonconvex.pso,1,trig_area.py,30.0%,15.581328868865967,3-0.1:524288.0 3-0.0-3.0:262144.0 ,"['3-0.0', '3-0.1', '3-0.0-3.0']"
+pymoo.algorithms.soo.nonconvex.ga,1,trig_area.py,30.0%,17.13732123374939,3-0.1:524288.0 3-0.0-3.0:262144.0 ,"['3-0.0', '3-0.1', '3-0.0-3.0']"
