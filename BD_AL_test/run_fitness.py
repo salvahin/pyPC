@@ -2,6 +2,7 @@ from lib2to3.pytree import convert
 #from pyswarms.single import GlobalBestPSO as GBPSO
 #from pyswarms.single import LocalBestPSO as LBPSO
 import time
+import datetime
 import ast
 import numpy as np
 import pandas as pd
@@ -184,5 +185,5 @@ if __name__ == '__main__':
     results_df['Weights'] = weights
     results_df['Positions'] = positions
     results_df['Walked tree'] =walkedTree
-    results_df.to_csv("output_results.csv", index=False)
+    results_df.to_csv(datetime.date.now().strftime("%Y-%B-%d_%I-%M%p")+"_output_results.csv", index=False)
             # print(f"Custom weights are {temp_arr}")    
