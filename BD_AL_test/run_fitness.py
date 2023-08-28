@@ -120,6 +120,7 @@ if __name__ == '__main__':
     times = []
     iteration = []
     weights = []
+    positions = []
     walkedTree = []
 
 
@@ -137,6 +138,7 @@ if __name__ == '__main__':
                 coverage = 0
                 past_walking = []
                 best_positions = {}
+                mult_pos = []
                 more_paths = True
                 fitness = Fitness(visitor)
                 problem = FitnessProblem(fitness, dimensions)
@@ -159,6 +161,7 @@ if __name__ == '__main__':
                     best_positions.update({f"{pos}": f"Cost is {cost} and coverage is {coverage}"})
                     print(f"Real coverage is {coverage}")
                     past_walking.extend(fitness.current_walked_tree)
+                    mult_pos.append(pos)
                     # plot_cost_history(cost_history=gbpso.cost_history)
                     # plt.show()
                 print(f"Estos son custom{fitness.custom_weights}")
@@ -171,6 +174,7 @@ if __name__ == '__main__':
                 coverages.append(f"{coverage*100}%")
                 print(f"Total elapsed time is {total_time} seconds")
                 weights.append(fitness.custom_weights)
+                positions.append(mult_pos)
                 walkedTree.append(list(set(fitness.walked_tree)))
     results_df['Algorithm'] = algorithms_list
     results_df['Iteration'] = iteration
@@ -178,6 +182,7 @@ if __name__ == '__main__':
     results_df['Coverage'] = coverages
     results_df['Execution Time'] = times
     results_df['Weights'] = weights
+    results_df['Positions'] = positions
     results_df['Walked tree'] =walkedTree
     results_df.to_csv("output_results.csv", index=False)
             # print(f"Custom weights are {temp_arr}")    
