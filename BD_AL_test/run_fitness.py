@@ -2,7 +2,7 @@ from lib2to3.pytree import convert
 #from pyswarms.single import GlobalBestPSO as GBPSO
 #from pyswarms.single import LocalBestPSO as LBPSO
 import time
-import datetime
+from datetime import datetime
 import ast
 import numpy as np
 import pandas as pd
@@ -22,6 +22,8 @@ from pymoo.algorithms.soo.nonconvex.sres import SRES
 from pymoo.algorithms.soo.nonconvex.isres import ISRES
 from pymoo.operators.sampling.lhs import LHS
 from pymoo.optimize import minimize
+from pymoo.termination import get_termination
+
 
 paths = {
     "test_programs/test_game_programs/function_only_testings/rock_paper_scissor_player_choice.py": 1,
@@ -65,7 +67,7 @@ def run_algorithm(algorithm, problem=None,verbose=False):
         result = minimize(
                           problem, 
                           algorithm, 
-                          ('n_gen', 100),
+                          ('n_eval', 500),
                           
                           verbose=False)
     return result.F, result.X
@@ -185,5 +187,6 @@ if __name__ == '__main__':
     results_df['Weights'] = weights
     results_df['Positions'] = positions
     results_df['Walked tree'] =walkedTree
-    results_df.to_csv(datetime.date.now().strftime("%Y-%B-%d_%I-%M%p")+"_output_results.csv", index=False)
+    date = datetime.now()
+    results_df.to_csv(date.strftime("%Y-%B-%d_%I-%M%p")+"_output_results.csv", index=False)
             # print(f"Custom weights are {temp_arr}")    
