@@ -23,7 +23,6 @@ from pymoo.algorithms.soo.nonconvex.isres import ISRES
 from pymoo.operators.sampling.lhs import LHS
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
-import tracemalloc
 
 
 paths = {
@@ -32,16 +31,15 @@ paths = {
     "test_programs/test_game_programs/function_only_testings/guess_the_number_input_guess.py": 1,
     "test_programs/test_game_programs/function_only_testings/jogo_da_velha_python_actualizar_jogadas.py": 1,
     "test_programs/test_game_programs/function_only_testings/rock_paper_scissor_number_to_name.py": 1,
-    "test_programs/test_game_programs/function_only_testings/TRPG_character_create_character.py": 1
-    }
-"""
+    "test_programs/test_game_programs/function_only_testings/TRPG_character_create_character.py": 1,
+
     "test_programs/bubble_sort.py": 4,
 
     "test_programs/minimum.py": 4,
     "test_programs/three_number_sort.py": 3,
     "test_programs/trig_area.py": 3
 }
-"""
+
 algorithms = [PSO(pop_size=100, w= 0.7, c1=2, c2=2),
               GA(pop_size=100, eliminate_duplicates=True)]
 """
@@ -66,13 +64,12 @@ def run_algorithm(algorithm, problem=None,verbose=False):
     Function that runs the selected algorithm into the tree nodes
     """
     try:
-        cost, pos = algorithm.optimize(fitness.fitness_function, iters=5000, verbose=False)
+        cost, pos = algorithm.optimize(fitness.fitness_function, iters=100, verbose=False)
     except:
         result = minimize(
                           problem, 
                           algorithm, 
-                          ('n_gen', 5000),
-    
+                          ('n_gen', 100),
                           verbose=False)
     return result.F, result.X
 
@@ -153,7 +150,6 @@ if __name__ == '__main__':
                 st = time.time()
                 programs.append(path.split('/')[-1])
                 algorithms_list.append(algorithm.__module__)
-                #tracemalloc.start()
                 # algorithm = algorithms[1]
                 # algorithm = CMAES(x0=np.random.random(dimensions))  # Only for more than 1 dimension
                 # gbpso = GBPSO(particles,dimensions,options=options)
@@ -184,7 +180,6 @@ if __name__ == '__main__':
                 weights.append(fitness.custom_weights)
                 positions.append(mult_pos)
                 walkedTree.append(list(set(fitness.walked_tree)))
-                #memory.append(tracemalloc.stop())
     results_df['Algorithm'] = algorithms_list
     results_df['Iteration'] = iteration
     results_df["Code Tested"] = programs
