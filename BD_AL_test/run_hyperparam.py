@@ -60,7 +60,7 @@ paths = {
     "test_programs/minimum.py": 4,
     "test_programs/three_number_sort.py": 3}
 
-algorithms = [DE()]#,GA(),G3PCX()]
+algorithms = [DE() ]#,GA(),G3PCX()]
 date = datetime.now()
 termination = MaximumFunctionCallTermination(500)
   # TerminateIfAny(SingleObjectiveSpaceTermination(tol=5)            
@@ -192,6 +192,7 @@ if __name__ == '__main__':
 
     for path, dimensions in paths.items():
     #path = "test_programs/test_game_programs/function_only_testings/bounce_draw.py"
+
         visitor = convert_tree(path)
         file1 = open("myfile.txt", "a")  # append mode
         file1.write(path+"\n")
