@@ -85,6 +85,7 @@ G3PCX()
 """
 
 
+
 def run_algorithm(algorithm, problem=None,verbose=False):
     """
     Function that runs the selected algorithm into the tree nodes
@@ -120,6 +121,7 @@ def run_algorithm(algorithm, problem=None,verbose=False):
     return res.F, res.X
 
 """
+Discarded-
     try:
         cost, pos = algorithm.optimize(fitness.fitness_function, iters=100, verbose=False)
     except:

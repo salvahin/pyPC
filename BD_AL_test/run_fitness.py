@@ -22,7 +22,8 @@ from pymoo.algorithms.soo.nonconvex.sres import SRES
 from pymoo.algorithms.soo.nonconvex.isres import ISRES
 from pymoo.operators.sampling.lhs import LHS
 from pymoo.optimize import minimize
-from pymoo.termination import get_termination
+#from pymoo.termination import get_termination
+
 
 
 paths = {
