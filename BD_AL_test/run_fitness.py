@@ -167,6 +167,10 @@ if __name__ == '__main__':
                     print(f"Real coverage is {coverage}")
                     past_walking.extend(fitness.current_walked_tree)
                     mult_pos.append(pos)
+                    
+                    #Emergency exit when no path is found
+                    if coverage == 0:
+                        break
                     # plot_cost_history(cost_history=gbpso.cost_history)
                     # plt.show()
                 print(f"Estos son custom{fitness.custom_weights}")
