@@ -1,0 +1,234 @@
+# Test Program Configuration for pyPC Testing Framework
+# Defines available test programs and their characteristics
+
+test_programs:
+  # Sorting algorithms
+  bubble_sort:
+    path: "test_programs/bubble_sort.py"
+    function: "bubbleSort"
+    dimensions: 4
+    category: "sorting"
+    description: "Bubble sort implementation with 4 inputs"
+    complexity: "medium"
+    expected_coverage: 1.0
+    bounds:
+      lower: -999999
+      upper: 999999
+    
+  three_number_sort:
+    path: "test_programs/three_number_sort.py"
+    function: "sort_three"
+    dimensions: 3
+    category: "sorting"
+    description: "Sort three numbers"
+    complexity: "low"
+    expected_coverage: 1.0
+    bounds:
+      lower: -999999
+      upper: 999999
+    
+  # Mathematical functions
+  minimum:
+    path: "test_programs/minimum.py"
+    function: "find_min"
+    dimensions: 4
+    category: "mathematical"
+    description: "Find minimum of 4 numbers"
+    complexity: "low"
+    expected_coverage: 1.0
+    bounds:
+      lower: -999999
+      upper: 999999
+    
+  trig_area:
+    path: "test_programs/trig_area.py"
+    function: "triangle_area"
+    dimensions: 3
+    category: "mathematical"
+    description: "Calculate triangle area from sides"
+    complexity: "medium"
+    expected_coverage: 0.8  # Has complex conditions
+    bounds:
+      lower: -999999
+      upper: 999999
+    notes: "Contains complex conditional logic for triangle validity"
+    
+  # Game functions - single function testing
+  rock_paper_scissor_player_choice:
+    path: "test_programs/test_game_programs/function_only_testings/rock_paper_scissor_player_choice.py"
+    function: "player_choice"
+    dimensions: 1
+    category: "game"
+    description: "Rock-paper-scissors player choice validation"
+    complexity: "low"
+    expected_coverage: 1.0
+    bounds:
+      lower: 0
+      upper: 10
+    
+  bounce_draw:
+    path: "test_programs/test_game_programs/function_only_testings/bounce_draw.py"
+    function: "draw"
+    dimensions: 2
+    category: "game"
+    description: "Bounce game drawing function"
+    complexity: "low"
+    expected_coverage: 1.0
+    bounds:
+      lower: -1000
+      upper: 1000
+    
+  guess_the_number_input_guess:
+    path: "test_programs/test_game_programs/function_only_testings/guess_the_number_input_guess.py"
+    function: "input_guess"
+    dimensions: 1
+    category: "game"
+    description: "Number guessing game input validation"
+    complexity: "low"
+    expected_coverage: 0.75
+    bounds:
+      lower: 0
+      upper: 100
+    
+  jogo_da_velha_python_actualizar_jogadas:
+    path: "test_programs/test_game_programs/function_only_testings/jogo_da_velha_python_actualizar_jogadas.py"
+    function: "actualizar_jogadas"
+    dimensions: 1
+    category: "game"
+    description: "Tic-tac-toe move update function"
+    complexity: "medium"
+    expected_coverage: 0.9
+    bounds:
+      lower: 0
+      upper: 9
+    
+  rock_paper_scissor_number_to_name:
+    path: "test_programs/test_game_programs/function_only_testings/rock_paper_scissor_number_to_name.py"
+    function: "number_to_name"
+    dimensions: 1
+    category: "game"
+    description: "Convert number to rock/paper/scissors"
+    complexity: "low"
+    expected_coverage: 1.0
+    bounds:
+      lower: 0
+      upper: 5
+    
+  TRPG_character_create_character:
+    path: "test_programs/test_game_programs/function_only_testings/TRPG_character_create_character.py"
+    function: "create_character"
+    dimensions: 1
+    category: "game"
+    description: "RPG character creation function"
+    complexity: "medium"
+    expected_coverage: 1.0
+    bounds:
+      lower: 0
+      upper: 100
+
+# Test suites - groups of related test programs
+test_suites:
+  basic:
+    name: "Basic Test Suite"
+    description: "Simple functions for quick testing"
+    programs:
+      - "minimum"
+      - "three_number_sort"
+      
+  sorting:
+    name: "Sorting Algorithms"
+    description: "All sorting-related test programs"
+    programs:
+      - "bubble_sort"
+      - "three_number_sort"
+      
+  mathematical:
+    name: "Mathematical Functions"
+    description: "Mathematical computation tests"
+    programs:
+      - "minimum"
+      - "trig_area"
+      
+  games:
+    name: "Game Functions"
+    description: "Game-related function tests"
+    programs:
+      - "rock_paper_scissor_player_choice"
+      - "bounce_draw"
+      - "guess_the_number_input_guess"
+      - "jogo_da_velha_python_actualizar_jogadas"
+      - "rock_paper_scissor_number_to_name"
+      - "TRPG_character_create_character"
+      
+  complex:
+    name: "Complex Functions"
+    description: "Functions with complex control flow"
+    programs:
+      - "bubble_sort"
+      - "trig_area"
+      - "jogo_da_velha_python_actualizar_jogadas"
+      
+  all:
+    name: "Complete Test Suite"
+    description: "All available test programs"
+    programs:
+      - "bubble_sort"
+      - "three_number_sort"
+      - "minimum"
+      - "trig_area"
+      - "rock_paper_scissor_player_choice"
+      - "bounce_draw"
+      - "guess_the_number_input_guess"
+      - "jogo_da_velha_python_actualizar_jogadas"
+      - "rock_paper_scissor_number_to_name"
+      - "TRPG_character_create_character"
+
+# Difficulty levels for progressive testing
+difficulty_levels:
+  easy:
+    description: "Simple programs with linear flow"
+    max_dimensions: 2
+    max_branches: 3
+    programs:
+      - "minimum"
+      - "three_number_sort"
+      - "rock_paper_scissor_player_choice"
+      - "rock_paper_scissor_number_to_name"
+      
+  medium:
+    description: "Moderate complexity with some branching"
+    max_dimensions: 4
+    max_branches: 10
+    programs:
+      - "bubble_sort"
+      - "bounce_draw"
+      - "guess_the_number_input_guess"
+      - "TRPG_character_create_character"
+      
+  hard:
+    description: "Complex programs with nested conditions"
+    max_dimensions: 4
+    max_branches: 20
+    programs:
+      - "trig_area"
+      - "jogo_da_velha_python_actualizar_jogadas"
+
+# Benchmark configurations
+benchmarks:
+  standard:
+    description: "Standard benchmark for algorithm comparison"
+    programs: ["minimum", "bubble_sort", "trig_area"]
+    target_coverage: 0.95
+    max_evaluations: 10000
+    
+  quick:
+    description: "Quick benchmark for rapid testing"
+    programs: ["minimum", "three_number_sort"]
+    target_coverage: 1.0
+    max_evaluations: 1000
+    
+  comprehensive:
+    description: "Comprehensive benchmark using all programs"
+    programs: "all"
+    target_coverage: 0.9
+    max_evaluations: 50000
