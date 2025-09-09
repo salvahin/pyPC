@@ -1,0 +1,354 @@
+# Comprehensive Synthetic Dataset Baseline Evaluation Experiment Configuration
+# This configuration defines the complete experimental setup for evaluating classical approaches
+# against multi-objective algorithms on the synthetic dataset
+
+experiment_metadata:
+  name: "Synthetic Dataset Baseline Evaluation"
+  version: "1.0.0"
+  description: "Comprehensive comparison of classical test generation methods vs multi-objective algorithms on synthetic challenging functions"
+  created_date: "2024-12-09"
+  contact: "research.team@university.edu"
+  
+# Dataset Configuration
+dataset:
+  name: "synthetic_challenging_functions"
+  config_file: "config/synthetic_test_programs.yaml"
+  total_functions: 25
+  categories:
+    - "algorithmic_foundations"
+    - "input_validation_gauntlet"
+    - "concurrency_resource_management"
+    - "distributed_systems"
+    - "optimization_solvers"
+  
+  complexity_range:
+    min_cyclomatic: 40
+    max_cyclomatic: 90
+    target_coverage: [15, 55]  # percentage
+  
+  validation_criteria:
+    max_execution_time: 30.0  # seconds per function
+    memory_limit_mb: 512
+    min_unique_paths: 10
+
+# Baseline Methods Configuration
+baseline_methods:
+  random_testing:
+    description: "Pure random input generation"
+    parameters:
+      seed: 42
+      distribution: "uniform"
+    
+  adaptive_random_testing:
+    description: "Adaptive Random Testing with distance-based selection"
+    parameters:
+      distance_metric: "euclidean"
+      candidate_ratio: 10
+      diversity_threshold: 0.1
+    
+  quasi_random_testing:
+    description: "Quasi-random testing using Halton sequences"
+    parameters:
+      sequence_type: "halton"
+      dimensions: "auto"  # Based on function parameters
+      scrambling: true
+    
+  latin_hypercube_sampling:
+    description: "Latin Hypercube Sampling for systematic coverage"
+    parameters:
+      criterion: "maximin"
+      iterations: 1000
+      
+  grid_search:
+    description: "Systematic grid-based input generation"
+    parameters:
+      grid_density: "adaptive"  # Based on parameter dimensionality
+      boundary_handling: "clamp"
+      
+  hill_climbing:
+    description: "Hill climbing local search"
+    parameters:
+      step_size: 0.1
+      max_restarts: 10
+      restart_strategy: "random"
+      stopping_criteria: "no_improvement"
+      patience: 50
+      
+  simulated_annealing:
+    description: "Simulated annealing global optimization"
+    parameters:
+      initial_temperature: 100.0
+      cooling_rate: 0.95
+      min_temperature: 0.01
+      max_iterations: 1000
+      
+  differential_evolution:
+    description: "Differential Evolution algorithm"
+    parameters:
+      population_size: 50
+      mutation_factor: 0.8
+      crossover_rate: 0.9
+      strategy: "best1bin"
+      
+  particle_swarm_optimization:
+    description: "Particle Swarm Optimization"
+    parameters:
+      swarm_size: 30
+      inertia: 0.729
+      cognitive: 1.494
+      social: 1.494
+      velocity_clamp: 0.5
+      
+  coverage_guided_generation:
+    description: "Coverage-guided input generation with feedback"
+    parameters:
+      feedback_mechanism: "branch_distance"
+      exploration_rate: 0.3
+      mutation_strength: 0.1
+
+# Multi-Objective Algorithms (for comparison)
+mo_algorithms:
+  NSGA2:
+    description: "Non-dominated Sorting Genetic Algorithm II"
+    parameters:
+      population_size: 100
+      generations: 500
+      crossover_rate: 0.8
+      mutation_rate: 0.1
+      tournament_size: 2
+      
+  NSGA3:
+    description: "Non-dominated Sorting Genetic Algorithm III"
+    parameters:
+      population_size: 100
+      generations: 500
+      reference_points: "uniform"
+      
+  MOEAD:
+    description: "Multi-Objective Evolutionary Algorithm based on Decomposition"
+    parameters:
+      population_size: 100
+      generations: 500
+      neighborhood_size: 20
+      probability_neighbor: 0.9
+      
+  CTAEA:
+    description: "Constrained Two-Archive Evolutionary Algorithm"
+    parameters:
+      population_size: 100
+      generations: 500
+      archive_size: 100
+
+# Experimental Design
+experimental_design:
+  repetitions: 30  # Number of independent runs per method per function
+  seed_offset: 1000  # Starting seed for reproducibility
+  randomization: true
+  
+  timeout_policy:
+    function_timeout: 30.0  # seconds
+    method_timeout: 300.0   # 5 minutes per method per function
+    experiment_timeout: 86400  # 24 hours total
+  
+  resource_monitoring:
+    track_cpu_usage: true
+    track_memory_usage: true
+    track_io_operations: true
+    sampling_interval: 0.1  # seconds
+  
+  parallel_execution:
+    enabled: true
+    max_workers: 8
+    method_parallelization: true
+    function_parallelization: false  # Due to complexity
+
+# Evaluation Metrics
+evaluation_metrics:
+  primary_objectives:
+    branch_coverage:
+      description: "Percentage of branches covered"
+      goal: "maximize"
+      weight: 0.4
+      
+    branch_distance:
+      description: "Normalized branch distance (fitness)"
+      goal: "minimize"
+      weight: 0.3
+      
+    approach_level:
+      description: "Approach level to target branches"
+      goal: "minimize"
+      weight: 0.3
+  
+  secondary_metrics:
+    execution_time:
+      description: "Total execution time in seconds"
+      goal: "minimize"
+      
+    memory_usage:
+      description: "Peak memory usage in MB"
+      goal: "minimize"
+      
+    test_case_uniqueness:
+      description: "Number of unique test cases generated"
+      goal: "maximize"
+      
+    convergence_speed:
+      description: "Iterations to reach best coverage"
+      goal: "minimize"
+      
+    robustness:
+      description: "Std deviation of coverage across runs"
+      goal: "minimize"
+
+# Statistical Analysis Configuration  
+statistical_analysis:
+  significance_level: 0.05
+  correction_method: "fdr_bh"  # False Discovery Rate (Benjamini-Hochberg)
+  effect_size_measure: "hedges_g"
+  practical_significance_threshold: 0.3
+  
+  bootstrap_analysis:
+    enabled: true
+    bootstrap_samples: 10000
+    confidence_level: 0.95
+  
+  tests:
+    normality_test: "shapiro_wilk"
+    homogeneity_test: "levene"
+    primary_test: "mann_whitney_u"  # Non-parametric
+    paired_test: "wilcoxon"
+    multiple_group_test: "kruskal_wallis"
+  
+  meta_analysis:
+    enabled: true
+    group_by_categories: true
+    heterogeneity_measure: "i2"
+    
+  power_analysis:
+    enabled: true
+    desired_power: 0.8
+    min_detectable_effect: 0.3
+
+# Output Configuration
+output:
+  base_directory: "synthetic_baseline_results"
+  
+  data_formats:
+    raw_results: "json"
+    statistical_results: "json"
+    summary_reports: ["html", "latex", "markdown"]
+  
+  visualizations:
+    performance_comparisons: true
+    statistical_plots: true
+    complexity_analysis: true
+    convergence_plots: true
+    resource_usage_plots: true
+    
+  detailed_logging:
+    enabled: true
+    log_level: "INFO"
+    log_individual_runs: true
+    log_statistical_tests: true
+  
+  export_formats:
+    csv_summaries: true
+    latex_tables: true
+    publication_ready_plots: true
+    
+# Quality Assurance
+quality_assurance:
+  validation_checks:
+    parameter_validation: true
+    result_sanity_checks: true
+    timeout_verification: true
+    memory_limit_checks: true
+    
+  reproducibility:
+    seed_management: "systematic"
+    environment_capture: true
+    version_tracking: true
+    
+  error_handling:
+    graceful_degradation: true
+    partial_result_recovery: true
+    detailed_error_logging: true
+
+# Computational Resources
+computational_resources:
+  recommended_cores: 8
+  recommended_memory_gb: 16
+  estimated_runtime_hours: 48
+  
+  cluster_configuration:
+    job_scheduler: "slurm"
+    partition: "research"
+    time_limit: "48:00:00"
+    memory_per_job: "4GB"
+    
+# Research Context
+research_context:
+  research_questions:
+    - "How do classical methods compare to MO algorithms on synthetic challenging functions?"
+    - "What is the relationship between function complexity and method performance?"
+    - "Which baseline methods show competitive performance for specific problem types?"
+    - "What are the computational trade-offs between different approaches?"
+    
+  hypotheses:
+    - "MO algorithms will outperform classical methods on high-complexity functions"
+    - "Coverage-guided methods will show better performance than random methods"
+    - "Method performance will correlate with function complexity metrics"
+    
+  expected_outcomes:
+    - "Comprehensive performance ranking of 10 baseline methods vs 4 MO algorithms"
+    - "Statistical significance testing with effect size analysis"
+    - "Complexity-performance relationship analysis"
+    - "Resource usage and efficiency comparison"
+
+# Experimental Phases
+experimental_phases:
+  phase_1_pilot:
+    description: "Small-scale validation run"
+    functions: ["cryptographic_hash", "avl_tree_operations", "numerical_solver"]
+    methods: ["random_testing", "hill_climbing", "NSGA2"]
+    repetitions: 5
+    
+  phase_2_baseline:
+    description: "Full baseline method evaluation"
+    functions: "all"
+    methods: "all_baseline"
+    repetitions: 30
+    
+  phase_3_comparison:
+    description: "Baseline vs MO comparison"
+    functions: "all"
+    methods: "all"
+    repetitions: 30
+    
+  phase_4_analysis:
+    description: "Statistical analysis and reporting"
+    tasks:
+      - "comprehensive_statistical_testing"
+      - "meta_analysis_by_category"
+      - "visualization_generation"
+      - "report_compilation"
+
+# Version Control and Documentation
+documentation:
+  experiment_log: "synthetic_baseline_experiment_log.md"
+  methodology_doc: "synthetic_baseline_methodology.md"
+  results_interpretation: "synthetic_baseline_results_guide.md"
+  
+  code_repositories:
+    baseline_generators: "synthetic_baseline_generators.py"
+    dataset_adapter: "synthetic_dataset_adapter.py"
+    evaluation_engine: "synthetic_baseline_evaluator.py"
+    comparison_framework: "baseline_vs_mo_comprehensive.py"
+    statistical_analyzer: "synthetic_statistical_analyzer.py"
+    
+# Ethical Considerations
+ethics:
+  computational_resource_usage: "justified_by_research_value"
+  open_science: "results_will_be_published"
+  reproducibility: "full_configuration_and_code_available"

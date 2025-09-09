@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "experiment_type": "synthetic_baseline_vs_mo",
+    "timestamp": "2025-09-09T16:29:20.064064",
+    "duration_minutes": 0.01449198325475057,
+    "functions_tested": [
+      "cryptographic_hash",
+      "avl_tree_operations",
+      "numerical_solver",
+      "matrix_optimizer",
+      "signal_processor",
+      "json_parser_validator",
+      "protocol_state_machine",
+      "workflow_engine",
+      "distributed_system",
+      "optimization_solver"
+    ],
+    "total_functions": 10
+  },
+  "comparison_results": {
+    "enhanced_analysis": null,
+    "baseline_comparison": 

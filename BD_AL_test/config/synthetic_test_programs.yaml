@@ -1,0 +1,363 @@
+# Synthetic Dataset Configuration for Multi-Objective Test Case Generation
+# This dataset contains 25 challenging functions designed to stress-test the MO framework
+# Each function targets specific coverage ranges and complexity levels
+
+# Category 1: Algorithmic Foundations (5 functions)
+# Focus: Complex algorithmic patterns with cryptographic and data structure elements
+
+cryptographic_hash:
+  file: "test_programs/cryptographic_hash.py"
+  function: "target_function"
+  description: "SHA-like cryptographic hash with security validation"
+  target_coverage: 20  # 15-25% expected coverage
+  cyclomatic_complexity: 45
+  difficulty: "high"
+  tags: ["cryptography", "security", "branching"]
+  parameter_ranges:
+    - name: "input_data"
+      type: "bytes"
+      min_length: 0
+      max_length: 1000
+    - name: "hash_config"
+      type: "dict"
+      required_keys: ["rounds", "salt", "verify_integrity"]
+      rounds: [1, 10]
+      salt_length: [0, 32]
+
+avl_tree_operations:
+  file: "test_programs/avl_tree_operations.py"
+  function: "target_function"
+  description: "AVL tree with complex rebalancing operations"
+  target_coverage: 25  # 20-30% expected coverage
+  cyclomatic_complexity: 50
+  difficulty: "high"
+  tags: ["data_structures", "balancing", "recursion"]
+  parameter_ranges:
+    - name: "operations"
+      type: "list"
+      min_length: 1
+      max_length: 50
+      operation_types: ["insert", "delete", "search", "rotate"]
+    - name: "initial_values"
+      type: "list"
+      element_type: "int"
+      range: [-1000, 1000]
+
+numerical_solver:
+  file: "test_programs/numerical_solver.py"
+  function: "target_function"
+  description: "Multi-method numerical equation solver"
+  target_coverage: 30  # 25-35% expected coverage
+  cyclomatic_complexity: 55
+  difficulty: "high"
+  tags: ["numerical", "iterative", "convergence"]
+  parameter_ranges:
+    - name: "equation_system"
+      type: "dict"
+      required_keys: ["equations", "initial_guess", "method"]
+      methods: ["newton_raphson", "bisection", "secant", "hybrid"]
+    - name: "solver_config"
+      type: "dict"
+      tolerance: [1e-10, 1e-3]
+      max_iterations: [10, 1000]
+
+matrix_optimizer:
+  file: "test_programs/matrix_optimizer.py"
+  function: "target_function"
+  description: "Advanced matrix optimization with multiple objectives"
+  target_coverage: 30  # 20-35% expected coverage
+  cyclomatic_complexity: 70
+  difficulty: "very_high"
+  tags: ["linear_algebra", "optimization", "eigenvalues"]
+  parameter_ranges:
+    - name: "matrix_data"
+      type: "matrix"
+      dimensions: [2, 10]
+      element_range: [-100, 100]
+    - name: "optimization_config"
+      type: "dict"
+      objectives: ["eigenvalue_optimization", "determinant_maximization", "condition_number_minimization"]
+      methods: ["gradient_descent", "conjugate_gradient", "newton_method"]
+
+signal_processor:
+  file: "test_programs/signal_processor.py"
+  function: "target_function"
+  description: "Advanced signal processing with multiple transforms"
+  target_coverage: 32  # 25-40% expected coverage
+  cyclomatic_complexity: 65
+  difficulty: "very_high"
+  tags: ["signal_processing", "fft", "filtering"]
+  parameter_ranges:
+    - name: "input_signal"
+      type: "list"
+      element_type: "float"
+      min_length: 10
+      max_length: 1000
+      range: [-10, 10]
+    - name: "processing_config"
+      type: "dict"
+      operations: ["fft", "filter", "window", "resample"]
+
+# Category 2: Input Validation Gauntlet (5 functions)
+# Focus: Complex input validation with security implications
+
+json_parser_validator:
+  file: "test_programs/json_parser_validator.py"
+  function: "target_function"
+  description: "Multi-layer JSON parsing with security validation"
+  target_coverage: 22  # 15-30% expected coverage
+  cyclomatic_complexity: 60
+  difficulty: "high"
+  tags: ["parsing", "security", "validation"]
+  parameter_ranges:
+    - name: "json_input"
+      type: "string"
+      patterns: ["valid_json", "malformed_json", "nested_json", "attack_payloads"]
+      max_length: 10000
+    - name: "validation_rules"
+      type: "dict"
+      security_level: ["basic", "strict", "paranoid"]
+      max_depth: [1, 20]
+
+protocol_state_machine:
+  file: "test_programs/protocol_state_machine.py"
+  function: "target_function"
+  description: "Complex protocol state machine with security checks"
+  target_coverage: 27  # 20-35% expected coverage
+  cyclomatic_complexity: 65
+  difficulty: "very_high"
+  tags: ["state_machine", "protocol", "security"]
+  parameter_ranges:
+    - name: "message_sequence"
+      type: "list"
+      min_length: 1
+      max_length: 100
+      message_types: ["INIT", "DATA", "ACK", "ERROR", "CLOSE"]
+    - name: "protocol_config"
+      type: "dict"
+      security_mode: ["none", "basic", "advanced"]
+      timeout_ms: [100, 10000]
+
+workflow_engine:
+  file: "test_programs/workflow_engine.py"
+  function: "target_function"
+  description: "Advanced workflow engine with complex business rules"
+  target_coverage: 40  # 30-50% expected coverage
+  cyclomatic_complexity: 80
+  difficulty: "extreme"
+  tags: ["workflow", "business_logic", "rules_engine"]
+  parameter_ranges:
+    - name: "workflow_definition"
+      type: "dict"
+      required_keys: ["tasks", "start_task"]
+      max_tasks: 20
+    - name: "execution_config"
+      type: "dict"
+      timeout_seconds: [1, 60]
+      input_variables: {}
+
+distributed_system:
+  file: "test_programs/distributed_system.py"
+  function: "target_function"
+  description: "Distributed system with consensus and fault tolerance"
+  target_coverage: 42  # 35-50% expected coverage
+  cyclomatic_complexity: 85
+  difficulty: "extreme"
+  tags: ["distributed", "consensus", "fault_tolerance"]
+  parameter_ranges:
+    - name: "system_config"
+      type: "dict"
+      num_nodes: [3, 10]
+      consensus_algorithm: ["raft", "pbft", "paxos"]
+    - name: "simulation_params"
+      type: "dict"
+      duration: [5.0, 30.0]
+      proposals: []
+      network_events: []
+
+optimization_solver:
+  file: "test_programs/optimization_solver.py"
+  function: "target_function"
+  description: "Multi-objective optimization solver with various algorithms"
+  target_coverage: 37  # 30-45% expected coverage
+  cyclomatic_complexity: 75
+  difficulty: "very_high"
+  tags: ["optimization", "metaheuristics", "multi_objective"]
+  parameter_ranges:
+    - name: "problem_definition"
+      type: "dict"
+      required_keys: ["objective", "constraints", "initial_guess"]
+      objective_types: ["sphere", "rosenbrock", "rastrigin", "ackley"]
+    - name: "solver_config"
+      type: "dict"
+      methods: ["genetic_algorithm", "particle_swarm", "simulated_annealing"]
+      max_iterations: [50, 1000]
+
+# Category 3: Concurrency & Resource Management (5 functions)
+# Focus: Threading, synchronization, and resource management
+
+resource_scheduler:
+  file: "test_programs/resource_scheduler.py"
+  function: "target_function"
+  description: "Advanced resource scheduler with deadlock detection"
+  target_coverage: 32  # 25-40% expected coverage
+  cyclomatic_complexity: 70
+  difficulty: "very_high"
+  tags: ["concurrency", "scheduling", "deadlock_detection"]
+  parameter_ranges:
+    - name: "resource_requests"
+      type: "list"
+      min_length: 1
+      max_length: 50
+      request_types: ["acquire", "release", "query"]
+    - name: "scheduler_config"
+      type: "dict"
+      max_resources: [5, 100]
+      scheduling_algorithm: ["fifo", "priority", "fair_share"]
+
+cache_manager:
+  file: "test_programs/cache_manager.py"
+  function: "target_function"
+  description: "Cache manager with LRU, LFU, and adaptive replacement"
+  target_coverage: 37  # 30-45% expected coverage
+  cyclomatic_complexity: 60
+  difficulty: "high"
+  tags: ["caching", "memory_management", "algorithms"]
+  parameter_ranges:
+    - name: "cache_size"
+      type: "int"
+      range: [10, 1000]
+    - name: "operations"
+      type: "list"
+      operation_types: ["get", "put", "invalidate"]
+      max_length: 100
+
+event_processor:
+  file: "test_programs/event_processor.py"
+  function: "target_function"
+  description: "Event processing system with complex routing"
+  target_coverage: 42  # 35-50% expected coverage
+  cyclomatic_complexity: 65
+  difficulty: "very_high"
+  tags: ["events", "routing", "filtering"]
+  parameter_ranges:
+    - name: "config"
+      type: "dict"
+      max_queue_size: [10, 1000]
+      worker_threads: [1, 10]
+    - name: "events"
+      type: "list"
+      max_length: 100
+      event_types: ["user_action", "system_event", "error_event"]
+
+lock_free_queue:
+  file: "test_programs/lock_free_queue.py"
+  function: "target_function"
+  description: "Lock-free queue with ABA protection"
+  target_coverage: 47  # 40-55% expected coverage
+  cyclomatic_complexity: 68
+  difficulty: "extreme"
+  tags: ["lock_free", "concurrent", "memory_management"]
+  parameter_ranges:
+    - name: "config"
+      type: "dict"
+      producers: [1, 5]
+      consumers: [1, 5]
+      items_per_producer: [10, 1000]
+      hazard_pointers: [5, 50]
+
+statistical_analyzer:
+  file: "test_programs/statistical_analyzer.py"
+  function: "target_function"
+  description: "Advanced statistical analysis with hypothesis testing"
+  target_coverage: 32  # 25-40% expected coverage
+  cyclomatic_complexity: 70
+  difficulty: "very_high"
+  tags: ["statistics", "hypothesis_testing", "distributions"]
+  parameter_ranges:
+    - name: "dataset"
+      type: "list"
+      element_type: "float"
+      min_length: 10
+      max_length: 1000
+      range: [-1000, 1000]
+    - name: "analysis_specification"
+      type: "dict"
+      analysis_types: ["descriptive", "inferential", "distribution_fitting", "regression_analysis"]
+      significance_level: [0.01, 0.1]
+
+# Global configuration for synthetic dataset
+global_config:
+  # Fitness objectives configuration
+  objectives:
+    branch_distance:
+      weight: 0.5
+      minimize: true
+      normalization: "min_max"
+    
+    approach_level:
+      weight: 0.5
+      minimize: true
+      normalization: "min_max"
+  
+  # Test case generation parameters
+  generation:
+    population_size: 100
+    max_generations: 500
+    mutation_rate: 0.1
+    crossover_rate: 0.8
+  
+  # Complexity analysis
+  complexity_targets:
+    min_cyclomatic: 40
+    max_cyclomatic: 90
+    target_coverage_range: [15, 55]
+    branching_depth: [5, 15]
+  
+  # Validation criteria
+  validation:
+    min_unique_paths: 10
+    max_execution_time: 30.0  # seconds
+    memory_limit_mb: 512
+    
+  # Dataset statistics
+  statistics:
+    total_functions: 25
+    categories: 5
+    difficulty_distribution:
+      high: 10
+      very_high: 12
+      extreme: 3
+    
+    coverage_distribution:
+      "15-25%": 5
+      "25-35%": 10
+      "35-45%": 7
+      "45-55%": 3
+    
+    complexity_distribution:
+      "40-50": 2
+      "50-60": 6
+      "60-70": 8
+      "70-80": 6
+      "80-90": 3
+
+# Experiment configuration for synthetic dataset
+experiment_config:
+  algorithms: ["NSGA2", "NSGA3", "MOEAD", "CTAEA"]
+  runs_per_function: 10
+  comparison_baseline: "random_search"
+  
+  metrics:
+    - "hypervolume"
+    - "igd"
+    - "spread"
+    - "spacing"
+    - "convergence_time"
+    - "unique_test_cases"
+  
+  output:
+    results_directory: "synthetic_results"
+    detailed_logs: true
+    visualization: true
+    statistical_analysis: true
