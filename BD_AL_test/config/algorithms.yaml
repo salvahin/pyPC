@@ -154,6 +154,52 @@ algorithms:
     capabilities:
       constraints: true
 
+# Multi-Objective Algorithms
+  NSGA2:
+    name: "Non-dominated Sorting Genetic Algorithm II"
+    type: "multi_objective"
+    enabled: true
+    default_params:
+      pop_size: 100
+      eliminate_duplicates: true
+      n_offsprings: null
+    description: "Classic multi-objective EA with non-dominated sorting"
+    reference: "Deb et al., 2002"
+    
+  NSGA3:
+    name: "Non-dominated Sorting Genetic Algorithm III"
+    type: "multi_objective"
+    enabled: true
+    default_params:
+      pop_size: 100
+      eliminate_duplicates: true
+      ref_dirs: null  # Auto-generated based on n_obj
+    description: "Many-objective optimization with reference directions"
+    reference: "Deb & Jain, 2014"
+    
+  MOEAD:
+    name: "Multi-Objective Evolutionary Algorithm based on Decomposition"
+    type: "multi_objective"
+    enabled: true
+    default_params:
+      n_neighbors: 20
+      decomposition: "auto"
+      prob_neighbor_mating: 0.9
+      ref_dirs: null  # Auto-generated
+    description: "Decomposition-based approach for multi-objective optimization"
+    reference: "Zhang & Li, 2007"
+    
+  CTAEA:
+    name: "Constrained Two-Archive Evolutionary Algorithm"
+    type: "multi_objective"
+    enabled: true
+    default_params:
+      pop_size: 100
+      ref_dirs: null  # Auto-generated
+      eliminate_duplicates: true
+    description: "Two-archive algorithm for constrained multi-objective problems"
+    reference: "Li et al., 2019"
+
 # Algorithm selection presets for different problem types
 presets:
   fast:
@@ -174,8 +220,16 @@ presets:
     
   constrained:
     description: "Algorithms good for constrained problems"
-    algorithms: ["SRES", "ISRES", "GA", "DE"]
+    algorithms: ["SRES", "ISRES", "GA", "DE", "CTAEA"]
     
   paper_comparison:
     description: "Standard set for academic paper comparisons"
     algorithms: ["PSO", "GA", "DE", "CMAES", "NelderMead"]
+    
+  multi_objective:
+    description: "Multi-objective optimization algorithms"
+    algorithms: ["NSGA2", "NSGA3", "MOEAD", "CTAEA"]
+    
+  mo_comparison:
+    description: "Standard MO algorithms for comparison"
+    algorithms: ["NSGA2", "NSGA3", "MOEAD"]

@@ -1,0 +1,31 @@
+================================================================================
+MULTI-OBJECTIVE ANALYSIS REPORT
+Algorithm: NSGA2
+Generated: 2025-09-01 20:00:43.829462
+================================================================================
+
+EXECUTIVE SUMMARY
+----------------------------------------
+Programs Tested: 10
+Successful: 10
+Total Runs: 20
+
+BEST PERFORMERS
+----------------------------------------
+Highest Hypervolume: bounce_draw (1000.000)
+Best Coverage: three_number_sort (100.0%)
+
+DIFFICULTY CLASSIFICATION
+----------------------------------------
+Easy: 7 programs
+  - bubble_sort
+  - three_number_sort
+  - minimum
+  ... and 4 more
+Medium: 3 programs
+  - rock_paper_scissor_player_choice
+  - jogo_da_velha_python_actualizar_jogadas
+  - rock_paper_scissor_number_to_name
+Hard: 0 programs
+
+================================================================================

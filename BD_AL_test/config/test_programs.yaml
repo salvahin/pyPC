@@ -125,6 +125,46 @@ test_programs:
     bounds:
       lower: 0
       upper: 100
+      
+  # New complex test programs with deeper branching
+  complex_conditions:
+    path: "test_programs/complex_conditions.py"
+    function: "complex_conditions"
+    dimensions: 4
+    category: "complex"
+    description: "Deep nested conditionals with multiple paths"
+    complexity: "hard"
+    expected_coverage: 0.3  # Much harder to achieve full coverage
+    bounds:
+      lower: -100
+      upper: 100
+    notes: "Designed to demonstrate multi-objective trade-offs"
+    
+  deep_branching:
+    path: "test_programs/deep_branching.py"
+    function: "deep_branching"
+    dimensions: 4
+    category: "complex"
+    description: "Multi-level branching with path-dependent execution"
+    complexity: "hard"
+    expected_coverage: 0.4
+    bounds:
+      lower: -50
+      upper: 50
+    notes: "4 levels of nested conditions with state accumulation"
+    
+  nested_loops:
+    path: "test_programs/nested_loops.py"
+    function: "nested_loops"
+    dimensions: 4
+    category: "complex"
+    description: "Nested loops with conditional branches"
+    complexity: "hard"
+    expected_coverage: 0.35
+    bounds:
+      lower: -20
+      upper: 20
+    notes: "Combines iteration with branching for complexity"
 
 # Test suites - groups of related test programs
 test_suites:
@@ -168,6 +208,14 @@ test_suites:
       - "trig_area"
       - "jogo_da_velha_python_actualizar_jogadas"
       
+  deep_complex:
+    name: "Deep Complex Programs"
+    description: "Programs with deep branching for MO trade-off testing"
+    programs:
+      - "complex_conditions"
+      - "deep_branching"
+      - "nested_loops"
+      
   all:
     name: "Complete Test Suite"
     description: "All available test programs"
@@ -182,6 +230,9 @@ test_suites:
       - "jogo_da_velha_python_actualizar_jogadas"
       - "rock_paper_scissor_number_to_name"
       - "TRPG_character_create_character"
+      - "complex_conditions"
+      - "deep_branching"
+      - "nested_loops"
 
 # Difficulty levels for progressive testing
 difficulty_levels:
@@ -213,6 +264,59 @@ difficulty_levels:
       - "trig_area"
       - "jogo_da_velha_python_actualizar_jogadas"
 
+# New challenging test programs
+  advanced_datastructure:
+    path: "test_programs/advanced_datastructure.py"
+    function: "advanced_datastructure"
+    dimensions: 4
+    category: "challenging"
+    description: "Complex nested data structure operations"
+    complexity: "very_hard"
+    expected_coverage: 0.20
+    bounds:
+      lower: -20
+      upper: 20
+    notes: "Nested dictionaries with state-dependent access"
+    
+  pattern_matcher:
+    path: "test_programs/pattern_matcher.py"
+    function: "pattern_matcher"
+    dimensions: 4
+    category: "challenging"
+    description: "Pattern matching with backtracking"
+    complexity: "very_hard"
+    expected_coverage: 0.25
+    bounds:
+      lower: -10
+      upper: 10
+    notes: "Multiple matching strategies and backtracking"
+    
+  constraint_solver:
+    path: "test_programs/constraint_solver.py"
+    function: "constraint_solver"
+    dimensions: 4
+    category: "challenging"
+    description: "Constraint satisfaction with conflict detection"
+    complexity: "very_hard"
+    expected_coverage: 0.15
+    bounds:
+      lower: -15
+      upper: 15
+    notes: "Constraint propagation and backtracking"
+    
+  graph_traversal:
+    path: "test_programs/graph_traversal.py"
+    function: "graph_traversal"
+    dimensions: 4
+    category: "challenging"
+    description: "Dynamic graph construction and traversal"
+    complexity: "very_hard"
+    expected_coverage: 0.20
+    bounds:
+      lower: -10
+      upper: 10
+    notes: "DFS/BFS/Bidirectional search with cycle detection"
+
 # Benchmark configurations
 benchmarks:
   standard:
@@ -232,3 +336,11 @@ benchmarks:
     programs: "all"
     target_coverage: 0.9
     max_evaluations: 50000
+    
+  challenging_benchmark:
+    description: "Complete benchmark suite with all difficulty levels"
+    programs: ["minimum", "three_number_sort", "bubble_sort", "trig_area",
+              "complex_conditions", "deep_branching", "advanced_datastructure",
+              "pattern_matcher", "constraint_solver", "graph_traversal"]
+    target_coverage: 0.5
+    max_evaluations: 100000

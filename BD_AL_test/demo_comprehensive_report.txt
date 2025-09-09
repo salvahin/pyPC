@@ -1,0 +1,168 @@
+================================================================================
+MULTI-OBJECTIVE ALGORITHM COMPARISON REPORT
+Generated: 2025-09-02 00:29:50
+================================================================================
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+
+• Best Overall Algorithm (Hypervolume): NSGA2
+• Best Overall Algorithm (IGD): CTAEA
+• Best Coverage Algorithm: NSGA2 (79.15% average)
+• Fastest Algorithm: NSGA2
+
+Coverage Milestone Performance:
+  • Fastest to 50% coverage: NSGA2 (13.3 generations)
+  • Fastest to 75% coverage: CTAEA (23.7 generations)
+  • Fastest to 90% coverage: CTAEA (31.0 generations)
+
+• Most Stable Algorithm: CTAEA
+• Most Diverse Solutions: MOEAD
+
+================================================================================
+ALGORITHM PROFILES
+================================================================================
+
+NSGA2
+-----
+
+Strengths:
+  ✓ Strong hypervolume performance
+  ✓ High efficiency
+  ✓ Fast convergence to 75% coverage (28 gen)
+
+Weaknesses:
+  ✗ High solution redundancy
+
+Best suited for:
+  • High coverage requirements
+  • Consistent results needed
+
+NSGA3
+-----
+
+Strengths:
+  ✓ Fast convergence to 75% coverage (29 gen)
+
+Weaknesses:
+  ✗ High solution redundancy
+
+Best suited for:
+  • High coverage requirements
+  • Time-constrained testing
+  • Consistent results needed
+
+MOEAD
+-----
+
+Strengths:
+  ✓ High efficiency
+  ✓ Fast convergence to 75% coverage (26 gen)
+
+Weaknesses:
+  ✗ Poor hypervolume performance
+  ✗ High solution redundancy
+
+Best suited for:
+  • High coverage requirements
+  • Time-constrained testing
+  • Consistent results needed
+
+CTAEA
+-----
+
+Strengths:
+  ✓ High efficiency
+  ✓ Fast convergence to 75% coverage (24 gen)
+
+Weaknesses:
+  ✗ High solution redundancy
+
+Best suited for:
+  • Time-constrained testing
+  • Consistent results needed
+
+================================================================================
+STATISTICAL ANALYSIS
+================================================================================
+
+Friedman Test Results (Hypervolume):
+  Statistic: 7.0000
+  P-value: 0.0719
+  Result: No significant differences (p >= 0.05)
+
+Pairwise Comparisons (Win/Tie/Loss):
+  NSGA2 vs NSGA3: 3W / 0T / 0L
+  NSGA2 vs MOEAD: 3W / 0T / 0L
+  NSGA2 vs CTAEA: 3W / 0T / 0L
+  NSGA3 vs MOEAD: 2W / 0T / 1L
+  NSGA3 vs CTAEA: 1W / 0T / 2L
+  MOEAD vs CTAEA: 0W / 0T / 3L
+
+Effect Sizes (Coverage):
+  NSGA2 vs NSGA3: d=0.028 (negligible)
+  NSGA2 vs MOEAD: d=0.537 (medium)
+  NSGA2 vs CTAEA: d=0.980 (large)
+  NSGA3 vs MOEAD: d=0.446 (small)
+  NSGA3 vs CTAEA: d=0.814 (large)
+  MOEAD vs CTAEA: d=0.314 (small)
+
+================================================================================
+KEY INSIGHTS
+================================================================================
+
+Coverage Patterns:
+  • Easy programs (1): All algorithms achieve >80% coverage
+  • NSGA2 is 1.2x more efficient than CTAEA
+
+Convergence Patterns:
+  • To 50% coverage: NSGA2 (13 gen) vs MOEAD (16 gen)
+  • To 75% coverage: CTAEA (24 gen) vs NSGA3 (29 gen)
+  • To 90% coverage: CTAEA (31 gen) vs NSGA2 (33 gen)
+
+Diversity Evolution:
+  • NSGA2: Maintains/increases diversity over time
+  • NSGA3: Maintains/increases diversity over time
+  • MOEAD: Loses diversity over time
+  • CTAEA: Loses diversity over time
+
+Pareto Front Quality:
+  • Best spread (diversity): NSGA2
+  • Best spacing (uniformity): NSGA3
+
+Robustness Analysis:
+  • Most consistent: CTAEA (CV=0.065)
+  • Most variable: NSGA2 (CV=0.116)
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+Algorithm Selection Guidelines:
+
+For Simple Programs (minimum):
+  • Best Coverage: MOEAD
+  • Fastest: NSGA2
+  • Most Reliable: CTAEA
+
+For Moderate Programs (bubble_sort, trig_area):
+  • Best Coverage: NSGA2
+  • Fastest: NSGA2
+  • Most Reliable: CTAEA
+
+General Guidelines:
+  • For maximum coverage: Use NSGA2
+  • For quick testing: Use NSGA2
+  • For diverse test cases: Use MOEAD
+  • For balanced trade-offs: Use NSGA2
+
+Parameter Tuning Suggestions:
+  • NSGA2: Increase population diversity mechanisms
+  • NSGA3: Increase population diversity mechanisms
+  • MOEAD: Increase population diversity mechanisms
+  • CTAEA: Increase population diversity mechanisms
+
+================================================================================
+END OF REPORT
+================================================================================

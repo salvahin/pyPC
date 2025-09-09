@@ -1,0 +1,725 @@
+{
+  "bubble_sort": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 748.5,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.75,
+      "mean_coverage": 0.75,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 2.0,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 748.5,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.75,
+      "mean_coverage": 0.75,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 2.0,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 748.5,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.75,
+      "mean_coverage": 0.75,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 2.0,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.400424599647522,
+    "convergence": {
+      "final_hv": 28036.90555555556,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  },
+  "three_number_sort": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 2.0,
+      "hypervolume": 1294115.745,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 393215.5,
+      "max_coverage": 1.0,
+      "mean_coverage": 0.75,
+      "coverage_std": 0.25,
+      "full_coverage_count": 1.0,
+      "min_fitness": 2.5,
+      "mean_fitness": 393217.75,
+      "fitness_std": 393215.25
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 774821.3135230265,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 185364.03574962672,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.11785113019775789,
+      "coverage_std": 0.11785113019775793,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.7071067811865476,
+      "mean_fitness": 185363.44649397573,
+      "fitness_std": 185364.1536007569
+    },
+    "metrics_min": {
+      "n_solutions": 2.0,
+      "hypervolume": 746234.3400000001,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 262143.33333333334,
+      "max_coverage": 1.0,
+      "mean_coverage": 0.6666666666666666,
+      "coverage_std": 0.16666666666666669,
+      "full_coverage_count": 1.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 262146.0,
+      "fitness_std": 262143.0
+    },
+    "metrics_max": {
+      "n_solutions": 2.0,
+      "hypervolume": 1841997.1500000001,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 524287.6666666667,
+      "max_coverage": 1.0,
+      "mean_coverage": 0.8333333333333333,
+      "coverage_std": 0.33333333333333337,
+      "full_coverage_count": 1.0,
+      "min_fitness": 3.0,
+      "mean_fitness": 524289.5,
+      "fitness_std": 524287.5
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.14445734024047852,
+    "convergence": {
+      "final_hv": 3110773.5,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {
+      "objective_correlation": -0.8181811876518685,
+      "conflict_level": "high"
+    }
+  },
+  "minimum": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 998.375,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 1.0,
+      "mean_coverage": 1.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 1.0,
+      "min_fitness": 1.625,
+      "mean_fitness": 1.625,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.1767766952966369,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.1767766952966369,
+      "mean_fitness": 0.1767766952966369,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 998.25,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 1.0,
+      "mean_coverage": 1.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 1.0,
+      "min_fitness": 1.5,
+      "mean_fitness": 1.5,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 998.5,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 1.0,
+      "mean_coverage": 1.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 1.0,
+      "min_fitness": 1.75,
+      "mean_fitness": 1.75,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.2152564525604248,
+    "convergence": {
+      "final_hv": 144179.80000000002,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  },
+  "trig_area": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 499.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 2.0,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 499.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 2.0,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 499.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 2.0,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.2563014030456543,
+    "convergence": {
+      "final_hv": 865075.5,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  },
+  "rock_paper_scissor_player_choice": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 333.3333333333333,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.3333333333333333,
+      "mean_coverage": 0.3333333333333333,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 333.3333333333333,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.3333333333333333,
+      "mean_coverage": 0.3333333333333333,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 333.3333333333333,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.3333333333333333,
+      "mean_coverage": 0.3333333333333333,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.16039562225341797,
+    "convergence": {
+      "final_hv": 768957.9333333333,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  },
+  "bounce_draw": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 1000.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 1.0,
+      "mean_coverage": 1.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 1.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 1000.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 1.0,
+      "mean_coverage": 1.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 1.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 1000.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 1.0,
+      "mean_coverage": 1.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 1.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.11219525337219238,
+    "convergence": {
+      "final_hv": 2306869.4000000004,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  },
+  "guess_the_number_input_guess": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 499.5,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 1.0,
+      "mean_fitness": 1.0,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.7071067811865476,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 1.4142135623730951,
+      "mean_fitness": 1.4142135623730951,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 499.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 500.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 2.0,
+      "mean_fitness": 2.0,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.14465069770812988,
+    "convergence": {
+      "final_hv": 1730150.5500000003,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  },
+  "jogo_da_velha_python_actualizar_jogadas": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 9.40500298527136,
+      "mean_fitness": 9.40500298527136,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.5388262619842743,
+      "mean_fitness": 0.5388262619842743,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 9.02399528154088,
+      "mean_fitness": 9.02399528154088,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 9.78601068900184,
+      "mean_fitness": 9.78601068900184,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.15028202533721924,
+    "convergence": {
+      "final_hv": 1.5944496030665114,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          18,
+          16
+        ],
+        "avg_gens_to_90pct": 17.0
+      }
+    },
+    "trade_off": {}
+  },
+  "rock_paper_scissor_number_to_name": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 165.66666666666666,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.16666666666666666,
+      "mean_coverage": 0.16666666666666666,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 6.0,
+      "mean_fitness": 6.0,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 165.66666666666666,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.16666666666666666,
+      "mean_coverage": 0.16666666666666666,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 6.0,
+      "mean_fitness": 6.0,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 165.66666666666666,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.16666666666666666,
+      "mean_coverage": 0.16666666666666666,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 6.0,
+      "mean_fitness": 6.0,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.11446762084960938,
+    "convergence": {
+      "final_hv": 672836.9666666668,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  },
+  "TRPG_character_create_character": {
+    "n_runs": 2,
+    "metrics_mean": {
+      "n_solutions": 1.0,
+      "hypervolume": 500.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_std": {
+      "n_solutions": 0.0,
+      "hypervolume": 0.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.0,
+      "mean_coverage": 0.0,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_min": {
+      "n_solutions": 1.0,
+      "hypervolume": 500.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "metrics_max": {
+      "n_solutions": 1.0,
+      "hypervolume": 500.0,
+      "spread": 0.0,
+      "spacing": 0.0,
+      "max_spread": 0.0,
+      "max_coverage": 0.5,
+      "mean_coverage": 0.5,
+      "coverage_std": 0.0,
+      "full_coverage_count": 0.0,
+      "min_fitness": 0.0,
+      "mean_fitness": 0.0,
+      "fitness_std": 0.0
+    },
+    "success_rate": 1.0,
+    "avg_execution_time": 0.18109130859375,
+    "convergence": {
+      "final_hv": 865076.8500000001,
+      "convergence_speed": {
+        "gens_to_90pct": [
+          0,
+          0
+        ],
+        "avg_gens_to_90pct": 0.0
+      }
+    },
+    "trade_off": {}
+  }
+}

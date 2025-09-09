@@ -197,12 +197,16 @@ class AlgorithmManager:
                 supports_constraints=True
             ),
             
-            # Multi-Objective (for future use)
+            # Multi-Objective Algorithms
             "NSGA2": AlgorithmConfig(
                 name="Non-dominated Sorting GA II",
                 type=AlgorithmType.MULTI_OBJECTIVE,
-                params={"pop_size": 100, "eliminate_duplicates": True},
-                description="Popular multi-objective evolutionary algorithm",
+                params={
+                    "pop_size": 100,
+                    "eliminate_duplicates": True,
+                    "n_offsprings": None  # Will be set to pop_size if None
+                },
+                description="Popular multi-objective evolutionary algorithm using non-dominated sorting",
                 reference="Deb et al., 2002",
                 supports_multi_objective=True
             ),
@@ -210,10 +214,43 @@ class AlgorithmManager:
             "NSGA3": AlgorithmConfig(
                 name="Non-dominated Sorting GA III",
                 type=AlgorithmType.MULTI_OBJECTIVE,
-                params={"pop_size": 100, "eliminate_duplicates": True},
-                description="Many-objective optimization algorithm",
+                params={
+                    "pop_size": 100,
+                    "eliminate_duplicates": True,
+                    "n_offsprings": None,
+                    "ref_dirs": None  # Will be auto-generated based on n_obj
+                },
+                description="Many-objective optimization algorithm with reference directions",
                 reference="Deb & Jain, 2014",
                 supports_multi_objective=True
+            ),
+            
+            "MOEAD": AlgorithmConfig(
+                name="Multi-Objective EA with Decomposition",
+                type=AlgorithmType.MULTI_OBJECTIVE,
+                params={
+                    "n_neighbors": 20,
+                    "decomposition": "auto",  # auto, tchebi, pbi, weighted
+                    "prob_neighbor_mating": 0.9,
+                    "ref_dirs": None  # Will be auto-generated
+                },
+                description="Decomposition-based multi-objective algorithm",
+                reference="Zhang & Li, 2007",
+                supports_multi_objective=True
+            ),
+            
+            "CTAEA": AlgorithmConfig(
+                name="Constrained Two-Archive EA",
+                type=AlgorithmType.MULTI_OBJECTIVE,
+                params={
+                    "pop_size": 100,
+                    "ref_dirs": None,  # Will be auto-generated
+                    "eliminate_duplicates": True
+                },
+                description="Two-archive algorithm for constrained multi-objective optimization",
+                reference="Li et al., 2019",
+                supports_multi_objective=True,
+                supports_constraints=True
             ),
         }
         return algorithms
@@ -254,6 +291,8 @@ class AlgorithmManager:
             "ISRES": ISRES,
             "NSGA2": NSGA2,
             "NSGA3": NSGA3,
+            "MOEAD": MOEAD,
+            "CTAEA": CTAEA,
         }
         
         algorithm_class = algorithm_map.get(name)
@@ -270,6 +309,44 @@ class AlgorithmManager:
             if "sampling" not in params:
                 params["sampling"] = LHS()
         
+        # Special handling for multi-objective algorithms with reference directions
+        if name in ["NSGA3", "MOEAD", "CTAEA"]:
+            if params.get("ref_dirs") is None:
+                # Auto-generate reference directions based on number of objectives
+                # This will be set when the problem is defined
+                # For now, create a lambda that accepts n_obj
+                filtered_params = {k: v for k, v in params.items() if k != "ref_dirs"}
+                return lambda n_obj: self._create_mo_algorithm_with_ref_dirs(
+                    algorithm_class, n_obj, filtered_params
+                )
+        
+        return algorithm_class(**params)
+    
+    def _create_mo_algorithm_with_ref_dirs(self, algorithm_class: Any, 
+                                          n_obj: int, params: Dict[str, Any]) -> Any:
+        """
+        Create multi-objective algorithm with auto-generated reference directions
+        
+        Args:
+            algorithm_class: The algorithm class
+            n_obj: Number of objectives
+            params: Algorithm parameters
+            
+        Returns:
+            Algorithm instance with reference directions
+        """
+        from pymoo.util.ref_dirs import get_reference_directions
+        
+        # Generate reference directions based on number of objectives
+        if n_obj == 2:
+            ref_dirs = get_reference_directions("das-dennis", n_obj, n_partitions=99)
+        elif n_obj == 3:
+            ref_dirs = get_reference_directions("das-dennis", n_obj, n_partitions=12)
+        else:
+            # For many objectives, use fewer partitions
+            ref_dirs = get_reference_directions("das-dennis", n_obj, n_partitions=4)
+        
+        params["ref_dirs"] = ref_dirs
         return algorithm_class(**params)
     
     def get_algorithm_info(self, name: str) -> AlgorithmConfig:

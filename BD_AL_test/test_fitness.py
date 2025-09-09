@@ -23,6 +23,10 @@ class Fitness:
         self.whole_tree = set()
         self.custom_weights = {}
         self.visitor = visitor
+        self.max_branch_distance = 1000.0  # Configurable max distance for normalization
+        self.unique_paths = set()  # Track unique execution paths
+        self.path_signatures = {}  # Store path signatures for each test
+        self.execution_times = []  # Track execution times
 
     def explore(self, node):
         result = 0
@@ -66,9 +70,11 @@ class Fitness:
                             if not re.match(r'\b([a-zA-Z_.0-9]*)\[[0-9]+\]', statement.split('=')[1].strip())]
                         exec(statement)
 
-            normalized_bd = 1 + (-1.001 ** -abs(sum_bd))
+            # Linear normalization with configurable max distance
+            max_distance = getattr(self, 'max_branch_distance', 1000.0)
+            normalized_bd = min(abs(sum_bd) / max_distance, 1.0)
             if self.visitor.verbose:
-                print(normalized_bd)
+                print(f"Branch distance: {sum_bd}, Normalized: {normalized_bd}")
             self.coverage = 1 if self.coverage == 0 else self.coverage
             complete_execution_coverage = (self.coverage/ifs_num) if ifs_num > 0 else 1
             self.complete_coverage.update({f"{float(normalized_bd+sum_al)}": complete_execution_coverage})
@@ -346,6 +352,31 @@ class Fitness:
         if eval(pred):
             return 0
         return 1
+    
+    def calculate_path_coverage(self, particle: np.ndarray) -> float:
+        """
+        Calculate path coverage for a test input
+        
+        Args:
+            particle: Test input vector
+            
+        Returns:
+            Path coverage ratio (unique paths / estimated total paths)
+        """
+        import hashlib
+        
+        # Generate path signature from walked tree
+        if self.walked_tree:
+            path_str = '-'.join(self.walked_tree)
+            path_signature = hashlib.md5(path_str.encode()).hexdigest()
+            self.unique_paths.add(path_signature)
+            self.path_signatures[tuple(particle)] = path_signature
+        
+        # Estimate total possible paths (heuristic based on tree structure)
+        # This is a simplified estimation - in practice would need more sophisticated analysis
+        estimated_paths = 2 ** min(len([n for n in self.whole_tree if 'if' in str(n)]), 10)
+        
+        return len(self.unique_paths) / max(estimated_paths, 1)
     
     def resolve_path(self, param, costs=[1048576]):
         """

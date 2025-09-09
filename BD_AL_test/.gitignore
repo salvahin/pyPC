@@ -1,1 +1,4 @@
 results/
+# Experiment Results - Generated Data
+mo_experiments_*/
+parallel_mo_results/
