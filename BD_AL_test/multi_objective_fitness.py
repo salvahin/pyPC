@@ -6,7 +6,7 @@ Objectives: Minimize fitness (branch distance) and Maximize coverage
 
 import numpy as np
 from typing import Tuple, List, Dict, Any, Optional
-from test_fitness import Fitness
+from src.algorithms.multi_objective.test_fitness import Fitness
 from tree_converter import TreeVisitor
 from pymoo.core.problem import Problem
 

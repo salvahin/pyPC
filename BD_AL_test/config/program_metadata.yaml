@@ -1,0 +1,651 @@
+metadata_info:
+  complexity_distribution:
+    complex: 19
+    extreme: 2
+    medium: 4
+    simple: 4
+    very_complex: 3
+  generated_by: ComplexityAnalyzer
+  generation_timestamp: '1757473199.9629486'
+  total_programs: 32
+test_programs:
+  advanced_datastructure:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: very_complex
+    coverage_range:
+    - 0.15
+    - 0.35
+    cyclomatic_complexity: 48
+    description: Very_Complex complexity general program with 48 cyclomatic complexity
+    difficulty_score: 92.85
+    dimensions: 4
+    expected_coverage: 0.35
+    function: target_function
+    function_count: 1
+    maintainability_index: 40.70121912398438
+    path: test_programs/advanced_datastructure.py
+    timeout: 69.78
+    total_lines: 163
+  avl_tree_operations:
+    bounds:
+    - -100
+    - 100
+    category: data_structure
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 29
+    description: Complex complexity data_structure program with 29 cyclomatic complexity
+    difficulty_score: 139.06206896551726
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 24
+    maintainability_index: 38.916282685007644
+    path: test_programs/avl_tree_operations.py
+    timeout: 59.67
+    total_lines: 326
+  binary_search_tree:
+    bounds:
+    - -100
+    - 100
+    category: data_structure
+    complexity: medium
+    coverage_range:
+    - 0.65
+    - 0.85
+    cyclomatic_complexity: 10
+    description: Medium complexity data_structure program with 10 cyclomatic complexity
+    difficulty_score: 151.85
+    dimensions: 4
+    expected_coverage: 0.85
+    function: target_function
+    function_count: 15
+    maintainability_index: 32.6719171444132
+    path: test_programs/binary_search_tree.py
+    timeout: 32.97
+    total_lines: 99
+  bubble_sort:
+    bounds:
+    - -999999
+    - 999999
+    category: sorting
+    complexity: simple
+    coverage_range:
+    - 0.85
+    - 1.0
+    cyclomatic_complexity: 5
+    description: Simple complexity sorting program with 5 cyclomatic complexity
+    difficulty_score: 35.65
+    dimensions: 4
+    expected_coverage: 1.0
+    function: target_function
+    function_count: 1
+    maintainability_index: 88.8355496632585
+    path: test_programs/bubble_sort.py
+    timeout: 15.165
+    total_lines: 11
+  cache_manager:
+    bounds:
+    - -20
+    - 20
+    category: system
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 26
+    description: Complex complexity system program with 26 cyclomatic complexity
+    difficulty_score: 190.4153846153846
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 25
+    maintainability_index: 27.06189704022826
+    path: test_programs/cache_manager.py
+    timeout: 58.00500000000001
+    total_lines: 289
+  complex_conditions:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 32
+    description: Complex complexity general program with 32 cyclomatic complexity
+    difficulty_score: 71.80000000000001
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 1
+    maintainability_index: 37.637139088251004
+    path: test_programs/complex_conditions.py
+    timeout: 49.86000000000001
+    total_lines: 108
+  constraint_solver:
+    bounds:
+    - -1000
+    - 1000
+    category: mathematical
+    complexity: extreme
+    coverage_range:
+    - 0.05
+    - 0.15
+    cyclomatic_complexity: 61
+    description: Extreme complexity mathematical program with 61 cyclomatic complexity
+    difficulty_score: 100.0
+    dimensions: 4
+    expected_coverage: 0.15
+    function: target_function
+    function_count: 1
+    maintainability_index: 39.54977114843199
+    path: test_programs/constraint_solver.py
+    timeout: 144.96
+    total_lines: 208
+  cryptographic_hash:
+    bounds:
+    - -100
+    - 100
+    category: data_structure
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 33
+    description: Complex complexity data_structure program with 33 cyclomatic complexity
+    difficulty_score: 99.7909090909091
+    dimensions: 5
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 11
+    maintainability_index: 49.45552992785848
+    path: test_programs/cryptographic_hash.py
+    timeout: 52.29
+    total_lines: 162
+  deep_branching:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 31
+    description: Complex complexity general program with 31 cyclomatic complexity
+    difficulty_score: 68.6
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 1
+    maintainability_index: 46.15414470011881
+    path: test_programs/deep_branching.py
+    timeout: 49.14
+    total_lines: 92
+  distributed_system:
+    bounds:
+    - -1000
+    - 1000
+    category: enterprise
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 37
+    description: Complex complexity enterprise program with 37 cyclomatic complexity
+    difficulty_score: 209.6
+    dimensions: 3
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 45
+    maintainability_index: 12.01131114992564
+    path: test_programs/distributed_system.py
+    timeout: 74.565
+    total_lines: 657
+  event_processor:
+    bounds:
+    - -20
+    - 20
+    category: system
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 28
+    description: Complex complexity system program with 28 cyclomatic complexity
+    difficulty_score: 221.6857142857143
+    dimensions: 5
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 33
+    maintainability_index: 16.174356382594837
+    path: test_programs/event_processor.py
+    timeout: 64.53
+    total_lines: 434
+  graph_traversal:
+    bounds:
+    - -50
+    - 50
+    category: algorithm
+    complexity: extreme
+    coverage_range:
+    - 0.05
+    - 0.15
+    cyclomatic_complexity: 77
+    description: Extreme complexity algorithm program with 77 cyclomatic complexity
+    difficulty_score: 97.9
+    dimensions: 4
+    expected_coverage: 0.15
+    function: target_function
+    function_count: 1
+    maintainability_index: 39.9969878543093
+    path: test_programs/graph_traversal.py
+    timeout: 142.32
+    total_lines: 186
+  json_parser_validator:
+    bounds:
+    - -1000
+    - 1000
+    category: enterprise
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 31
+    description: Complex complexity enterprise program with 31 cyclomatic complexity
+    difficulty_score: 160.28387096774193
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 32
+    maintainability_index: 28.404098783106736
+    path: test_programs/json_parser_validator.py
+    timeout: 72.67500000000001
+    total_lines: 615
+  lock_free_queue:
+    bounds:
+    - -100
+    - 100
+    category: data_structure
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 21
+    description: Complex complexity data_structure program with 21 cyclomatic complexity
+    difficulty_score: 239.65714285714284
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 31
+    maintainability_index: 25.64390434837691
+    path: test_programs/lock_free_queue.py
+    timeout: 62.99999999999999
+    total_lines: 400
+  matrix_optimizer:
+    bounds:
+    - -1000
+    - 1000
+    category: mathematical
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 28
+    description: Complex complexity mathematical program with 28 cyclomatic complexity
+    difficulty_score: 246.32857142857145
+    dimensions: 5
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 27
+    maintainability_index: 15.689555619049328
+    path: test_programs/matrix_optimizer.py
+    timeout: 65.88
+    total_lines: 464
+  minimum:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: simple
+    coverage_range:
+    - 0.85
+    - 1.0
+    cyclomatic_complexity: 3
+    description: Simple complexity general program with 3 cyclomatic complexity
+    difficulty_score: 33.9
+    dimensions: 4
+    expected_coverage: 1.0
+    function: target_function
+    function_count: 1
+    maintainability_index: 92.69208354953405
+    path: test_programs/minimum.py
+    timeout: 15.15
+    total_lines: 10
+  nested_loops:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 21
+    description: Complex complexity general program with 21 cyclomatic complexity
+    difficulty_score: 54.75
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 1
+    maintainability_index: 39.79040446154113
+    path: test_programs/nested_loops.py
+    timeout: 47.385
+    total_lines: 53
+  numerical_solver:
+    bounds:
+    - -1000
+    - 1000
+    category: mathematical
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 24
+    description: Complex complexity mathematical program with 24 cyclomatic complexity
+    difficulty_score: 165.45
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 18
+    maintainability_index: 33.872586419797464
+    path: test_programs/numerical_solver.py
+    timeout: 59.625
+    total_lines: 325
+  optimization_solver:
+    bounds:
+    - -1000
+    - 1000
+    category: mathematical
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 34
+    description: Complex complexity mathematical program with 34 cyclomatic complexity
+    difficulty_score: 212.49411764705883
+    dimensions: 5
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 32
+    maintainability_index: 12.50171381004851
+    path: test_programs/optimization_solver.py
+    timeout: 69.66
+    total_lines: 548
+  path_finder:
+    bounds:
+    - -50
+    - 50
+    category: algorithm
+    complexity: medium
+    coverage_range:
+    - 0.65
+    - 0.85
+    cyclomatic_complexity: 17
+    description: Medium complexity algorithm program with 17 cyclomatic complexity
+    difficulty_score: 64.57352941176471
+    dimensions: 4
+    expected_coverage: 0.85
+    function: target_function
+    function_count: 2
+    maintainability_index: 33.42565656203758
+    path: test_programs/path_finder.py
+    timeout: 32.43
+    total_lines: 81
+  pattern_matcher:
+    bounds:
+    - -50
+    - 50
+    category: algorithm
+    complexity: very_complex
+    coverage_range:
+    - 0.15
+    - 0.35
+    cyclomatic_complexity: 56
+    description: Very_Complex complexity algorithm program with 56 cyclomatic complexity
+    difficulty_score: 99.25
+    dimensions: 4
+    expected_coverage: 0.35
+    function: target_function
+    function_count: 1
+    maintainability_index: 41.27934772229011
+    path: test_programs/pattern_matcher.py
+    timeout: 71.7
+    total_lines: 195
+  protocol_state_machine:
+    bounds:
+    - -20
+    - 20
+    category: system
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 34
+    description: Complex complexity system program with 34 cyclomatic complexity
+    difficulty_score: 193.08235294117645
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 39
+    maintainability_index: 20.767298080757488
+    path: test_programs/protocol_state_machine.py
+    timeout: 80.1
+    total_lines: 780
+  recursive_calc:
+    bounds:
+    - -1000
+    - 1000
+    category: mathematical
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 27
+    description: Complex complexity mathematical program with 27 cyclomatic complexity
+    difficulty_score: 73.38888888888889
+    dimensions: 5
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 2
+    maintainability_index: 47.54400292824853
+    path: test_programs/recursive_calc.py
+    timeout: 48.870000000000005
+    total_lines: 86
+  resource_scheduler:
+    bounds:
+    - -20
+    - 20
+    category: system
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 38
+    description: Complex complexity system program with 38 cyclomatic complexity
+    difficulty_score: 164.61052631578949
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 38
+    maintainability_index: 25.263969599169297
+    path: test_programs/resource_scheduler.py
+    timeout: 78.43499999999999
+    total_lines: 743
+  signal_processor:
+    bounds:
+    - -20
+    - 20
+    category: system
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 24
+    description: Complex complexity system program with 24 cyclomatic complexity
+    difficulty_score: 235.45
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 24
+    maintainability_index: 19.99085719135862
+    path: test_programs/signal_processor.py
+    timeout: 65.61
+    total_lines: 458
+  state_machine:
+    bounds:
+    - -20
+    - 20
+    category: system
+    complexity: very_complex
+    coverage_range:
+    - 0.15
+    - 0.35
+    cyclomatic_complexity: 45
+    description: Very_Complex complexity system program with 45 cyclomatic complexity
+    difficulty_score: 109.06666666666666
+    dimensions: 4
+    expected_coverage: 0.35
+    function: target_function
+    function_count: 4
+    maintainability_index: 23.961918538103983
+    path: test_programs/state_machine.py
+    timeout: 68.16000000000001
+    total_lines: 136
+  statistical_analyzer:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 34
+    description: Complex complexity general program with 34 cyclomatic complexity
+    difficulty_score: 209.84705882352938
+    dimensions: 4
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 30
+    maintainability_index: 14.385130199513627
+    path: test_programs/statistical_analyzer.py
+    timeout: 70.155
+    total_lines: 559
+  test:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: medium
+    coverage_range:
+    - 0.65
+    - 0.85
+    cyclomatic_complexity: 10
+    description: Medium complexity general program with 10 cyclomatic complexity
+    difficulty_score: 42.2
+    dimensions: 3
+    expected_coverage: 0.85
+    function: target_function
+    function_count: 1
+    maintainability_index: 73.66899747304967
+    path: test_programs/test.py
+    timeout: 30.84
+    total_lines: 28
+  test2:
+    bounds:
+    - -1000
+    - 1000
+    category: general
+    complexity: simple
+    coverage_range:
+    - 0.85
+    - 1.0
+    cyclomatic_complexity: 7
+    description: Simple complexity general program with 7 cyclomatic complexity
+    difficulty_score: 36.05
+    dimensions: 3
+    expected_coverage: 1.0
+    function: target_function
+    function_count: 1
+    maintainability_index: 73.64573045597606
+    path: test_programs/test2.py
+    timeout: 15.044999999999998
+    total_lines: 3
+  three_number_sort:
+    bounds:
+    - -999999
+    - 999999
+    category: sorting
+    complexity: simple
+    coverage_range:
+    - 0.85
+    - 1.0
+    cyclomatic_complexity: 4
+    description: Simple complexity sorting program with 4 cyclomatic complexity
+    difficulty_score: 35.15
+    dimensions: 3
+    expected_coverage: 1.0
+    function: target_function
+    function_count: 1
+    maintainability_index: 64.33254013344666
+    path: test_programs/three_number_sort.py
+    timeout: 15.194999999999999
+    total_lines: 13
+  trig_area:
+    bounds:
+    - -1000
+    - 1000
+    category: mathematical
+    complexity: medium
+    coverage_range:
+    - 0.65
+    - 0.85
+    cyclomatic_complexity: 14
+    description: Medium complexity mathematical program with 14 cyclomatic complexity
+    difficulty_score: 46.0
+    dimensions: 3
+    expected_coverage: 0.85
+    function: target_function
+    function_count: 1
+    maintainability_index: 44.47687435886321
+    path: test_programs/trig_area.py
+    timeout: 30.96
+    total_lines: 32
+  workflow_engine:
+    bounds:
+    - -1000
+    - 1000
+    category: enterprise
+    complexity: complex
+    coverage_range:
+    - 0.35
+    - 0.65
+    cyclomatic_complexity: 29
+    description: Complex complexity enterprise program with 29 cyclomatic complexity
+    difficulty_score: 284.9241379310345
+    dimensions: 5
+    expected_coverage: 0.65
+    function: target_function
+    function_count: 50
+    maintainability_index: 5.244835529693849
+    path: test_programs/workflow_engine.py
+    timeout: 74.655
+    total_lines: 659

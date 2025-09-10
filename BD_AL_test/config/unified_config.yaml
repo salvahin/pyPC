@@ -1,0 +1,366 @@
+# Unified Configuration for Test Generation Framework
+# Consolidates all configuration aspects into a single, maintainable file
+
+# Framework Settings
+framework:
+  name: "Unified Test Generation Framework"
+  version: "1.0.0"
+  default_results_dir: "results"
+  default_timeout: 30.0
+  verbose_logging: true
+  
+# Baseline Test Generation Methods
+baseline_methods:
+  random:
+    name: "Pure Random Testing"
+    description: "Traditional random test case generation"
+    enabled: true
+    parameters:
+      bounds: [[-1000, 1000], [-1000, 1000]]  # Default bounds
+      seed: null  # Random seed (null = random)
+      
+  adaptive_random:
+    name: "Adaptive Random Testing"
+    description: "Distance-based test case selection"
+    enabled: true
+    parameters:
+      distance_threshold: 0.1
+      candidates_per_test: 10
+      
+  quasi_random:
+    name: "Quasi-Random Testing"
+    description: "Low-discrepancy sequence testing"
+    enabled: true
+    parameters:
+      sequence_type: "halton"  # halton, sobol, latin_hypercube
+      
+  grid_search:
+    name: "Grid Search Testing"
+    description: "Systematic grid-based exploration"
+    enabled: true
+    parameters:
+      points_per_dimension: "auto"  # auto, or specific number
+      
+  boundary_value:
+    name: "Boundary Value Analysis"
+    description: "Focus on boundary conditions"
+    enabled: true
+    parameters:
+      boundary_types: ["min", "max", "mid"]
+      
+  hill_climbing:
+    name: "Hill Climbing Search"
+    description: "Local search optimization"
+    enabled: true
+    parameters:
+      step_size: 0.1
+      max_restarts: 5
+
+# Multi-Objective Algorithms
+multi_objective_algorithms:
+  NSGA2:
+    name: "Non-dominated Sorting Genetic Algorithm II"
+    type: "multi_objective"
+    enabled: true
+    parameters:
+      population_size: 100
+      generations: 100
+      eliminate_duplicates: true
+      crossover_prob: 0.9
+      mutation_prob: 0.1
+    description: "Classic multi-objective EA with non-dominated sorting"
+    reference: "Deb et al., 2002"
+    
+  NSGA3:
+    name: "Non-dominated Sorting Genetic Algorithm III"
+    type: "multi_objective"
+    enabled: true
+    parameters:
+      population_size: 100
+      generations: 100
+      eliminate_duplicates: true
+      reference_directions: "auto"  # Auto-generated based on objectives
+    description: "Many-objective optimization with reference directions"
+    reference: "Deb & Jain, 2014"
+    
+  MOEAD:
+    name: "Multi-Objective Evolutionary Algorithm based on Decomposition"
+    type: "multi_objective"
+    enabled: true
+    parameters:
+      n_neighbors: 20
+      decomposition: "tchebycheff"
+      prob_neighbor_mating: 0.9
+    description: "Decomposition-based approach"
+    reference: "Zhang & Li, 2007"
+    
+  CTAEA:
+    name: "Constrained Two-Archive Evolutionary Algorithm"
+    type: "multi_objective"
+    enabled: true
+    parameters:
+      population_size: 100
+      generations: 100
+      eliminate_duplicates: true
+    description: "Two-archive algorithm for constrained problems"
+    reference: "Li et al., 2019"
+
+# Test Programs Configuration
+test_programs:
+  # Simple Programs
+  minimum:
+    path: "test_programs/minimum.py"
+    function: "find_min"
+    dimensions: 4
+    category: "mathematical"
+    description: "Find minimum of 4 numbers"
+    complexity: "low"
+    cyclomatic_complexity: 4
+    expected_coverage: 1.0
+    bounds: [-999999, 999999]
+    timeout: 30.0
+    
+  three_number_sort:
+    path: "test_programs/three_number_sort.py"
+    function: "sort_three"
+    dimensions: 3
+    category: "sorting"
+    description: "Sort three numbers"
+    complexity: "low"
+    cyclomatic_complexity: 6
+    expected_coverage: 1.0
+    bounds: [-999999, 999999]
+    timeout: 30.0
+    
+  # Medium Complexity Programs
+  bubble_sort:
+    path: "test_programs/bubble_sort.py"
+    function: "bubbleSort"
+    dimensions: 4
+    category: "sorting"
+    description: "Bubble sort implementation"
+    complexity: "medium"
+    cyclomatic_complexity: 8
+    expected_coverage: 1.0
+    bounds: [-999999, 999999]
+    timeout: 30.0
+    
+  triangle_area:
+    path: "test_programs/trig_area.py"
+    function: "triangle_area"
+    dimensions: 3
+    category: "mathematical"
+    description: "Calculate triangle area from sides"
+    complexity: "medium"
+    cyclomatic_complexity: 12
+    expected_coverage: 0.8
+    bounds: [0, 1000]  # Positive sides only
+    timeout: 30.0
+    
+  # Complex Programs
+  complex_conditions:
+    path: "test_programs/complex_conditions.py"
+    function: "complex_conditions"
+    dimensions: 4
+    category: "complex"
+    description: "Deep nested conditionals"
+    complexity: "hard"
+    cyclomatic_complexity: 20
+    expected_coverage: 0.3
+    bounds: [-100, 100]
+    timeout: 45.0
+    
+  deep_branching:
+    path: "test_programs/deep_branching.py"
+    function: "deep_branching"
+    dimensions: 4
+    category: "complex"
+    description: "Multi-level branching"
+    complexity: "hard"
+    cyclomatic_complexity: 25
+    expected_coverage: 0.4
+    bounds: [-50, 50]
+    timeout: 45.0
+    
+  nested_loops:
+    path: "test_programs/nested_loops.py"
+    function: "nested_loops"
+    dimensions: 4
+    category: "complex"
+    description: "Nested loops with branches"
+    complexity: "hard"
+    cyclomatic_complexity: 18
+    expected_coverage: 0.35
+    bounds: [-20, 20]
+    timeout: 60.0
+
+# Synthetic Test Functions (for baseline comparison)
+synthetic_functions:
+  complex_logic_matrix:
+    dimensions: 4
+    parameter_types: ["int", "int", "float", "bool"]
+    parameter_bounds: [[-10, 10], [-10, 10], [-1.0, 1.0], [0, 1]]
+    complexity: "hard"
+    cyclomatic_complexity: 45
+    expected_coverage: 0.2
+    description: "Complex matrix operations with conditional logic"
+    
+  dynamic_data_processor:
+    dimensions: 4
+    parameter_types: ["list", "dict", "str", "int"]
+    parameter_bounds: [null, null, null, [0, 100]]
+    complexity: "very_hard" 
+    cyclomatic_complexity: 60
+    expected_coverage: 0.15
+    description: "Dynamic data structure processing"
+    
+  recursive_calculator:
+    dimensions: 3
+    parameter_types: ["int", "int", "int"]
+    parameter_bounds: [[-20, 20], [-20, 20], [0, 10]]
+    complexity: "hard"
+    cyclomatic_complexity: 35
+    expected_coverage: 0.25
+    description: "Recursive mathematical calculations"
+
+# Test Suites
+test_suites:
+  quick:
+    name: "Quick Test Suite"
+    description: "Fast testing for development"
+    programs: ["minimum", "three_number_sort"]
+    max_time_minutes: 5
+    
+  standard:
+    name: "Standard Benchmark"
+    description: "Standard comparison suite"
+    programs: ["minimum", "bubble_sort", "triangle_area"]
+    max_time_minutes: 30
+    
+  comprehensive:
+    name: "Comprehensive Suite"
+    description: "All available programs"
+    programs: ["minimum", "three_number_sort", "bubble_sort", "triangle_area", 
+              "complex_conditions", "deep_branching", "nested_loops"]
+    max_time_minutes: 120
+    
+  baseline_comparison:
+    name: "Baseline vs MO Comparison"
+    description: "Suite for comparing baseline methods vs MO algorithms"
+    programs: ["bubble_sort", "triangle_area", "complex_conditions", "deep_branching"]
+    baseline_methods: ["random", "adaptive_random", "quasi_random", "boundary_value"]
+    mo_algorithms: ["NSGA2", "NSGA3", "MOEAD"]
+    repetitions: 10
+    max_time_minutes: 180
+
+# Experiment Configurations
+experiments:
+  demo:
+    description: "Quick demonstration experiment"
+    baseline_methods: ["random", "adaptive_random"]
+    mo_algorithms: ["NSGA2"]
+    test_suite: "quick"
+    repetitions: 3
+    baseline_params:
+      n_tests: 20
+    mo_params:
+      generations: 50
+      population_size: 20
+      
+  standard_comparison:
+    description: "Standard baseline vs MO comparison"
+    baseline_methods: ["random", "adaptive_random", "quasi_random", "boundary_value"]
+    mo_algorithms: ["NSGA2", "NSGA3", "MOEAD"]
+    test_suite: "standard"
+    repetitions: 10
+    baseline_params:
+      n_tests: 50
+    mo_params:
+      generations: 100
+      population_size: 50
+      
+  comprehensive_analysis:
+    description: "Full comparison across all methods"
+    baseline_methods: "all"
+    mo_algorithms: "all"
+    test_suite: "comprehensive"
+    repetitions: 30
+    baseline_params:
+      n_tests: 100
+    mo_params:
+      generations: 150
+      population_size: 100
+
+# Statistical Analysis Settings
+statistical_analysis:
+  significance_level: 0.05
+  multiple_comparison_correction: "fdr_bh"  # bonferroni, holm, fdr_bh
+  effect_size_measure: "hedges_g"  # cohens_d, hedges_g, cliff_delta
+  min_effect_size_threshold: 0.3
+  bootstrap_samples: 10000
+  confidence_level: 0.95
+  
+  # Metrics to analyze
+  metrics:
+    - "coverage"
+    - "branch_distance" 
+    - "approach_level"
+    - "execution_time"
+    - "memory_usage"
+    - "hypervolume"  # For MO algorithms
+    - "igd"  # For MO algorithms
+
+# Output and Reporting
+reporting:
+  generate_html: true
+  generate_latex: true
+  generate_csv: true
+  generate_plots: true
+  
+  plot_types:
+    - "boxplot"
+    - "violin"
+    - "heatmap"
+    - "scatter"
+    - "pareto_front"  # For MO results
+    
+  output_formats:
+    results: ["json", "csv"]
+    reports: ["txt", "html", "pdf"]
+    plots: ["png", "svg", "pdf"]
+
+# Resource Management
+resources:
+  max_parallel_processes: 4
+  memory_limit_gb: 8
+  disk_space_warning_gb: 1
+  cleanup_intermediate_files: true
+  
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_logging: true
+  console_logging: true
+  max_log_size_mb: 10
+  backup_count: 5
+
+# Advanced Settings
+advanced:
+  enable_caching: true
+  cache_directory: ".cache"
+  enable_profiling: false
+  profile_directory: "profiles"
+  enable_detailed_metrics: true
+  
+  # Optimization settings
+  early_stopping:
+    enabled: true
+    patience: 50  # generations without improvement
+    min_improvement: 0.001
+    
+  # Convergence criteria
+  convergence:
+    coverage_threshold: 0.95
+    stagnation_generations: 100
+    diversity_threshold: 0.01

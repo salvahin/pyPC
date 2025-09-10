@@ -1,0 +1,25 @@
+============================================================
+TEST PROGRAM SUITE COMPLEXITY ANALYSIS
+============================================================
+Total Programs Analyzed: 32
+
+Complexity Distribution:
+  Complex: 19 programs (59.4%)
+  Extreme: 2 programs (6.2%)
+  Medium: 4 programs (12.5%)
+  Simple: 4 programs (12.5%)
+  Very_Complex: 3 programs (9.4%)
+
+Program Details:
+----------------------------------------
+graph_traversal           | CC: 77 | Extreme      | Coverage: 15.0%
+constraint_solver         | CC: 61 | Extreme      | Coverage: 15.0%
+pattern_matcher           | CC: 56 | Very_Complex | Coverage: 35.0%
+advanced_datastructure    | CC: 48 | Very_Complex | Coverage: 35.0%
+state_machine             | CC: 45 | Very_Complex | Coverage: 35.0%
+resource_scheduler        | CC: 38 | Complex      | Coverage: 65.0%
+distributed_system        | CC: 37 | Complex      | Coverage: 65.0%
+optimization_solver       | CC: 34 | Complex      | Coverage: 65.0%
+protocol_state_machine    | CC: 34 | Complex      | Coverage: 65.0%
+statistical_analyzer      | CC: 34 | Complex      | Coverage: 65.0%
+... and 22 more programs

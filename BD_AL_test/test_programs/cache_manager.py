@@ -332,9 +332,9 @@ class CacheManager:
         
         return False
 
-def target_function(cache_size: int, operations: List[Tuple[str, str, Any]]) -> Dict[str, Any]:
+def cache_manager_original(cache_size: int, operations: List[Tuple[str, str, Any]]) -> Dict[str, Any]:
     """
-    Target function for test case generation with high complexity
+    Original target function for test case generation with high complexity
     """
     if cache_size <= 0 or cache_size > 10000:
         return {'error': 'invalid_cache_size'}
@@ -389,3 +389,66 @@ def target_function(cache_size: int, operations: List[Tuple[str, str, Any]]) -> 
         return {'status': 'poor_locality', 'stats': stats, 'results': results}
     else:
         return {'status': 'normal', 'stats': stats, 'results': results}
+
+
+def target_function(a, b=None, c=None, d=None):
+    """
+    Standardized test function interface for experimental methodology.
+    
+    This function wraps the original cache_manager_original to provide
+    a consistent 4-parameter interface for automated test generation.
+    
+    Original function: cache_manager_original(cache_size, operations)
+    
+    Args:
+        a: Cache size (required)
+        b: Number of operations to generate (optional)
+        c: Operation type bias (optional) 
+        d: Cache policy selector (optional)
+    
+    Returns:
+        Result from cache_manager_original
+    """
+    # Set defaults for optional parameters based on function requirements
+    if b is None:
+        b = 10
+    if c is None:
+        c = 0
+    if d is None:
+        d = 1
+    
+    # Validate parameter ranges
+    a = max(1, min(100, abs(int(a)) if a != 0 else 10))  # Cache size 1-100
+    b = max(1, min(50, abs(int(b)) if b != 0 else 10))   # Operations 1-50
+    c = max(-1, min(1, int(c)))                          # Bias -1 to 1
+    d = max(0, min(2, int(abs(d))))                      # Policy 0-2
+    
+    # Generate simple operations based on parameters
+    operations = []
+    policies = ["lru", "lfu", "adaptive"]
+    policy = policies[d] if d < len(policies) else "lru"
+    
+    # Create operations based on bias
+    for i in range(b):
+        if c > 0:  # More gets
+            if i % 3 == 0:
+                operations.append(('put', f'key_{i}', f'value_{i}'))
+            else:
+                operations.append(('get', f'key_{i//2}', None))
+        elif c < 0:  # More puts
+            if i % 3 != 0:
+                operations.append(('put', f'key_{i}', f'value_{i}'))
+            else:
+                operations.append(('get', f'key_{i//3}', None))
+        else:  # Balanced
+            if i % 2 == 0:
+                operations.append(('put', f'key_{i}', f'value_{i}'))
+            else:
+                operations.append(('get', f'key_{i//2}', None))
+    
+    # Call original function
+    try:
+        return cache_manager_original(a, operations)
+    except Exception as e:
+        # Handle potential errors gracefully for test generation
+        return {'error': str(e), 'cache_size': a, 'operations': len(operations)}

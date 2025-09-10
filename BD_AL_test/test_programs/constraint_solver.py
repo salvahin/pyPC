@@ -247,3 +247,58 @@ if __name__ == '__main__':
     for a, b, c, d in test_cases:
         result = constraint_solver(a, b, c, d)
         print(f"Input: ({a}, {b}, {c}, {d}) -> Result: {result}")
+
+
+def target_function(a, b=None, c=None, d=None):
+    """
+    Standardized test function interface for experimental methodology.
+    
+    This function wraps the original constraint_solver to provide
+    a consistent 4-parameter interface for automated test generation.
+    
+    Original function: constraint_solver(a, b, c, d)
+    
+    Args:
+        a: First parameter (required)
+        b: Second parameter (optional)
+        c: Third parameter (optional) 
+        d: Fourth parameter (optional)
+    
+    Returns:
+        Result from constraint_solver
+    """
+    # Set defaults for optional parameters based on function requirements
+    if b is None:
+        b = -1000
+    if c is None:
+        c = 0
+    if d is None:
+        d = 1000
+    
+    # Validate parameter ranges
+    for param, name in [(a, 'a'), (b, 'b'), (c, 'c'), (d, 'd')]:
+        if param is not None and isinstance(param, (int, float)):
+            if not (-1000 <= param <= 1000):
+                param = max(-1000, min(1000, param))  # Clamp to bounds
+    
+    # Call original function with appropriate parameters
+    try:
+        return constraint_solver(a, b, c, d)
+    except Exception as e:
+        # Handle potential errors gracefully for test generation
+        if "too many" in str(e).lower() or "unexpected keyword" in str(e).lower():
+            # Try with fewer parameters
+            try:
+                return constraint_solver(a, b, c)
+            except:
+                pass
+            try:
+                return constraint_solver(a, b)
+            except:
+                pass
+            try:
+                return constraint_solver(a)
+            except:
+                pass
+            return constraint_solver(a)
+        raise e

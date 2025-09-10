@@ -1,4 +1,0 @@
-2025-09-09 16:25:48,856 - SyntheticExperimentRunner - INFO - run_experiment:422 - DRY RUN MODE - No actual execution
-2025-09-09 16:25:54,027 - SyntheticExperimentRunner - INFO - run_experiment:425 - Starting synthetic baseline experiment - Phase: pilot
-2025-09-09 16:25:54,027 - SyntheticExperimentRunner - INFO - initialize_components:175 - Initializing experiment components...
-2025-09-09 16:25:54,027 - SyntheticExperimentRunner - ERROR - initialize_components:202 - Failed to initialize components: __init__() missing 1 required positional argument: 'param_ranges'

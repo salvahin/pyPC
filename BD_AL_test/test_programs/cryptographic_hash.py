@@ -229,3 +229,58 @@ if __name__ == '__main__':
     # Edge case - all zeros
     result4 = cryptographic_hash(0, 0, 0, 0)
     print(f"All zeros: {result4}")
+
+
+def target_function(a, b=None, c=None, d=None):
+    """
+    Standardized test function interface for experimental methodology.
+    
+    This function wraps the original cryptographic_hash to provide
+    a consistent 4-parameter interface for automated test generation.
+    
+    Original function: cryptographic_hash(a, b, c, d)
+    
+    Args:
+        a: First parameter (required)
+        b: Second parameter (optional)
+        c: Third parameter (optional) 
+        d: Fourth parameter (optional)
+    
+    Returns:
+        Result from cryptographic_hash
+    """
+    # Set defaults for optional parameters based on function requirements
+    if b is None:
+        b = -100
+    if c is None:
+        c = 0
+    if d is None:
+        d = 100
+    
+    # Validate parameter ranges
+    for param, name in [(a, 'a'), (b, 'b'), (c, 'c'), (d, 'd')]:
+        if param is not None and isinstance(param, (int, float)):
+            if not (-100 <= param <= 100):
+                param = max(-100, min(100, param))  # Clamp to bounds
+    
+    # Call original function with appropriate parameters
+    try:
+        return cryptographic_hash(a, b, c, d)
+    except Exception as e:
+        # Handle potential errors gracefully for test generation
+        if "too many" in str(e).lower() or "unexpected keyword" in str(e).lower():
+            # Try with fewer parameters
+            try:
+                return cryptographic_hash(a, b, c)
+            except:
+                pass
+            try:
+                return cryptographic_hash(a, b)
+            except:
+                pass
+            try:
+                return cryptographic_hash(a)
+            except:
+                pass
+            return cryptographic_hash(a)
+        raise e

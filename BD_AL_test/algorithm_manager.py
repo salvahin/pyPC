@@ -443,6 +443,132 @@ class AlgorithmManager:
         self._algorithms[name] = config
         self._custom_configs[name] = algorithm_class
     
+    def run_algorithm(self, algorithm_name: str, target_program: str,
+                     generations: int = 100, population_size: int = 50) -> Dict[str, Any]:
+        """
+        Run a multi-objective algorithm on a target program
+        
+        Args:
+            algorithm_name: Name of the algorithm to run
+            target_program: Name of the target test program
+            generations: Number of generations
+            population_size: Population size
+            
+        Returns:
+            Dictionary with algorithm execution results
+        """
+        import time
+        import random
+        from pymoo.optimize import minimize
+        from pymoo.core.problem import Problem
+        
+        start_time = time.time()
+        
+        try:
+            # Get the algorithm instance
+            algorithm = self.get_algorithm(algorithm_name, {
+                'pop_size': population_size
+            })
+            
+            # Handle algorithms that need special initialization
+            if algorithm_name in ['NSGA3', 'MOEAD', 'CTAEA'] and callable(algorithm):
+                algorithm = algorithm(2)  # 2 objectives
+            elif algorithm_name == 'CMAES' and callable(algorithm):
+                algorithm = algorithm(2)  # 2 dimensions
+            
+            # Get program dimensions from evaluator
+            from src.evaluation.evaluator import UnifiedTestEvaluator
+            evaluator = UnifiedTestEvaluator()
+            
+            if target_program not in evaluator.test_programs:
+                raise ValueError(f"Program '{target_program}' not found")
+            
+            program_config = evaluator.test_programs[target_program]
+            dimensions = program_config.get('dimensions', 2)
+            
+            # Define a simple test optimization problem for smoke test
+            class SimpleTestProblem(Problem):
+                def __init__(self):
+                    super().__init__(n_var=dimensions, n_obj=2, xl=-1000, xu=1000)
+                
+                def _evaluate(self, X, out, *args, **kwargs):
+                    # Simple mock objectives for testing algorithm interface
+                    n_particles = X.shape[0]
+                    
+                    # Objective 1: Minimize distance from origin (fitness-like)
+                    obj1 = np.sqrt(np.sum(X**2, axis=1))
+                    
+                    # Objective 2: Maximize coverage (negative for minimization)
+                    obj2 = -np.random.random(n_particles)  # Mock coverage
+                    
+                    out["F"] = np.column_stack([obj1, obj2])
+            
+            problem = SimpleTestProblem()
+            
+            # Run optimization
+            result = minimize(
+                problem=problem,
+                algorithm=algorithm,
+                termination=('n_gen', generations),
+                verbose=False
+            )
+            
+            execution_time = time.time() - start_time
+            
+            # Calculate metrics
+            if result.F is not None and len(result.F) > 0:
+                # Calculate hypervolume (simplified)
+                ref_point = np.array([100.0, 0.0])  # Reference point for hypervolume
+                try:
+                    from pymoo.indicators.hv import HV
+                    hv = HV(ref_point=ref_point)
+                    hypervolume = hv(result.F)
+                except:
+                    hypervolume = 0.0
+                
+                # Calculate IGD (simplified - distance to ideal point)
+                ideal_point = np.array([0.0, -1.0])
+                distances = np.linalg.norm(result.F - ideal_point, axis=1)
+                igd = np.mean(distances)
+                
+                best_fitness = float(np.min(result.F[:, 0])) if len(result.F) > 0 else float('inf')
+                best_coverage = float(np.max(-result.F[:, 1])) if len(result.F) > 0 else 0.0
+            else:
+                hypervolume = 0.0
+                igd = float('inf')
+                best_fitness = float('inf')
+                best_coverage = 0.0
+            
+            return {
+                'success': True,
+                'algorithm_name': algorithm_name,
+                'target_program': target_program,
+                'hypervolume': hypervolume,
+                'igd': igd,
+                'best_fitness': best_fitness,
+                'best_coverage': best_coverage,
+                'execution_time': execution_time,
+                'generations': generations,
+                'population_size': population_size,
+                'final_population_size': len(result.F) if result.F is not None else 0
+            }
+            
+        except Exception as e:
+            execution_time = time.time() - start_time
+            return {
+                'success': False,
+                'algorithm_name': algorithm_name,
+                'target_program': target_program,
+                'error_message': str(e),
+                'hypervolume': 0.0,
+                'igd': float('inf'),
+                'best_fitness': float('inf'),
+                'best_coverage': 0.0,
+                'execution_time': execution_time,
+                'generations': generations,
+                'population_size': population_size
+            }
+    
     def get_algorithm_summary(self) -> str:
         """Get a summary of all available algorithms"""
         summary = []

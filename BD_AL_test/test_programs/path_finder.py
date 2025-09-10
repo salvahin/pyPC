@@ -101,3 +101,58 @@ def test_pathfinder(a, b, c, d):
 if __name__ == '__main__':
     result = test_pathfinder(5, 0, 0, 3)
     print(f"Path finder result: {result}")
+
+
+def target_function(a, b=None, c=None, d=None):
+    """
+    Standardized test function interface for experimental methodology.
+    
+    This function wraps the original find_path to provide
+    a consistent 4-parameter interface for automated test generation.
+    
+    Original function: find_path(maze_size, start_x, start_y, obstacles)
+    
+    Args:
+        a: First parameter (required)
+        b: Second parameter (optional)
+        c: Third parameter (optional) 
+        d: Fourth parameter (optional)
+    
+    Returns:
+        Result from find_path
+    """
+    # Set defaults for optional parameters based on function requirements
+    if b is None:
+        b = -50
+    if c is None:
+        c = 0
+    if d is None:
+        d = 50
+    
+    # Validate parameter ranges
+    for param, name in [(a, 'a'), (b, 'b'), (c, 'c'), (d, 'd')]:
+        if param is not None and isinstance(param, (int, float)):
+            if not (-50 <= param <= 50):
+                param = max(-50, min(50, param))  # Clamp to bounds
+    
+    # Call original function with appropriate parameters
+    try:
+        return find_path(a, b, c, d)
+    except Exception as e:
+        # Handle potential errors gracefully for test generation
+        if "too many" in str(e).lower() or "unexpected keyword" in str(e).lower():
+            # Try with fewer parameters
+            try:
+                return find_path(a, b, c)
+            except:
+                pass
+            try:
+                return find_path(a, b)
+            except:
+                pass
+            try:
+                return find_path(a)
+            except:
+                pass
+            return find_path(a)
+        raise e

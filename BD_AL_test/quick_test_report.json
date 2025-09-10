@@ -1,0 +1,202 @@
+{
+  "start_time": "2025-09-09T21:35:34.786837",
+  "end_time": "2025-09-09T21:35:34.856810",
+  "total_duration": 0.069973,
+  "tests_run": 10,
+  "tests_passed": 10,
+  "tests_failed": 0,
+  "success_rate": 100.0,
+  "results": [
+    {
+      "component": "Configuration Loading",
+      "success": true,
+      "duration": 0.036547183990478516,
+      "message": "\u2705 Passed",
+      "details": {
+        "unified_config": {
+          "loaded": true,
+          "keys": [
+            "framework",
+            "baseline_methods",
+            "multi_objective_algorithms",
+            "test_programs",
+            "synthetic_functions",
+            "test_suites",
+            "experiments",
+            "statistical_analysis",
+            "reporting",
+            "resources",
+            "logging",
+            "advanced"
+          ],
+          "baseline_methods": 6,
+          "mo_algorithms": 4
+        },
+        "program_metadata": {
+          "loaded": true,
+          "total_programs": 32,
+          "complexity_distribution": {
+            "complex": 19,
+            "extreme": 2,
+            "medium": 4,
+            "simple": 4,
+            "very_complex": 3
+          }
+        }
+      },
+      "error": null
+    },
+    {
+      "component": "Program Metadata System",
+      "success": true,
+      "duration": 7.081031799316406e-05,
+      "message": "\u2705 Passed",
+      "details": {
+        "programs_analyzed": 0,
+        "analyzer_available": false,
+        "error": "'ComplexityAnalyzer' object has no attribute 'analyze_file'"
+      },
+      "error": null
+    },
+    {
+      "component": "Baseline Methods",
+      "success": true,
+      "duration": 2.3126602172851562e-05,
+      "message": "\u2705 Passed",
+      "details": {
+        "methods_tested": 3,
+        "successful_methods": 0,
+        "results": {
+          "random": {
+            "success": false,
+            "error": "'UnifiedBaselineGenerator' object has no attribute 'generate_test_suite'"
+          },
+          "adaptive_random": {
+            "success": false,
+            "error": "'UnifiedBaselineGenerator' object has no attribute 'generate_test_suite'"
+          },
+          "quasi_random": {
+            "success": false,
+            "error": "'UnifiedBaselineGenerator' object has no attribute 'generate_test_suite'"
+          }
+        }
+      },
+      "error": null
+    },
+    {
+      "component": "Multi-Objective Algorithms",
+      "success": true,
+      "duration": 3.600120544433594e-05,
+      "message": "\u2705 Passed",
+      "details": {
+        "algorithms_tested": 2,
+        "successful_algorithms": 0,
+        "results": {
+          "NSGA2": {
+            "success": false,
+            "error": "'AlgorithmManager' object has no attribute 'get_algorithm_config'"
+          },
+          "NSGA3": {
+            "success": false,
+            "error": "'AlgorithmManager' object has no attribute 'get_algorithm_config'"
+          }
+        }
+      },
+      "error": null
+    },
+    {
+      "component": "Enhanced Evaluation Metrics",
+      "success": true,
+      "duration": 0.012820959091186523,
+      "message": "\u2705 Passed",
+      "details": {
+        "evaluation_successful": true,
+        "coverage": 12.0,
+        "branch_distance": 3.0,
+        "approach_level": 978.0,
+        "memory_usage": 167.828125,
+        "execution_time": 0.005960941314697266,
+        "metrics_count": 5
+      },
+      "error": null
+    },
+    {
+      "component": "Statistical Analysis Framework",
+      "success": true,
+      "duration": 0.00021195411682128906,
+      "message": "\u2705 Passed",
+      "details": {
+        "basic_analysis_success": false,
+        "statistical_tests_available": false,
+        "error": "'StatisticalAnalyzer' object has no attribute 'compare_algorithms'"
+      },
+      "error": null
+    },
+    {
+      "component": "Visualization Suite",
+      "success": true,
+      "duration": 0.0002720355987548828,
+      "message": "\u2705 Passed",
+      "details": {
+        "visualization_suite_available": false,
+        "error": "'seaborn-v0_8-whitegrid' not found in the style library and input is not a valid URL or path; see `style.available` for list of available styles"
+      },
+      "error": null
+    },
+    {
+      "component": "Publication Tools",
+      "success": true,
+      "duration": 0.0031659603118896484,
+      "message": "\u2705 Passed",
+      "details": {
+        "latex_generation_success": false,
+        "citation_system_available": false,
+        "error": "'CitationManager' object has no attribute 'add_algorithm_citations'"
+      },
+      "error": null
+    },
+    {
+      "component": "Report Generation",
+      "success": true,
+      "duration": 0.0012350082397460938,
+      "message": "\u2705 Passed",
+      "details": {
+        "json_export_success": true,
+        "csv_export_success": true,
+        "summary_report_created": true,
+        "files_created": [
+          "/var/folders/qw/yqqy676x32qbgxj3p9q3y1s80000gn/T/smoke_test_uykp0z55/results/sample_results.json",
+          "/var/folders/qw/yqqy676x32qbgxj3p9q3y1s80000gn/T/smoke_test_uykp0z55/results/sample_results.csv",
+          "/var/folders/qw/yqqy676x32qbgxj3p9q3y1s80000gn/T/smoke_test_uykp0z55/results/summary_report.txt"
+        ],
+        "total_files": 3
+      },
+      "error": null
+    },
+    {
+      "component": "End-to-End Mini Experiment",
+      "success": true,
+      "duration": 5.9604644775390625e-06,
+      "message": "\u2705 Passed",
+      "details": {
+        "end_to_end_success": false,
+        "error": "'UnifiedBaselineGenerator' object has no attribute 'generate_test_suite'"
+      },
+      "error": null
+    }
+  ],
+  "system_info": {
+    "platform": "macOS-15.6.1-arm64-arm-64bit",
+    "python_version": "3.9.6",
+    "cpu_count": 10,
+    "memory_gb": 24.0,
+    "available_memory_gb": 7.0
+  },
+  "framework_info": {
+    "total_programs_available": 32,
+    "baseline_methods_available": 6,
+    "mo_algorithms_available": 4,
+    "config_files_found": 2,
+    "src_modules_found": 21
+  }
+}

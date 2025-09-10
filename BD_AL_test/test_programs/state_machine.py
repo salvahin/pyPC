@@ -150,3 +150,58 @@ def test_state_machine(a, b, c, d):
 if __name__ == '__main__':
     result = test_state_machine(5, 12, -3, 8)
     print(f"State machine result: {result}")
+
+
+def target_function(a, b=None, c=None, d=None):
+    """
+    Standardized test function interface for experimental methodology.
+    
+    This function wraps the original test_state_machine to provide
+    a consistent 4-parameter interface for automated test generation.
+    
+    Original function: test_state_machine(a, b, c, d)
+    
+    Args:
+        a: First parameter (required)
+        b: Second parameter (optional)
+        c: Third parameter (optional) 
+        d: Fourth parameter (optional)
+    
+    Returns:
+        Result from test_state_machine
+    """
+    # Set defaults for optional parameters based on function requirements
+    if b is None:
+        b = -20
+    if c is None:
+        c = 0
+    if d is None:
+        d = 20
+    
+    # Validate parameter ranges
+    for param, name in [(a, 'a'), (b, 'b'), (c, 'c'), (d, 'd')]:
+        if param is not None and isinstance(param, (int, float)):
+            if not (-20 <= param <= 20):
+                param = max(-20, min(20, param))  # Clamp to bounds
+    
+    # Call original function with appropriate parameters
+    try:
+        return test_state_machine(a, b, c, d)
+    except Exception as e:
+        # Handle potential errors gracefully for test generation
+        if "too many" in str(e).lower() or "unexpected keyword" in str(e).lower():
+            # Try with fewer parameters
+            try:
+                return test_state_machine(a, b, c)
+            except:
+                pass
+            try:
+                return test_state_machine(a, b)
+            except:
+                pass
+            try:
+                return test_state_machine(a)
+            except:
+                pass
+            return test_state_machine(a)
+        raise e

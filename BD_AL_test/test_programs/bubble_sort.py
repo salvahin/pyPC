@@ -22,3 +22,58 @@ def bubbleSort(a, b, c, d):
             # if we haven't needed to make a single swap, we
             # can just exit the main loop.
             return
+
+
+def target_function(a, b=None, c=None, d=None):
+    """
+    Standardized test function interface for experimental methodology.
+    
+    This function wraps the original bubbleSort to provide
+    a consistent 4-parameter interface for automated test generation.
+    
+    Original function: bubbleSort(a, b, c, d)
+    
+    Args:
+        a: First parameter (required)
+        b: Second parameter (optional)
+        c: Third parameter (optional) 
+        d: Fourth parameter (optional)
+    
+    Returns:
+        Result from bubbleSort
+    """
+    # Set defaults for optional parameters based on function requirements
+    if b is None:
+        b = -999999
+    if c is None:
+        c = 0
+    if d is None:
+        d = 999999
+    
+    # Validate parameter ranges
+    for param, name in [(a, 'a'), (b, 'b'), (c, 'c'), (d, 'd')]:
+        if param is not None and isinstance(param, (int, float)):
+            if not (-999999 <= param <= 999999):
+                param = max(-999999, min(999999, param))  # Clamp to bounds
+    
+    # Call original function with appropriate parameters
+    try:
+        return bubbleSort(a, b, c, d)
+    except Exception as e:
+        # Handle potential errors gracefully for test generation
+        if "too many" in str(e).lower() or "unexpected keyword" in str(e).lower():
+            # Try with fewer parameters
+            try:
+                return bubbleSort(a, b, c)
+            except:
+                pass
+            try:
+                return bubbleSort(a, b)
+            except:
+                pass
+            try:
+                return bubbleSort(a)
+            except:
+                pass
+            return bubbleSort(a)
+        raise e
